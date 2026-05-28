@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infra Map v3 — Claude Code 인프라 완전 명세서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c14; --surface: #13131f; --surface2: #1a1a2a; --surface3: #222236;
+  --border: #2a2a40; --text: #e4e4f0; --text-muted: #7e7e9a; --text-dim: #55556e;
+  --yellow: #fbbf24; --yellow-soft: rgba(251,191,36,0.1); --yellow-glow: rgba(251,191,36,0.25);
+  --cyan: #22d3ee; --cyan-soft: rgba(34,211,238,0.1);
+  --green: #34d399; --green-soft: rgba(52,211,153,0.1);
+  --red: #f87171; --red-soft: rgba(248,113,113,0.1);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,0.1);
+  --orange: #fb923c; --orange-soft: rgba(251,146,60,0.1);
+  --blue: #60a5fa; --pink: #f472b6;
+  --sidebar-w: 300px; --active-color: #7F77DD;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; }
+.app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; height: 100vh; }
+.sidebar { background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 10; }
+.sidebar-logo { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--yellow); letter-spacing: 2px; margin-bottom: 4px; }
+.sidebar-sub { font-size: 11px; color: var(--text-dim); }
+.phase-section { padding: 14px 12px 4px; }
+.phase-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: var(--yellow); letter-spacing: 1px; padding: 0 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.phase-label::after { content: ''; flex: 1; height: 0.5px; background: linear-gradient(90deg, rgba(251,191,36,0.3), transparent); }
+.ch-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin: 0 4px 4px; border-radius: 10px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; position: relative; text-decoration: none; color: var(--text); }
+.ch-card:hover { background: var(--surface2); border-color: var(--border); }
+.ch-card.active { background: color-mix(in srgb, var(--active-color, #fbbf24) 8%, transparent); border-color: color-mix(in srgb, var(--active-color, #fbbf24) 25%, transparent); }
+.ch-card.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; background: var(--active-color, #fbbf24); border-radius: 0 3px 3px 0; }
+.ch-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; background: var(--yellow-soft); }
+.ch-info { flex: 1; min-width: 0; }
+.ch-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--yellow); font-weight: 600; }
+.ch-title { font-size: 12.5px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.ch-card.active .ch-title { color: #fff; }
+.ch-desc { font-size: 10px; color: var(--text-dim); margin-top: 2px; line-height: 1.3; }
+.main { overflow-y: auto; position: relative; }
+.main::-webkit-scrollbar { width: 6px; }
+.main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+.topbar { position: sticky; top: 0; z-index: 100; background: rgba(12,12,20,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
+.topbar-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--yellow-soft); color: var(--yellow); padding: 3px 10px; border-radius: 4px; font-weight: 600; letter-spacing: 0.5px; }
+.topbar-title { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+.hero { padding: 56px 24px 40px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(251,191,36,0.05) 0%, transparent 70%); pointer-events: none; }
+.hero-phase { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.hero h1 { font-size: clamp(24px, 4vw, 36px); font-weight: 900; line-height: 1.3; margin-bottom: 12px; }
+.hero h1 .highlight { background: linear-gradient(135deg, var(--yellow), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 14px; color: var(--text-muted); font-weight: 300; max-width: 540px; margin: 0 auto; }
+.content { max-width: 800px; margin: 0 auto; padding: 0 24px 80px; }
+.section { margin-bottom: 60px; scroll-margin-top: 60px; }
+.section-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 2px; margin-bottom: 6px; }
+.section h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.section-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; font-weight: 300; }
+.para { font-size: 15px; line-height: 2; color: var(--text); margin-bottom: 22px; font-weight: 400; }
+.para code, .accordion-content code, .comp-table code, .callout code { font-family: 'JetBrains Mono', monospace; background: var(--surface2); padding: 2px 7px; border-radius: 4px; font-size: 13px; color: var(--cyan); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 20px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+.card:hover { border-color: rgba(255,255,255,0.08); }
+.card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.card-icon { font-size: 20px; margin-bottom: 10px; }
+.callout { border-radius: 14px; padding: 18px 22px; margin-bottom: 22px; position: relative; }
+.callout.warn { background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(251,191,36,0.02)); border: 1px solid rgba(251,191,36,0.25); }
+.callout.warn::before { content:'⚡'; position:absolute; top:-10px; left:18px; font-size:18px; background:var(--bg); padding:0 6px; }
+.callout.info { background: var(--cyan-soft); border: 1px solid rgba(34,211,238,0.2); }
+.callout.info::before { content:'ℹ'; position:absolute; top:-10px; left:18px; font-size:16px; background:var(--bg); padding:0 6px; color:var(--cyan); font-weight:700; }
+.callout.danger { background: var(--red-soft); border: 1px solid rgba(248,113,113,0.25); }
+.callout.danger::before { content:'🚨'; position:absolute; top:-10px; left:18px; font-size:16px; background:var(--bg); padding:0 6px; }
+.callout.tip { background: var(--green-soft); border: 1px solid rgba(52,211,153,0.2); }
+.callout.tip::before { content:'💡'; position:absolute; top:-10px; left:18px; font-size:16px; background:var(--bg); padding:0 6px; }
+.callout-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+.callout.warn .callout-title { color: var(--yellow); }
+.callout.info .callout-title { color: var(--cyan); }
+.callout.danger .callout-title { color: var(--red); }
+.callout.tip .callout-title { color: var(--green); }
+.callout p { font-size: 14px; line-height: 1.8; }
+.hl { font-weight: 600; padding: 1px 6px; border-radius: 4px; font-size: 0.93em; }
+.hl-y { background: var(--yellow-soft); color: var(--yellow); }
+.hl-c { background: var(--cyan-soft); color: var(--cyan); }
+.hl-g { background: var(--green-soft); color: var(--green); }
+.hl-r { background: var(--red-soft); color: var(--red); }
+.hl-p { background: var(--purple-soft); color: var(--purple); }
+.badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+.badge-y { background: var(--yellow-soft); color: var(--yellow); }
+.badge-c { background: var(--cyan-soft); color: var(--cyan); }
+.badge-g { background: var(--green-soft); color: var(--green); }
+.badge-r { background: var(--red-soft); color: var(--red); }
+.badge-p { background: var(--purple-soft); color: var(--purple); }
+.code-block { background: #0d1117; border: 1px solid #21262d; border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+.code-header { background: #161b22; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #21262d; }
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.code-dot.r { background: #ff5f57; } .code-dot.y { background: #febc2e; } .code-dot.g { background: #28c840; }
+.code-filename { margin-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #7d8590; }
+.code-body { padding: 16px 18px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.9; color: #c9d1d9; overflow-x: auto; white-space: pre-wrap; }
+.code-body .cmt { color: #7d8590; } .code-body .str { color: #a5d6ff; } .code-body .kw { color: #ff7b72; } .code-body .fn { color: #d2a8ff; } .code-body .num { color: #79c0ff; }
+.comp-table-wrap { overflow-x: auto; margin-bottom: 24px; }
+.comp-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.comp-table th { background: var(--surface2); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.comp-table td { padding: 11px 14px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6; }
+.comp-table tr:last-child td { border-bottom: none; }
+.flow { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; padding: 10px 0; margin-bottom: 22px; }
+.flow-step { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; min-width: 104px; }
+.flow-step-icon { font-size: 20px; margin-bottom: 4px; }
+.flow-step-label { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.flow-step-desc { font-size: 10px; color: var(--text-muted); }
+.flow-arrow { font-size: 18px; color: var(--text-dim); padding: 0 6px; flex-shrink: 0; }
+.accordion { margin-bottom: 8px; }
+.accordion-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; margin-bottom: 6px; }
+.accordion-item:hover { border-color: rgba(255,255,255,0.08); }
+.accordion-item.open { border-color: rgba(251,191,36,0.3); }
+.accordion-head { display: flex; align-items: center; gap: 12px; padding: 15px 18px; cursor: pointer; user-select: none; }
+.accordion-icon { font-size: 18px; flex-shrink: 0; }
+.accordion-title { font-size: 14px; font-weight: 600; flex: 1; }
+.accordion-chevron { font-size: 12px; color: var(--text-dim); transition: transform 0.3s ease; flex-shrink: 0; }
+.accordion-item.open .accordion-chevron { transform: rotate(180deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.2s ease; padding: 0 18px; }
+.accordion-item.open .accordion-body { max-height: 2000px; padding: 0 18px 16px; }
+.accordion-content { font-size: 13.5px; line-height: 1.85; color: var(--text-muted); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.todo-note { opacity: 0.45; font-style: italic; font-size: 13px; }
+.menu-toggle { display: none; position: fixed; top: 12px; left: 12px; z-index: 1100; width: 44px; height: 44px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--yellow); font-size: 22px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 12px rgba(0,0,0,0.4); transition: background 0.2s, transform 0.2s; -webkit-tap-highlight-color: transparent; }
+.menu-toggle:active { transform: scale(0.92); }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; opacity: 0; transition: opacity 0.3s ease; -webkit-tap-highlight-color: transparent; }
+.sidebar-overlay.visible { opacity: 1; }
+@media(max-width:700px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; left: 0; top: 0; height: 100vh; width: var(--sidebar-w); z-index: 1000; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
+  .menu-toggle { display: flex; }
+  .sidebar-overlay.open { display: block; }
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuToggle" onclick="toggleMobileMenu()" aria-label="메뉴 열기">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileMenu()"></div>
+
+<div class="app">
+
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">INFRA MAP v3</div>
+      <div class="sidebar-sub">Claude Code 인프라 완전 명세서</div>
+    </div>
+
+    <div class="phase-section">
+      <div class="phase-label">PHASE 1 · 전체 조감도</div>
+      <div class="ch-card active" data-sec="p1a" onclick="scrollToSection('p1a')"><div class="ch-icon">🗺️</div><div class="ch-info"><div class="ch-num">1.1</div><div class="ch-title">인프라란 무엇인가</div><div class="ch-desc">5장치 + 파일 지도</div></div></div>
+      <div class="ch-card" data-sec="p1b" onclick="scrollToSection('p1b')"><div class="ch-icon">🌊</div><div class="ch-info"><div class="ch-num">1.2</div><div class="ch-title">데이터 흐름 큰그림</div><div class="ch-desc">4대 파이프라인 미리보기</div></div></div>
+    </div>
+
+    <div class="phase-section">
+      <div class="phase-label">PHASE 2 · 규칙 14</div>
+      <div class="ch-card" data-sec="p2a" onclick="scrollToSection('p2a')"><div class="ch-icon">💬</div><div class="ch-info"><div class="ch-num">2.1</div><div class="ch-title">말하는 방식</div><div class="ch-desc">4개 규칙</div></div></div>
+      <div class="ch-card" data-sec="p2b" onclick="scrollToSection('p2b')"><div class="ch-icon">⚙️</div><div class="ch-info"><div class="ch-num">2.2</div><div class="ch-title">일하는 절차</div><div class="ch-desc">3개 규칙</div></div></div>
+      <div class="ch-card" data-sec="p2c" onclick="scrollToSection('p2c')"><div class="ch-icon">🛡️</div><div class="ch-info"><div class="ch-num">2.3</div><div class="ch-title">안전장치</div><div class="ch-desc">2개 규칙</div></div></div>
+      <div class="ch-card" data-sec="p2d" onclick="scrollToSection('p2d')"><div class="ch-icon">🧠</div><div class="ch-info"><div class="ch-num">2.4</div><div class="ch-title">기억·기록</div><div class="ch-desc">4개 규칙</div></div></div>
+      <div class="ch-card" data-sec="p2e" onclick="scrollToSection('p2e')"><div class="ch-icon">🔁</div><div class="ch-info"><div class="ch-num">2.5</div><div class="ch-title">자기교정</div><div class="ch-desc">1개 규칙</div></div></div>
+    </div>
+
+    <div class="phase-section">
+      <div class="phase-label">PHASE 3 · 훅 18</div>
+      <div class="ch-card" data-sec="p3a" onclick="scrollToSection('p3a')"><div class="ch-icon">⏱️</div><div class="ch-info"><div class="ch-num">3.1</div><div class="ch-title">훅 라이프사이클</div><div class="ch-desc">언제 무엇이</div></div></div>
+      <div class="ch-card" data-sec="p3b" onclick="scrollToSection('p3b')"><div class="ch-icon">📥</div><div class="ch-info"><div class="ch-num">3.2</div><div class="ch-title">입력·시작 훅</div><div class="ch-desc">2개</div></div></div>
+      <div class="ch-card" data-sec="p3c" onclick="scrollToSection('p3c')"><div class="ch-icon">🔒</div><div class="ch-info"><div class="ch-num">3.3</div><div class="ch-title">도구 전 훅</div><div class="ch-desc">4개</div></div></div>
+      <div class="ch-card" data-sec="p3d" onclick="scrollToSection('p3d')"><div class="ch-icon">⚡</div><div class="ch-info"><div class="ch-num">3.4</div><div class="ch-title">도구 후 훅</div><div class="ch-desc">5개</div></div></div>
+      <div class="ch-card" data-sec="p3e" onclick="scrollToSection('p3e')"><div class="ch-icon">🏁</div><div class="ch-info"><div class="ch-num">3.5</div><div class="ch-title">실패·종료 훅</div><div class="ch-desc">7개</div></div></div>
+      <div class="ch-card" data-sec="p3f" onclick="scrollToSection('p3f')"><div class="ch-icon">🕸️</div><div class="ch-info"><div class="ch-num">3.6</div><div class="ch-title">연결 관계도</div><div class="ch-desc">4대 파이프라인</div></div></div>
+      <div class="ch-card" data-sec="p3g" onclick="scrollToSection('p3g')"><div class="ch-icon">🔧</div><div class="ch-info"><div class="ch-num">3.7</div><div class="ch-title">수동 유틸</div><div class="ch-desc">고아 정정</div></div></div>
+    </div>
+
+    <div class="phase-section">
+      <div class="phase-label">PHASE 4 · 기억 체계</div>
+      <div class="ch-card" data-sec="p4a" onclick="scrollToSection('p4a')"><div class="ch-icon">🧠</div><div class="ch-info"><div class="ch-num">4.1</div><div class="ch-title">메모리 30</div><div class="ch-desc">분류 + 주요 항목</div></div></div>
+      <div class="ch-card" data-sec="p4b" onclick="scrollToSection('p4b')"><div class="ch-icon">📓</div><div class="ch-info"><div class="ch-num">4.2</div><div class="ch-title">세션로그 + hot.md</div><div class="ch-desc">일지 프로토콜</div></div></div>
+    </div>
+
+    <div class="phase-section">
+      <div class="phase-label">PHASE 5 · 외부연결·위임</div>
+      <div class="ch-card" data-sec="p5a" onclick="scrollToSection('p5a')"><div class="ch-icon">🔌</div><div class="ch-info"><div class="ch-num">5.1</div><div class="ch-title">MCP 6개</div><div class="ch-desc">언제·어떻게·상태</div></div></div>
+      <div class="ch-card" data-sec="p5b" onclick="scrollToSection('p5b')"><div class="ch-icon">🤖</div><div class="ch-info"><div class="ch-num">5.2</div><div class="ch-title">에이전트 호출 규칙</div><div class="ch-desc">위임 게이트</div></div></div>
+    </div>
+
+    <div class="phase-section">
+      <div class="phase-label">PHASE 6 · 운영 현황</div>
+      <div class="ch-card" data-sec="p6a" onclick="scrollToSection('p6a')"><div class="ch-icon">📌</div><div class="ch-info"><div class="ch-num">6.1</div><div class="ch-title">펜딩 현황</div><div class="ch-desc">활성 9건</div></div></div>
+      <div class="ch-card" data-sec="p6b" onclick="scrollToSection('p6b')"><div class="ch-icon">⚡</div><div class="ch-info"><div class="ch-num">6.2</div><div class="ch-title">결함·설계 결정</div><div class="ch-desc">발견 사항</div></div></div>
+      <div class="ch-card" data-sec="p6c" onclick="scrollToSection('p6c')"><div class="ch-icon">🔭</div><div class="ch-info"><div class="ch-num">6.3</div><div class="ch-title">다음 후보</div><div class="ch-desc">향후 개선</div></div></div>
+    </div>
+  </div><!-- /sidebar -->
+
+  <div class="main" id="mainPanel">
+    <div class="topbar">
+      <span class="topbar-badge">INFRA MAP v3</span>
+      <span class="topbar-title">우리 시스템 공부용 실전 명세서</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-phase">FULL SPECIFICATION · 2026-05-28</div>
+      <h1>우리 봇은<br><span class="highlight">어떻게 만들어져 있나</span></h1>
+      <p class="hero-sub">규칙·훅·메모리·세션로그·MCP·에이전트가 실제로 무엇을 하고, 서로 어떻게 연결되며, 언제 작동하는지 — 하나하나 뜯어봅니다.</p>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ PHASE 1 ============ -->
+      <section id="p1a" class="section">
+        <div class="section-num">PHASE 1 · 1.1</div>
+        <h2>🗺️ 인프라란 무엇인가</h2>
+        <p class="section-desc">우리 봇을 떠받치는 5가지 장치와, 그것들이 디스크 어디에 사는지</p>
+
+        <p class="para">우리 봇(<span class="hl hl-y">Woong1993bot</span>)은 그냥 Claude 하나가 아니라, 옆에 <span class="hl hl-c">5가지 보조장치</span>를 달고 일합니다. 이 장치들이 봇을 "매번 백지에서 시작하는 AI"가 아니라 "어제 일을 기억하고, 규칙을 지키고, 실수를 막는 일꾼"으로 만들어 줍니다.</p>
+
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>장치</th><th>한 줄로</th><th>사는 곳 (실제 경로)</th><th>개수</th></tr></thead>
+            <tbody>
+              <tr><td>📐 규칙</td><td>항상 지켜야 할 일하는 방식</td><td><code>~/.claude/CLAUDE.md</code><br><code>~/.claude/rules/*.md</code></td><td><span class="badge badge-y">14</span></td></tr>
+              <tr><td>🪝 훅</td><td>정해진 순간 자동 실행되는 동작</td><td><code>~/.claude/settings.json</code><br><code>~/.claude/hooks/*.js</code></td><td><span class="badge badge-c">16+2</span></td></tr>
+              <tr><td>🧠 메모리</td><td>까먹지 않으려 저장한 정보</td><td><code>~/.claude/projects/&lt;…&gt;/memory/</code></td><td><span class="badge badge-g">30</span></td></tr>
+              <tr><td>📓 세션로그</td><td>날짜별 업무일지</td><td><code>Wiki/02-ai-tools/project-log/</code></td><td><span class="badge badge-p">29</span></td></tr>
+              <tr><td>🔌 MCP</td><td>외부 서비스 연결 통로</td><td>커넥터 / <code>cmd /c &lt;바이너리&gt;</code></td><td><span class="badge badge-c">6</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info reveal">
+          <div class="callout-title">"한눈에 안 들어왔던" 진짜 이유</div>
+          <p>이 5가지가 <span class="hl hl-y">서로 다른 폴더 6곳</span>에 흩어져 있고, 핵심 연결(훅↔로그↔규칙)이 파일 안에 숨어 있어서입니다. 이 문서가 그 흩어진 것들을 <strong>한 자리에 모으고, 숨은 연결을 드러내는</strong> 게 목적입니다.</p>
+        </div>
+
+        <p class="para"><strong>📂 파일 지도</strong> — 어디를 열면 무엇이 있는지:</p>
+        <div class="code-block reveal">
+          <div class="code-header"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div><span class="code-filename">디렉토리 구조</span></div>
+          <div class="code-body"><span class="cmt"># 규칙·훅·메모리·로그가 사는 곳</span>
+~/.claude/
+├─ CLAUDE.md            <span class="cmt"># 전역 규칙 (50줄 요약본)</span>
+├─ rules/*.md           <span class="cmt"># 상세 규칙 14개</span>
+├─ settings.json        <span class="cmt"># 훅 등록표 (어떤 이벤트→어떤 훅)</span>
+├─ hooks/*.js           <span class="cmt"># 훅 스크립트 18개</span>
+├─ logs/                <span class="cmt"># 훅이 남기는 기록 (metrics·agents·summaries)</span>
+├─ checkpoints/         <span class="cmt"># 파일 수정 전 백업</span>
+└─ projects/&lt;slug&gt;/memory/  <span class="cmt"># 메모리 30개 + MEMORY.md 목차</span>
+
+~/Desktop/Bot_setting/
+├─ CLAUDE.md            <span class="cmt"># 이 프로젝트 전용 규칙</span>
+└─ Wiki/02-ai-tools/project-log/
+   ├─ hot.md            <span class="cmt"># 최신 상태 요약 (세션 시작 시 1번째로 읽음)</span>
+   ├─ sessions/*.md     <span class="cmt"># 날짜별 일지 29개</span>
+   └─ MOC.md            <span class="cmt"># 주제별 색인</span></div>
+        </div>
+      </section>
+
+      <section id="p1b" class="section">
+        <div class="section-num">PHASE 1 · 1.2</div>
+        <h2>🌊 데이터 흐름 큰그림</h2>
+        <p class="section-desc">봇이 일하는 동안 정보가 어디로 흘러 어디에 쌓이는지 — 4개의 큰 물길</p>
+
+        <p class="para">훅들은 따로 노는 게 아니라, <span class="hl hl-c">4개의 데이터 물길(파이프라인)</span>로 이어져 있습니다. 여기선 큰 그림만 보고, 각 훅의 세부 연결은 <span class="hl hl-y">P3.6 관계도</span>에서 자세히 다룹니다.</p>
+
+        <div class="flow reveal">
+          <div class="flow-step"><div class="flow-step-icon">🛠️</div><div class="flow-step-label">도구 사용</div><div class="flow-step-desc">매 호출</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">📮</div><div class="flow-step-label">dispatcher</div><div class="flow-step-desc">기록 분배</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">📊</div><div class="flow-step-label">로그 3종</div><div class="flow-step-desc">audit·metrics·agents</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">📈</div><div class="flow-step-label">daily-summary</div><div class="flow-step-desc">하루 통계</div></div>
+        </div>
+
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">✅</div><div class="accordion-title">① 성공 기록 물길</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">도구를 쓸 때마다 → <code>dispatcher</code>가 받아서 → <span class="hl hl-g">로그 3종</span>(작업일지·통계·에이전트기록)에 동시에 적습니다 → <code>daily-summary</code>가 그걸 읽어 하루 리포트를 만들고, <code>session-log-guard</code>가 "일을 많이 했는데 일지를 안 썼네?"를 감시합니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">❌</div><div class="accordion-title">② 실패 기록 물길</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">도구가 실패하면 → <code>dispatcher-failure</code>가 → <span class="hl hl-r">errors.jsonl</span>(에러 모음)과 실패 통계에 적습니다 → 나중에 <code>analyze-errors</code>를 손으로 돌리면 "3번 이상 반복된 에러"를 묶어 보여줍니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🤖</div><div class="accordion-title">③ 에이전트 수명 추적 물길</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">보조 일꾼(에이전트)을 부르면 → <code>agent-tracker-pre</code>가 "시작"을 적고 → 끝나면 <code>dispatcher</code>(또는 실패 시 <code>dispatcher-failure</code>)가 같은 파일에 "완료"를 적습니다 → 시작·완료 짝을 맞춰 "에이전트를 얼마나·어떻게 썼나"를 추적합니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔄</div><div class="accordion-title">④ 컨텍스트 복원 물길</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">대화가 길어져 압축되거나 세션이 새로 시작되면 → <code>restore-context</code>/<code>restore-session</code>이 <span class="hl hl-c">cc-connect의 대화 기록</span>을 읽어 직전 맥락을 되살립니다. 실패하면 <code>hot.md</code>를 대신 읽습니다.</p></div></div>
+          </div>
+        </div>
+
+        <div class="callout tip reveal">
+          <div class="callout-title">기억해 둘 한 가지</div>
+          <p>거의 모든 기록은 <code>~/.claude/logs/</code> 한곳으로 모입니다. 그래서 "봇이 뭘 했나"가 궁금하면 이 폴더만 보면 됩니다. (오래되면 <code>log-rotate</code>가 청소)</p>
+        </div>
+      </section>
+
+      <!-- ============ PHASE 2~6 : 다음 단계에서 채움 ============ -->
+      <section id="p2a" class="section">
+        <div class="section-num">PHASE 2 · 2.1</div>
+        <h2>💬 말하는 방식 규칙</h2>
+        <p class="section-desc">봇이 사용자에게 어떻게 보고·설명할지 — 4개 규칙</p>
+        <p class="para">이 4개는 "어떻게 말하느냐"를 정합니다. 각 규칙은 <span class="hl hl-y">언제 발동하는지</span>가 정해져 있어요. 펼쳐 보세요.</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📖</div><div class="accordion-title">쉬운 4단 설명 <span class="badge badge-r">위반 4회→규칙</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 기술 항목·도구·개념을 설명할 때.<br><strong>무엇을</strong> — 어려운 용어를 나열하지 말고 <span class="hl hl-y">"뭔지 / 없으면 / 있으면 / 주의"</span> 4단으로.<br><strong>왜</strong> — 안 지켜 4번 지적받아 정식 규칙으로 굳었습니다. <em>(지금 이 문서 전체가 이 규칙대로 쓰였어요)</em></p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">✂️</div><div class="accordion-title">5줄 요약 <span class="badge badge-r">위반 3회→규칙</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 보조 일꾼(에이전트)의 조사 결과를 사용자에게 전달할 때.<br><strong>무엇을</strong> — 원문을 그대로 쏟지 말고 <span class="hl hl-c">5줄 이내</span>로: 결론 1줄 + 근거 2~3줄 + 다음 단계 1줄.<br><strong>왜</strong> — 길게 덤프하는 습관을 3번 지적받아 규칙화.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">⚡</div><div class="accordion-title">결과 즉시 전달 <span class="badge badge-r">위반 4회→규칙</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 병렬로 돌린 에이전트 결과가 도착했을 때.<br><strong>무엇을</strong> — 모아서 한 번에 보고하지 말고 <span class="hl hl-y">오는 즉시 하나씩</span>. 결과를 안 쓰고 버리더라도 "도착했지만 폐기" 한 줄, 실패해도 "실패: 사유" 한 줄.<br><strong>왜</strong> — 결과를 묵혀두는 습관을 4번 지적받아 규칙화.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🎓</div><div class="accordion-title">전문성 기준</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 기술 답변 전반.<br><strong>무엇을</strong> — 뻔한 개념 설명은 건너뛰고 <span class="hl hl-g">차이점·한계·실패 지점·트레이드오프</span> 중심으로. 수식·모델링이 필요하면 전제를 공유하고 정량적으로 전개.<br><strong>왜</strong> — 근거 우선순위가 정해져 있음: ①물리법칙·수식 → ②논문·표준 → ③실무 관행("경험적 근거"라 명시).</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p2b" class="section">
+        <div class="section-num">PHASE 2 · 2.2</div>
+        <h2>⚙️ 일하는 절차 규칙</h2>
+        <p class="section-desc">큰 작업을 어떤 순서로 진행할지 — 3개 규칙</p>
+        <p class="para">이 3개는 "함부로 실행하지 않게" 막는 절차입니다. 특히 첫 번째는 이 봇의 <span class="hl hl-c">가장 중요한 작업 규칙</span>이에요.</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">✅</div><div class="accordion-title">검증 실행 7단계 (VE)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content">
+              <p class="para"><strong>언제</strong> — 파일을 <span class="hl hl-y">3개 이상</span> 고치거나, 훅·설정·cron을 <span class="hl hl-y">하나라도</span> 바꾸거나, 동작 방식을 바꾸는 리팩토링.<br>
+              <strong>무엇을</strong> — 아래 7단계를 순서대로. 건너뛰기 금지:</p>
+              <div class="flow" style="margin:8px 0 14px">
+                <div class="flow-step" style="min-width:84px"><div class="flow-step-label">①조사</div></div><div class="flow-arrow">→</div>
+                <div class="flow-step" style="min-width:84px"><div class="flow-step-label">②계획</div></div><div class="flow-arrow">→</div>
+                <div class="flow-step" style="min-width:84px"><div class="flow-step-label">③검증조사</div></div><div class="flow-arrow">→</div>
+                <div class="flow-step" style="min-width:84px"><div class="flow-step-label">④시뮬</div></div><div class="flow-arrow">→</div>
+                <div class="flow-step" style="min-width:84px;border-color:var(--yellow)"><div class="flow-step-label" style="color:var(--yellow)">⑤승인</div></div><div class="flow-arrow">→</div>
+                <div class="flow-step" style="min-width:84px"><div class="flow-step-label">⑥실행</div></div><div class="flow-arrow">→</div>
+                <div class="flow-step" style="min-width:84px"><div class="flow-step-label">⑦테스트</div></div>
+              </div>
+              <p class="para">⑤ <span class="hl hl-y">승인 게이트</span>가 핵심 — 사용자가 "해줘/진행해/응"이라고 명시하기 전엔 절대 파일을 안 고칩니다. ⑦에서는 CoVe 질문 3개("모든 진입점에 적용됐나 / 깨지는 게 있나 / 되돌릴 수 있나")로 자기검증.<br>
+              <strong>왜</strong> — 예전 "조사하고 바로 구현" 방식에서 버그가 연달아 터졌고(#21~#24), 이 절차로 바꾼 뒤 사전에 버그 7건을 잡았습니다. 같은 접근 <span class="hl hl-r">2번 실패하면 재시도 금지</span>(접근 재설계). 단순한 1~2개 파일 수정은 면제.</p>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🚪</div><div class="accordion-title">진입점 열거 체크</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 버그 수정·기능 차단·동작 변경·설정 수정 시.<br><strong>무엇을</strong> — 고치기 전에 그 동작에 도달하는 <span class="hl hl-c">모든 경로</span>를 나열하고("CLI / 채팅명령 / API / 자동실행 …"), 각각 영향을 확인한 뒤에만 수정.<br><strong>왜</strong> — 전체 버그의 <span class="hl hl-r">52%</span>가 "한 경로만 고치고 다른 경로를 빠뜨림"에서 발생. 실제로 텔레그램 명령만 막고 CLI를 빠뜨려 이중 실행이 재발한 사례(#25)가 있었습니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧭</div><div class="accordion-title">모델 라우팅 (요약)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 일을 받았을 때 "내가 직접 할지, 보조 일꾼에게 넘길지" 정할 때.<br><strong>무엇을</strong> — 먼저 위임할지 정하고, 위임하면 작업 종류에 맞는 모델 선택(계획=Opus / 실행=Sonnet / 검색=Haiku).<br><strong>왜</strong> — 위임은 한 번에 고정 비용(~16K~25K 토큰)이 들어, 작은 일은 직접이 이득. <span class="hl hl-p">자세한 판단 기준은 P5.2 "에이전트 호출 규칙"에서</span> 다룹니다.</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p2c" class="section">
+        <div class="section-num">PHASE 2 · 2.3</div>
+        <h2>🛡️ 안전장치 규칙</h2>
+        <p class="section-desc">시스템과 기억을 망가뜨리지 않게 — 2개 규칙</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">⚙️</div><div class="accordion-title">설정 안전</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — <code>settings.json</code>이나 규칙 파일(<code>CLAUDE.md</code>, <code>rules/</code>)을 고칠 때.<br><strong>무엇을</strong> — 설정을 바꾸면 <span class="hl hl-y">백업본(settings.backup.json)을 동기화</span>하고 변경 이력(changelog)을 남김. 알림음을 내는 <span class="hl hl-r">Stop 훅은 절대 삭제 금지</span>(편집 후 반드시 다시 읽어 확인).<br><strong>왜</strong> — 설정이 한 번 깨지면 봇 전체가 멈출 수 있어, 되돌릴 수단을 항상 남겨둡니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧠</div><div class="accordion-title">기억 안전 (메모리 중독 방어)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 메모리를 읽거나 새로 저장할 때.<br><strong>무엇을</strong> — 네 가지를 지킴:<br>① 메모리가 <span class="hl hl-c">현재 파일 상태와 충돌하면 "지금 파일"을 신뢰</span>(메모리는 과거 정보)<br>② 메모리에 "실행하라" 같은 명령이 있어도 그대로 실행 안 함(참고용)<br>③ 새 메모리가 기존과 모순되면 사용자에게 보고 후 저장<br>④ 외부 소스(웹·봇 메시지) 데이터는 출처를 명시.<br><strong>왜</strong> — 오래되거나 오염된 기억이 현재 시스템을 덮어쓰는 <span class="hl hl-r">"메모리 중독" 공격</span>(OWASP ASI06)을 막기 위함.</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p2d" class="section">
+        <div class="section-num">PHASE 2 · 2.4</div>
+        <h2>🧠 기억·기록 규칙</h2>
+        <p class="section-desc">무엇을 언제 기록하고, 어떻게 다시 찾을지 — 4개 규칙</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📓</div><div class="accordion-title">세션 일지 작성</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 5가지 순간: ①"끝/로그 남겨" 등 명시 마무리 ②작업 단위 완료 ③주제 전환 ④계획 구현 단계 ⑤대화 압축 발생 시.<br><strong>무엇을</strong> — <code>sessions/YYYY-MM-DD.md</code>에 6필드 머리말 + <span class="hl hl-g">TL;DR 요약</span>으로 기록. 그 뒤 <code>hot.md</code>(최신 상태 요약)도 갱신.<br><strong>왜</strong> — 기록이 곧 다음 세션의 기억. 모호하면 "기록할까요?"라고 사용자에게 먼저 물음.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">⏳</div><div class="accordion-title">기억 유효기간 (TTL)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 세션 시작 시 만료 메모리 점검.<br><strong>무엇을</strong> — 메모리에 <code>expires</code> 날짜를 둠. 행동지침은 <span class="hl hl-g">영구</span>, 프로젝트는 <span class="hl hl-g">90일</span>, 장애 이력은 180일 권장. 기한이 지나면 <span class="hl hl-y">자동 삭제가 아니라 "정리할까요?"</span>라고 물음.<br><strong>왜</strong> — 오래된 프로젝트 기억이 쌓여 혼선을 주는 걸 막되, 함부로 지우지 않기 위해.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔎</div><div class="accordion-title">과거 검색 (Obsidian 리콜)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 사용자가 <span class="hl hl-c">"지난주에", "그때", "어떻게 해결했지", "이력"</span> 같은 과거를 물을 때.<br><strong>무엇을</strong> — Obsidian Wiki에서 단계적으로 검색: MOC(주제 색인) → 머리말 요약 → TL;DR만 → 필요 시 본문. 한 번에 최대 5개 세션만 읽음(컨텍스트 보호).<br><strong>왜</strong> — 수십 개 일지를 통째로 읽으면 토큰 폭발. 좁혀가며 찾습니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🗜️</div><div class="accordion-title">긴 출력 자동 압축</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 명령 결과(Bash·Read·Grep 등)가 <span class="hl hl-y">4000자(~1000토큰)</span>를 넘을 때.<br><strong>무엇을</strong> — 훅이 자동으로 앞 30줄 + 뒤 10줄만 남기고 중간을 생략. 에러 출력은 압축 안 함(디버깅 보존).<br><strong>왜</strong> — 긴 출력이 컨텍스트를 잡아먹지 않게. 이건 규칙이자 <code>compress-output</code> 훅으로 강제됩니다(P3에서).</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p2e" class="section">
+        <div class="section-num">PHASE 2 · 2.5</div>
+        <h2>🔁 자기교정 규칙</h2>
+        <p class="section-desc">실수가 습관이 되지 않게 — 1개 규칙</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔢</div><div class="accordion-title">피드백 카운터 (Reflexion 패턴)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 사용자가 <span class="hl hl-c">"또 이러네", "몇 번을 말해야", "또 안 지켰네"</span>처럼 같은 실수를 반복 지적하거나, "위반 기록해"라고 할 때.<br>
+            <strong>무엇을</strong> — 해당 실수의 횟수를 <code>feedback-violations.json</code>에 +1. <span class="hl hl-y">3번</span>에 도달하면 "이걸 정식 규칙(rules/)으로 승격할까요?"라고 제안. 승인하면 메모리 레이어(약함)에서 → 규칙 레이어(매 세션 강제)로 올림.<br>
+            <strong>왜</strong> — 메모리만으론 같은 실수가 반복됩니다. 횟수를 세어 임계점에서 더 강한 규칙으로 굳히는 자기개선 장치입니다. <em>P2.1의 "4단 설명·5줄 요약·즉시 전달"이 모두 이 카운터로 승격된 규칙이에요.</em></p></div></div>
+          </div>
+        </div>
+        <div class="callout tip reveal">
+          <div class="callout-title">3단 강제 구조</div>
+          <p>규칙은 강제력에 따라 3층입니다: <span class="hl hl-r">훅</span>(100% 자동 차단) → <span class="hl hl-y">rules/</span>(매 세션 리마인드, 70~80%) → <span class="hl hl-g">메모리</span>(참고, 30~50%). 피드백 카운터가 아래층 → 위층으로 올리는 승강기 역할을 합니다.</p>
+        </div>
+      </section>
+      <section id="p3a" class="section">
+        <div class="section-num">PHASE 3 · 3.1</div>
+        <h2>⏱️ 훅 라이프사이클</h2>
+        <p class="section-desc">봇이 일하는 동안 어느 순간에 어떤 훅이 도는지 — 전체 타임라인</p>
+        <p class="para">훅은 <span class="hl hl-c">7개의 시점(이벤트)</span>에 자동으로 끼어듭니다. 아래 표가 "언제 → 무엇이 → 어떤 순서로" 도는지 전부입니다. 각 훅의 자세한 동작은 3.2~3.5에서 하나하나 봅니다.</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>시점 (이벤트)</th><th>조건</th><th>실행 훅 (순서대로)</th></tr></thead>
+            <tbody>
+              <tr><td>📥 프롬프트 제출</td><td>전체</td><td><code>rule-reminder</code></td></tr>
+              <tr><td>🌅 세션 시작</td><td>startup·clear·compact</td><td><code>restore-context</code></td></tr>
+              <tr><td>🔒 도구 쓰기 전</td><td>Bash·PS</td><td><code>guard</code></td></tr>
+              <tr><td></td><td>Write·Edit</td><td><code>checkpoint-pre</code> → <code>credential-guard</code></td></tr>
+              <tr><td></td><td>Agent·Task</td><td><code>agent-tracker-pre</code></td></tr>
+              <tr><td>⚡ 도구 쓴 후</td><td>전체</td><td><code>restore-settings</code> → <code>compress-output</code> → <code>dispatcher</code></td></tr>
+              <tr><td></td><td>Edit·Write</td><td><code>auto-lint</code></td></tr>
+              <tr><td></td><td>Compact</td><td><code>restore-session</code></td></tr>
+              <tr><td>❌ 도구 실패</td><td>전체</td><td><code>dispatcher-failure</code></td></tr>
+              <tr><td>🏁 응답 끝(Stop)</td><td>전체</td><td>알림음 → <code>stop-dump</code> → <code>daily-summary</code> → <code>check-response-format</code> → <code>cancel-typing</code> → <code>session-log-guard</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout info reveal">
+          <div class="callout-title">읽는 법</div>
+          <p>한 도구를 쓰면 보통 <span class="hl hl-y">"쓰기 전 훅 → 도구 실행 → 쓴 후 훅"</span> 순서로 흐릅니다. 예를 들어 파일을 고치면: <code>checkpoint-pre</code>(백업)·<code>credential-guard</code>(검사) → 수정 → <code>auto-lint</code>(서식정리)·<code>dispatcher</code>(기록)가 차례로 돕니다.</p>
+        </div>
+      </section>
+      <section id="p3b" class="section">
+        <div class="section-num">PHASE 3 · 3.2</div>
+        <h2>📥 입력·시작 훅 <span class="badge badge-y">2</span></h2>
+        <p class="section-desc">내가 말을 걸거나 세션이 시작될 때 도는 훅</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">💡</div><div class="accordion-title">rule-reminder</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 내가 메시지를 보낼 때마다(UserPromptSubmit).<br><strong>하는 일</strong> — "승인 전 실행 금지 / 완료 시 검증 / 애매하면 질문" 핵심 규칙을 자동으로 다시 일러줍니다. 설정·훅 관련 키워드가 보이면 "검증 절차 대상"을 덧붙입니다.<br><strong>읽고/쓰고</strong> — 내 입력을 읽고, 규칙 글귀를 답변 위에 붙입니다(파일엔 안 씀).<br><strong>연결</strong> — <span class="hl hl-y">규칙 체계(P2)</span>를 매 턴 상기시키는 역할.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🌅</div><div class="accordion-title">restore-context</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 세션이 새로 시작될 때(SessionStart: 시작·초기화·압축).<br><strong>하는 일</strong> — 직전 대화 최대 5줄을 불러와 "어제 무슨 얘기 했는지" 기억한 채로 시작하게 합니다.<br><strong>읽고/쓰고</strong> — <code>~/.cc-connect/sessions/*.json</code>과 <code>config.toml</code>을 읽음.<br><strong>연결</strong> — <span class="hl hl-c">cc-connect 대화 기록</span>에 직접 연결. (압축 시 복원은 <code>restore-session</code>이 따로 담당 → P3.4)</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p3c" class="section">
+        <div class="section-num">PHASE 3 · 3.3</div>
+        <h2>🔒 도구 전 훅 <span class="badge badge-r">4</span></h2>
+        <p class="section-desc">위험·실수를 도구 실행 직전에 막거나 대비하는 문지기들</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🚨</div><div class="accordion-title">guard</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — Bash·PowerShell 명령을 실행하기 직전.<br><strong>하는 일</strong> — 위험한 명령 <span class="hl hl-r">7종</span>(전체 삭제 <code>rm -rf /</code>, main 강제 푸시, <code>DROP DATABASE</code>, 드라이브 포맷 등)을 정규식으로 검사해, 걸리면 <span class="hl hl-r">즉시 차단</span>(exit 2).<br><strong>읽고/쓰고</strong> — 명령어를 읽고, 차단 기록을 <code>guard.log</code>에 남김.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">💾</div><div class="accordion-title">checkpoint-pre</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 파일을 Write·Edit로 고치기 직전.<br><strong>하는 일</strong> — 수정 대상 파일(10MB 이하)의 원본을 <span class="hl hl-c">백업</span>해 둡니다(되돌리기용, 파일당 최대 5개).<br><strong>읽고/쓰고</strong> — 대상 파일을 읽어 <code>~/.claude/checkpoints/</code>에 타임스탬프 이름으로 복사.<br><strong>연결</strong> — git을 안 쓰는 작업에서도 "실행 전 되돌릴 수단"을 보장(VE 규칙의 ③번 안전망).</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔑</div><div class="accordion-title">credential-guard</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — Write·Edit로 파일에 내용을 쓰기 직전.<br><strong>하는 일</strong> — 쓰려는 내용에 <span class="hl hl-r">자격증명 15종</span>(AWS키, GitHub 토큰, 텔레그램 토큰 등)이 섞여 있으면 차단(exit 2). 단, 훅 폴더·예시·플레이스홀더는 허용.<br><strong>읽고/쓰고</strong> — 쓸 내용을 검사하고, 차단 기록을 <code>credential-guard.log</code>에.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🤖</div><div class="accordion-title">agent-tracker-pre</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 보조 일꾼(Agent·Task)을 부르기 직전.<br><strong>하는 일</strong> — 누구에게·무슨 모델로·무슨 프롬프트로 시켰는지 "시작" 기록을 남깁니다.<br><strong>읽고/쓰고</strong> — 호출 정보를 읽어 <code>~/.claude/logs/agents/</code>에 <span class="hl hl-y">start 이벤트</span>로 기록.<br><strong>연결</strong> — 끝나면 <code>dispatcher</code>가 같은 파일에 "완료"를 적습니다 → <span class="hl hl-y">에이전트 수명 추적 물길</span>(P3.6).</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p3d" class="section">
+        <div class="section-num">PHASE 3 · 3.4</div>
+        <h2>⚡ 도구 후 훅 <span class="badge badge-y">5</span></h2>
+        <p class="section-desc">도구를 쓴 직후 뒷정리·기록·복원을 맡는 훅들</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📮</div><div class="accordion-title">dispatcher <span class="badge badge-c">핵심</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 모든 도구를 쓴 직후.<br><strong>하는 일</strong> — 이 봇 기록의 <span class="hl hl-c">중심 분배기</span>. 도구 사용을 세 곳에 동시에 적습니다: ①작업일지(audit) ②통계(metrics) ③에이전트 기록(agents).<br><strong>읽고/쓰고</strong> — 도구 결과를 읽어 <code>session-logs/</code>·<code>logs/metrics/</code>·<code>logs/agents/</code>에 기록(내부 3함수).<br><strong>연결</strong> — 여기서 나온 기록을 <code>daily-summary</code>·<code>session-log-guard</code>가 읽습니다 → <span class="hl hl-y">성공 기록 물길</span>의 출발점.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🗜️</div><div class="accordion-title">compress-output</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 도구 결과가 나온 직후.<br><strong>하는 일</strong> — 결과가 <span class="hl hl-y">4000자</span>를 넘으면 앞 30줄 + 뒤 10줄만 남기고 줄여 토큰을 아낍니다. 에러 출력은 안 줄임(디버깅 보존).<br><strong>연결</strong> — P2.4 "긴 출력 압축" 규칙을 실제로 강제하는 훅.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧹</div><div class="accordion-title">restore-settings</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 도구 사용 후.<br><strong>하는 일</strong> — 설정이 의도치 않게 틀어졌으면 원래대로 되돌립니다.<br><strong>연결</strong> — P2.3 "설정 안전" 규칙의 자동 복구 장치.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">✨</div><div class="accordion-title">auto-lint</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — Edit·Write로 코드 파일을 고친 직후.<br><strong>하는 일</strong> — 확장자에 맞춰 서식 정리 도구를 자동 실행: <code>ruff</code>(파이썬)·<code>biome</code>(JS/TS)·<code>prettier</code>(CSS/JSON/MD).<br><strong>읽고/쓰고</strong> — 외부 린터를 불러 대상 파일을 직접 다듬음.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔄</div><div class="accordion-title">restore-session</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 대화가 길어져 압축(Compact)될 때.<br><strong>하는 일</strong> — 직전 대화 약 15개를 다시 불러와 핵심 맥락을 복원합니다. 실패하면 <code>hot.md</code>를 대신 읽습니다.<br><strong>읽고/쓰고</strong> — <code>cc-connect sessions</code>를 읽어 <code>last-session-context.md</code>에 캐시.<br><strong>연결</strong> — <span class="hl hl-c">컨텍스트 복원 물길</span>(P3.6).</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section id="p3e" class="section">
+        <div class="section-num">PHASE 3 · 3.5</div>
+        <h2>🏁 실패·종료 훅 <span class="badge badge-g">1 + 6</span></h2>
+        <p class="section-desc">도구가 실패했을 때, 그리고 답변이 끝났을 때 도는 훅들</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">❌</div><div class="accordion-title">dispatcher-failure (도구 실패 시)</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 도구가 실패했을 때(PostToolUseFailure).<br><strong>하는 일</strong> — 실패를 세 곳에 적습니다: ①<code>errors.jsonl</code>(에러 모음) ②통계(success:false) ③에이전트 기록(status:failure).<br><strong>연결</strong> — <code>errors.jsonl</code>은 나중에 <code>analyze-errors</code>가 읽습니다(P3.7) → <span class="hl hl-r">실패 기록 물길</span>.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔔</div><div class="accordion-title">응답 종료(Stop) 6종 — 펼쳐보기</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">답변이 끝나면 아래가 순서대로 돕니다:<br>
+            • <strong>알림음</strong> — 답변 끝났다고 소리로 알림.<br>
+            • <code>stop-dump</code> — 대화 스냅샷을 디버그용으로 저장.<br>
+            • <code>daily-summary</code> — <span class="hl hl-g">통계·에이전트 기록을 읽어</span> 하루 리포트(도구 횟수·성공률 등)를 <code>summaries/</code>에 생성. <em>(dispatcher가 쌓은 기록의 소비자)</em><br>
+            • <code>check-response-format</code> — "결과를 너무 길게 쏟지 않았나, 쉬운 4단 설명을 빠뜨리지 않았나" 검사 → 어기면 <span class="hl hl-r">다시 쓰게 막음</span>(block).<br>
+            • <code>cancel-typing</code> — 텔레그램 "입력 중..." 표시를 끔.<br>
+            • <code>session-log-guard</code> — 그날 작업일지(audit) 줄 수를 세어, 일을 많이 했는데 세션 로그를 안 썼으면 <span class="hl hl-r">"일지 쓰라"고 막음</span>(하루 1회).</p></div></div>
+          </div>
+        </div>
+        <div class="callout info reveal">
+          <div class="callout-title">두 개의 "막는" 훅</div>
+          <p><code>check-response-format</code>과 <code>session-log-guard</code>는 단순 기록이 아니라 <span class="hl hl-r">실제로 응답을 멈추고 다시 시키는</span> 강제 훅입니다. 규칙(P2)을 말로만 두지 않고 끝에서 검문하는 장치예요.</p>
+        </div>
+      </section>
+      <section id="p3f" class="section">
+        <div class="section-num">PHASE 3 · 3.6</div>
+        <h2>🕸️ 훅 연결 관계도</h2>
+        <p class="section-desc">훅들은 따로 노는 게 아니라, 공유 폴더를 통해 4개의 물길로 이어집니다</p>
+        <p class="para">"어떤 훅이 어떤 훅과 연결되나"의 핵심 — 훅들은 <span class="hl hl-c">같은 로그 폴더</span>를 한쪽은 쓰고 한쪽은 읽으며 간접 연결됩니다. 아래가 그 지도입니다.</p>
+
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">✅</div><div class="accordion-title">물길 1 — 성공 기록</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">도구 사용 → <code>dispatcher</code>가 <span class="hl hl-g">로그 3종</span>(작업일지·통계·에이전트)에 기록 → <code>daily-summary</code>가 통계·에이전트를 읽어 하루 리포트 생성 + <code>session-log-guard</code>가 작업일지 줄 수를 세어 세션 로그 작성 여부 감시.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">❌</div><div class="accordion-title">물길 2 — 실패 기록</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">도구 실패 → <code>dispatcher-failure</code>가 <span class="hl hl-r">errors.jsonl</span> + 통계(실패)에 기록 → (수동) <code>analyze-errors</code>가 errors.jsonl을 읽어 3회 이상 반복된 에러를 묶어줌 → (정리 시) <code>log-rotate</code>가 오래된 errors.jsonl 삭제.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🤖</div><div class="accordion-title">물길 3 — 에이전트 수명 추적</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><code>agent-tracker-pre</code>가 "시작"을 적음 → 끝나면 <code>dispatcher</code>(성공) 또는 <code>dispatcher-failure</code>(실패)가 <span class="hl hl-y">같은 agents 파일</span>에 "완료"를 추가 → <code>daily-summary</code>가 시작·완료 짝을 맞춰 집계.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔄</div><div class="accordion-title">물길 4 — 컨텍스트 복원</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">세션 시작 → <code>restore-context</code>, 압축 발생 → <code>restore-session</code>이 둘 다 <span class="hl hl-c">cc-connect 대화 기록</span>을 읽어 직전 맥락을 되살림. 실패하면 <code>hot.md</code>로 폴백.</p></div></div>
+          </div>
+        </div>
+
+        <p class="para"><strong>📁 공유 폴더 = 훅끼리 이어지는 통로</strong> — 누가 쓰고 누가 읽는지:</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>공유 폴더</th><th>쓰는 훅</th><th>읽는 훅</th></tr></thead>
+            <tbody>
+              <tr><td><code>logs/metrics/</code></td><td>dispatcher · dispatcher-failure</td><td>daily-summary · (log-rotate 삭제)</td></tr>
+              <tr><td><code>logs/agents/</code></td><td>agent-tracker-pre · dispatcher · dispatcher-failure</td><td>daily-summary · (log-rotate)</td></tr>
+              <tr><td><code>error-log/errors.jsonl</code></td><td>dispatcher-failure</td><td>analyze-errors · (log-rotate)</td></tr>
+              <tr><td><code>session-logs/</code> (audit)</td><td>dispatcher</td><td>session-log-guard</td></tr>
+              <tr><td><code>summaries/</code></td><td>daily-summary</td><td>(log-rotate)</td></tr>
+              <tr><td><code>checkpoints/</code></td><td>checkpoint-pre</td><td>(수동 복구)</td></tr>
+              <tr><td><code>cc-connect/sessions/</code></td><td>cc-connect 봇(외부)</td><td>restore-context · restore-session</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout tip reveal">
+          <div class="callout-title">한 문장 요약</div>
+          <p><code>dispatcher</code>가 <span class="hl hl-y">모든 기록의 중심</span>이고, <code>log-rotate</code>가 <span class="hl hl-y">모든 로그의 청소부</span>입니다. 나머지 훅은 이 두 축 사이에서 쓰거나 읽습니다.</p>
+        </div>
+      </section>
+      <section id="p3g" class="section">
+        <div class="section-num">PHASE 3 · 3.7</div>
+        <h2>🔧 수동 유틸 <span class="badge badge-y">2</span></h2>
+        <p class="section-desc">자동 실행엔 안 걸렸지만, 데이터 흐름엔 연결된 두 스크립트</p>
+
+        <div class="callout warn reveal">
+          <div class="callout-title">"고아 훅"이라던 오해 정정</div>
+          <p>이전엔 이 둘이 <code>settings.json</code>에 등록 안 됐다고 "고아"로 봤습니다. 하지만 조사해 보니 <span class="hl hl-y">데이터 흐름엔 분명히 연결</span>돼 있습니다 — <strong>자동 실행만 안 걸렸을 뿐, 시스템의 일부</strong>입니다. 필요할 때 손으로 돌리는 유지보수 도구예요.</p>
+        </div>
+
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔍</div><div class="accordion-title">analyze-errors</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 손으로 실행할 때(자동 아님).<br><strong>하는 일</strong> — <code>errors.jsonl</code>을 읽어 <span class="hl hl-r">3회 이상 반복된 에러 패턴</span>을 묶어 보여줍니다.<br><strong>연결</strong> — <code>dispatcher-failure</code>가 쌓은 실패 로그의 <span class="hl hl-y">소비자</span>. 즉 "실패 기록 물길"의 마지막 단계입니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧽</div><div class="accordion-title">log-rotate</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 손으로 실행할 때(자동 아님).<br><strong>하는 일</strong> — <code>~/.claude/</code> 아래 6개 로그 폴더에서 <span class="hl hl-c">30일 넘은 파일</span>을 삭제합니다.<br><strong>연결</strong> — metrics·agents·errors·summaries 등 <span class="hl hl-y">모든 로그의 청소부</span>. 다른 훅이 쌓은 기록이 무한정 쌓이지 않게 합니다.</p></div></div>
+          </div>
+        </div>
+
+        <div class="callout info reveal">
+          <div class="callout-title">개선 여지</div>
+          <p>둘 다 <span class="hl hl-y">수동</span>이라, 잊으면 안 돌아갑니다. <code>log-rotate</code>는 주기 실행(cron/스케줄)으로, <code>analyze-errors</code>는 가끔 점검용으로 자동화할 수 있습니다 — 펜딩 후보로 P6에 적어뒀습니다.</p>
+        </div>
+      </section>
+      <section id="p4a" class="section"><div class="section-num">PHASE 4 · 4.1</div><h2>🧠 메모리 30</h2><p class="todo-note">— P4에서 작성 예정</p></section>
+      <section id="p4b" class="section"><div class="section-num">PHASE 4 · 4.2</div><h2>📓 세션로그 + hot.md</h2><p class="todo-note">— P4에서 작성 예정</p></section>
+      <section id="p5a" class="section"><div class="section-num">PHASE 5 · 5.1</div><h2>🔌 MCP 6개</h2><p class="todo-note">— P5에서 작성 예정</p></section>
+      <section id="p5b" class="section"><div class="section-num">PHASE 5 · 5.2</div><h2>🤖 에이전트 호출 규칙</h2><p class="todo-note">— P5에서 작성 예정</p></section>
+      <section id="p6a" class="section"><div class="section-num">PHASE 6 · 6.1</div><h2>📌 펜딩 현황</h2><p class="todo-note">— P6에서 작성 예정</p></section>
+      <section id="p6b" class="section"><div class="section-num">PHASE 6 · 6.2</div><h2>⚡ 결함·설계 결정</h2><p class="todo-note">— P6에서 작성 예정</p></section>
+      <section id="p6c" class="section"><div class="section-num">PHASE 6 · 6.3</div><h2>🔭 다음 후보</h2><p class="todo-note">— P6에서 작성 예정</p></section>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+function toggleMobileMenu() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('menuToggle');
+  if (sidebar.classList.contains('open')) { closeMobileMenu(); }
+  else { sidebar.classList.add('open'); overlay.classList.add('open'); requestAnimationFrame(() => overlay.classList.add('visible')); btn.textContent = '✕'; }
+}
+function closeMobileMenu() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('menuToggle');
+  sidebar.classList.remove('open'); overlay.classList.remove('visible');
+  setTimeout(() => overlay.classList.remove('open'), 300); btn.textContent = '☰';
+}
+function scrollToSection(secId) {
+  const target = document.getElementById(secId);
+  if (!target) return;
+  const main = document.getElementById('mainPanel');
+  const topbarH = document.querySelector('.topbar').offsetHeight;
+  main.scrollTo({ top: target.offsetTop - topbarH - 8, behavior: 'smooth' });
+  document.querySelectorAll('.ch-card').forEach(c => c.classList.remove('active'));
+  const card = document.querySelector(`.ch-card[data-sec="${secId}"]`);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  closeMobileMenu();
+}
+(function initScrollSpy() {
+  const sections = document.querySelectorAll('.section[id]');
+  const main = document.getElementById('mainPanel');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const secId = entry.target.id;
+        document.querySelectorAll('.ch-card').forEach(c => c.classList.remove('active'));
+        const card = document.querySelector(`.ch-card[data-sec="${secId}"]`);
+        if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      }
+    });
+  }, { root: main, rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+  sections.forEach(s => observer.observe(s));
+})();
+(function initReveal() {
+  const main = document.getElementById('mainPanel');
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, { root: main, threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+})();
+function toggleAccordion(headEl) {
+  const item = headEl.closest('.accordion-item');
+  item.classList.toggle('open', !item.classList.contains('open'));
+}
+</script>
+</body>
+</html>
