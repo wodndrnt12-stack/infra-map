@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>P4.1 · 메모리 31개</title>
+<title>P4.1 · 메모리 32개</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -32,7 +32,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
 /* stacked bar */
 .bar{display:flex;height:40px;border-radius:10px;overflow:hidden;font-size:12.5px;font-weight:900;}
 .bar div{display:flex;align-items:center;justify-content:center;color:#fff;}
-.b1{flex:18;background:#d39b34;} .b2{flex:7;background:#3f9fb0;} .b3{flex:6;background:#57a06a;}
+.b1{flex:18;background:#d39b34;} .b2{flex:7;background:#3f9fb0;} .b3{flex:6;background:#57a06a;} .b4{flex:3;background:#c2674f;}
 .barcap{font-size:11.5px;color:#8a8f9b;margin-top:7px;}
 .barcap b{color:var(--ac);}
 
@@ -43,7 +43,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
   display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .cname{font-size:15.5px;font-weight:900;color:#3a3f48;}
 .cbadge{font-size:11px;font-weight:700;color:#fff;border-radius:20px;padding:2px 10px;margin-left:auto;}
-.bg-y{background:#d39b34;} .bg-c{background:#3f9fb0;} .bg-g{background:#57a06a;}
+.bg-y{background:#d39b34;} .bg-c{background:#3f9fb0;} .bg-g{background:#57a06a;} .bg-t{background:#c2674f;}
 .cbody{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:10px;}
 .cbody b{color:#3a3f48;} .cbody em{color:#7a7f8c;font-style:normal;}
 .cbody .hl{background:linear-gradient(transparent 58%,#f0e3a8 58%);font-weight:700;padding:0 2px;}
@@ -88,21 +88,22 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
   <div class="poster">
     <div class="hd">
       <span class="tag">PHASE 4 · 4.1</span>
-      <h1>🧠 메모리 &nbsp;<span style="font-size:20px;color:#5a4cb0;">31개</span></h1>
-      <p>봇이 까먹지 않으려고 <b>파일로 저장해 둔 기억</b> — 목차 1장 + 내용 30개. 크게 세 종류로 나뉩니다.</p>
+      <h1>🧠 메모리 &nbsp;<span style="font-size:20px;color:#5a4cb0;">32개</span></h1>
+      <p>봇이 까먹지 않으려고 <b>파일로 저장해 둔 기억</b> — 목차 1장(<code style="font-family:'JetBrains Mono',monospace;font-size:12px;">MEMORY.md</code>) + 내용 32개. 크게 네 종류로 나뉩니다.</p>
     </div>
 
     <div class="body">
-      <p class="lead"><code>MEMORY.md</code>가 <span class="hl">목차</span> 역할을 하고, 실제 내용은 30개 파일에 나뉘어 있습니다. <b>행동지침이 절반 이상</b>으로, "어떻게 일할지"가 기억의 중심이에요.</p>
+      <p class="lead"><code>MEMORY.md</code>가 <span class="hl">목차</span> 역할을 하고, 실제 내용은 32개 파일에 나뉘어 있습니다. <b>행동지침이 절반 이상</b>으로, "어떻게 일할지"가 기억의 중심이에요.</p>
 
       <div class="bar">
         <div class="b1">🧭 행동지침 18</div>
         <div class="b2">📦 프로젝트 7</div>
         <div class="b3">🛠️ 인프라 6</div>
+        <div class="b4">🧯 인시던트 1</div>
       </div>
-      <div class="barcap">총 <b>31개</b> — 행동지침(18)이 가장 많고, 프로젝트(7)·인프라 메모(6)가 뒤를 잇습니다.</div>
+      <div class="barcap">총 <b>32개</b> — 행동지침(18)이 가장 많고, 프로젝트(7)·인프라(6)·인시던트(1)가 뒤를 잇습니다.</div>
 
-      <div class="seclab">세 종류의 기억</div>
+      <div class="seclab">네 종류의 기억</div>
       <div class="cards">
         <div class="card">
           <div class="chead"><div class="cico">🧭</div><div class="cname">행동지침 — 어떻게 일할지</div><div class="cbadge bg-y">18</div></div>
@@ -114,7 +115,11 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         </div>
         <div class="card">
           <div class="chead"><div class="cico">🛠️</div><div class="cname">인프라 메모 — 설치·복제 노하우</div><div class="cbadge bg-g">6</div></div>
-          <div class="cbody">환경 구축 중 막혔던 지점과 해법: 봇 자동시작(작업 스케줄러) · 새 PC 원클릭 복제 키트 · 훅 복제 · Obsidian Wiki 검색 고장 수정 · 복제 트러블슈팅.</div>
+          <div class="cbody">환경 구축 중 막혔던 지점과 해법: 봇 자동시작(작업 스케줄러) · 새 PC 원클릭 복제 키트 · 훅 복제 · Obsidian Wiki 검색 고장 수정 · 복제 트러블슈팅 · 인프라 배포 펜딩.</div>
+        </div>
+        <div class="card">
+          <div class="chead"><div class="cico">🧯</div><div class="cname">인시던트 — 장애·사건 기록</div><div class="cbadge bg-t">1</div></div>
+          <div class="cbody"><b>#THINK-400</b> 400 thinking 에러 — 근본원인·재현·대응(워크어라운드 <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">/new</code>)·재발 자동 카운터까지 담은 장애 보고서입니다.</div>
         </div>
       </div>
 

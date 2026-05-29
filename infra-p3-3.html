@@ -92,6 +92,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rows">
             <div class="row"><span class="rk">하는 일</span><span class="rv">위험한 명령 <span class="hl">8종</span>(전체 삭제 <code>rm -rf /</code>, main 강제 푸시, <code>DROP DATABASE</code>, 드라이브 포맷 등)을 정규식으로 검사해, 걸리면 <span class="hl">즉시 차단</span>(exit 2).</span></div>
             <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">명령어를 읽고, 차단 기록을 <code>guard.log</code>에 남김.</span></div>
+            <div class="row"><span class="rk">예외</span><span class="rv">시스템 종료·재시작 차단(<code>shutdown</code>·<code>Restart-Computer</code>)은 현재 <span class="hl">임시 비활성</span>(코드 주석) 상태 — 봇 운영 편의를 위한 의도적 BYPASS입니다.</span></div>
           </div>
         </div>
 

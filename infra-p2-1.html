@@ -34,6 +34,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
 .rt{font-size:17px;font-weight:900;}
 .esc{font-size:11px;font-weight:700;color:var(--ac);background:#fff;border:1px solid var(--bd);
   border-radius:20px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;}
+.hk{font-size:11px;font-weight:700;color:#fff;background:var(--ac);
+  border-radius:20px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;}
 .rd{font-size:13px;color:#5d6370;line-height:1.65;margin-top:7px;}
 .rd b{color:#3a3f48;}
 .rx{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:11px;}
@@ -61,7 +63,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
     <div class="hd">
       <span class="tag">PHASE 2 · 2.1</span>
       <h1>💬 말하는 방식</h1>
-      <p>봇이 <b>어떻게 전달하는가</b>에 대한 4개 규칙. 셋은 같은 실수를 반복해 정식 규칙으로 <b>승격</b>됐습니다.</p>
+      <p>봇이 <b>어떻게 전달하는가</b>에 대한 4개 규칙. 셋은 같은 실수를 반복해 정식 규칙으로 <b>승격</b>됐고, 그중 <b>둘(4단 설명·5줄 요약)만 Stop 훅이 끝에서 직접 검문</b>합니다 — 나머지 둘은 규칙·메모리 레이어 몫.</p>
     </div>
 
     <div class="body">
@@ -71,7 +73,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="rule">
           <div class="rnum">1</div>
           <div class="rmain">
-            <div class="rh"><span class="rt">쉬운 4단 설명</span><span class="esc">⬆ 위반 4회 → 규칙</span></div>
+            <div class="rh"><span class="rt">쉬운 4단 설명</span><span class="esc">⬆ 위반 4회 → 규칙</span><span class="hk">🔒 Stop훅 검문</span></div>
             <div class="rd">기술 용어를 나열하지 않고, 항상 <b>4단 구조</b>로 풀어서 설명합니다.</div>
             <div class="rx">
               <span class="lab">구조</span>
@@ -86,7 +88,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="rule">
           <div class="rnum">2</div>
           <div class="rmain">
-            <div class="rh"><span class="rt">5줄 요약</span><span class="esc">⬆ 위반 3회 → 규칙</span></div>
+            <div class="rh"><span class="rt">5줄 요약</span><span class="esc">⬆ 위반 3회 → 규칙</span><span class="hk">🔒 Stop훅 검문</span></div>
             <div class="rd">에이전트 결과를 <b>원문 그대로 덤프 금지</b>. 5줄 안에 핵심만 압축합니다.</div>
             <div class="rx">
               <span class="lab">공식</span>

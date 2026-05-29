@@ -94,7 +94,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
     <div class="hd">
       <span class="tag">PHASE 5 · 5.1</span>
       <h1>🔌 MCP &nbsp;<span style="font-size:20px;color:#23808b;">6개</span></h1>
-      <p>봇을 바깥 세상(문서·웹·드라이브·메모)과 잇는 <b>6개의 통로</b> — 언제·어떻게·지금 상태.</p>
+      <p>봇을 바깥 세상(문서·웹·드라이브·메모)과 잇는 <b>6개의 통로</b> — 연결 방식 3가지·지금 상태·과금 여부.</p>
     </div>
 
     <div class="body">
@@ -118,8 +118,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <tbody>
           <tr><td class="nm">📚 context7</td><td>라이브러리·프레임워크·API <span class="hl">공식 문서 최신본</span> 조회 (학습데이터보다 신선)</td><td><span class="bdg g">정상</span></td></tr>
           <tr><td class="nm">🔎 obsidian</td><td>Wiki 노트 읽기·검색·쓰기 — 과거 이력 <span class="hly">리콜</span>의 통로</td><td><span class="bdg g">정상</span></td></tr>
-          <tr><td class="nm">🌐 exa</td><td>의미 기반 웹 <span class="hl">검색·페치</span> (키워드보다 맥락 매칭)</td><td><span class="bdg g">정상</span></td></tr>
-          <tr><td class="nm">🔥 firecrawl</td><td>웹 스크래핑·크롤·구조화 추출·브라우저 자동화</td><td><span class="bdg g">정상</span></td></tr>
+          <tr><td class="nm">🌐 exa</td><td>의미 기반 웹 <span class="hl">검색·페치</span> (키워드보다 맥락 매칭) · <b>유료 API키</b></td><td><span class="bdg g">정상</span></td></tr>
+          <tr><td class="nm">🔥 firecrawl</td><td>웹 스크래핑·크롤·구조화 추출·브라우저 자동화 · <b>유료 API키</b></td><td><span class="bdg g">정상</span></td></tr>
           <tr><td class="nm">📓 notebooklm</td><td>소스 업로드 후 Gemini로 <span class="hl">근거 기반 연구</span>·오디오 요약</td><td><span class="bdg r">미인증</span></td></tr>
           <tr><td class="nm">📁 Google Drive</td><td>드라이브 파일 검색·내용 읽기</td><td><span class="bdg r">스코프 부족</span></td></tr>
         </tbody>
@@ -128,8 +128,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
       <div class="cal warn">
         <div class="ci">🔧</div>
         <div>
-          <div class="ct">복제 때 가장 크게 막혔던 한 줄</div>
-          <div class="cd">6개 모두 연결 방식을 <code>cmd /c &lt;직접 바이너리&gt;</code>로 통일했습니다. Windows에서는 <span class="hl">맨 <code>npx</code> 호출이 프로세스 스폰에 실패</span>하기 때문 — 새 PC 복제 시 핵심 교훈이었습니다.</div>
+          <div class="ct">연결 방식은 한 가지가 아닙니다</div>
+          <div class="cd"><b>stdio 4개</b>(obsidian·exa·firecrawl·notebooklm)는 <code>cmd /c &lt;직접 바이너리&gt;</code>로 통일 — Windows에서 <span class="hl">맨 <code>npx</code> 호출이 스폰에 실패</span>하기 때문(복제 핵심 교훈). 반면 <b>context7</b>은 <code>HTTP 원격</code>(url 직접 연결), <b>Google Drive</b>는 claude.ai 커넥터라 연결 방식이 서로 다릅니다.</div>
         </div>
       </div>
 

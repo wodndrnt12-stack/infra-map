@@ -83,7 +83,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
     </div>
 
     <div class="body">
-      <p class="lead">훅은 <span class="hl">7개 시점(이벤트)</span>에 자동으로 끼어듭니다. 내가 메시지를 보내고 답이 끝날 때까지, 아래 순서로 흐릅니다.</p>
+      <p class="lead">훅은 <span class="hl">6개 시점(이벤트)</span>에 자동으로 끼어듭니다. 내가 메시지를 보내고 답이 끝날 때까지, 아래 순서로 흐릅니다.</p>
 
       <div class="seclab">큰 흐름 — 5개 관문</div>
       <div class="tl">
@@ -102,7 +102,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
       <table class="tbl">
         <thead><tr><th>시점 (이벤트)</th><th>조건</th><th>실행 훅 (순서대로)</th></tr></thead>
         <tbody>
-          <tr><td class="ev">📥 프롬프트 제출</td><td>전체</td><td><code>rule-reminder</code></td></tr>
+          <tr><td class="ev">📥 프롬프트 제출</td><td>전체</td><td><code>rule-reminder</code> <span class="arw">→</span> <code>infra-map-link</code></td></tr>
           <tr><td class="ev">🌅 세션 시작</td><td>startup·clear·compact</td><td><code>restore-context</code></td></tr>
           <tr><td class="ev">🔒 도구 쓰기 전</td><td>Bash·PS</td><td><code>guard</code></td></tr>
           <tr><td></td><td>Write·Edit</td><td><code>checkpoint-pre</code> <span class="arw">→</span> <code>credential-guard</code></td></tr>
