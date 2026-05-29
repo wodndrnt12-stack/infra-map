@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P2.5 · 자기교정</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#cba43c;--soft:#fbf0cf;--bd:#f2e3a8;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#fbf0cd 0%,#faf2d7 55%,#f7f3e6 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#a8842a;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a5a2e;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:22px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#f4e6a8 58%);font-weight:700;padding:0 2px;}
+.seclab{font-size:16px;font-weight:900;margin:26px 0 13px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+
+.rule{display:flex;gap:16px;background:var(--soft);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;}
+.rnum{width:38px;height:38px;border-radius:11px;background:var(--ac);color:#fff;font-size:18px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rt{font-size:17px;font-weight:900;}
+.rd{font-size:13px;color:#5d6370;line-height:1.65;margin-top:7px;}
+.rd b{color:#3a3f48;}
+
+/* loop flow */
+.loop{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-top:14px;}
+.ln{background:#fff;border:1px solid var(--bd);border-radius:11px;padding:10px 15px;text-align:center;}
+.ln .le{font-size:18px;} .ln .ll{font-size:12.5px;font-weight:700;color:#3a3f48;margin-top:2px;}
+.ln.hot{background:var(--ac);border-color:var(--ac);} .ln.hot .ll{color:#fff;}
+.larw{margin:0 9px;color:#d9c270;font-size:18px;font-weight:700;}
+
+/* ladder */
+.ladder{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-top:6px;}
+.rung{flex:1;max-width:230px;border-radius:14px 14px 10px 10px;padding:16px 14px;text-align:center;color:#fff;}
+.rung .rl{font-size:16px;font-weight:900;}
+.rung .rp{font-size:22px;font-weight:900;margin:3px 0 1px;}
+.rung .rs{font-size:11.5px;opacity:0.92;}
+.r1{background:#b9bcc4;height:104px;} .r2{background:#8a7fb0;height:134px;} .r3{background:var(--ac);height:166px;}
+.lcap{text-align:center;font-size:11.5px;color:#8a8f9b;margin-top:11px;}
+.lcap b{color:var(--ac);}
+
+/* example counters */
+.ex{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px;}
+.exc{flex:1;min-width:150px;background:var(--soft);border:1px solid var(--bd);border-radius:11px;padding:11px 13px;}
+.exc .en{font-size:12.5px;font-weight:700;color:#3a3f48;}
+.exc .ec{font-size:11.5px;color:#8a7a3c;margin-top:2px;}
+.exc .ec b{color:var(--ac);font-weight:900;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:25px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .rule{gap:13px;padding:15px 16px;}
+  .rnum{width:32px;height:32px;font-size:16px;}
+  .loop{flex-direction:column;}
+  .ln{width:100%;}
+  .larw{margin:6px 0;transform:rotate(90deg);}
+  .ladder{gap:8px;}
+  .rung{padding:14px 8px;}
+  .rung .rp{font-size:17px;}
+  .exc{min-width:0;flex:1 1 100%;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 2 · 2.5</span>
+      <h1>🔁 자기교정</h1>
+      <p>봇이 <b>같은 실수를 반복하지 않도록</b> 스스로 강화하는 단 하나의 규칙 — 하지만 14개 전체를 움직이는 엔진입니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">앞의 규칙들이 "왜 위반 4회 → 규칙"이라고 적혀 있었죠? 그 <span class="hl">승격을 자동으로 굴리는 장치</span>가 바로 이 피드백 카운터입니다.</p>
+
+      <div class="rule">
+        <div class="rnum">14</div>
+        <div style="flex:1;min-width:0;">
+          <div class="rt">피드백 카운터 (Reflexion 패턴)</div>
+          <div class="rd">반복되는 실수를 감지하면 카운트를 올리고, <b>3회에 도달하면</b> 메모리 레이어의 약한 지침을 정식 규칙으로 <b>승격</b>합니다.</div>
+          <div class="loop">
+            <span class="ln"><div class="le">🔍</div><div class="ll">반복 실수 감지</div></span>
+            <span class="larw">→</span>
+            <span class="ln"><div class="le">➕</div><div class="ll">카운터 +1</div></span>
+            <span class="larw">→</span>
+            <span class="ln hot"><div class="le">⚠️</div><div class="ll">3회 도달</div></span>
+            <span class="larw">→</span>
+            <span class="ln"><div class="le">⬆️</div><div class="ll">규칙으로 승격</div></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="seclab">강제력 3단 사다리 — 카운터가 올리는 승강기</div>
+      <div class="ladder">
+        <div class="rung r1"><div class="rl">📒 메모리</div><div class="rp">30~50%</div><div class="rs">참고용</div></div>
+        <div class="rung r2"><div class="rl">📌 규칙</div><div class="rp">70~80%</div><div class="rs">매 세션 리마인드</div></div>
+        <div class="rung r3"><div class="rl">🔒 훅</div><div class="rp">100%</div><div class="rs">코드 자동 차단</div></div>
+      </div>
+      <div class="lcap">자주 어기는 항목일수록 <b>아래층에서 위층으로</b> 올라갑니다. 규칙은 곧 반복된 실수가 만든 흉터입니다.</div>
+
+      <div class="seclab">실제로 승격된 카운터</div>
+      <div class="ex">
+        <div class="exc"><div class="en">즉시 전달</div><div class="ec">위반 <b>4회</b> → 규칙 승격</div></div>
+        <div class="exc"><div class="en">4단 설명</div><div class="ec">위반 <b>4회</b> → 규칙 승격</div></div>
+        <div class="exc"><div class="en">5줄 요약</div><div class="ec">위반 <b>3회</b> → 규칙 승격</div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
