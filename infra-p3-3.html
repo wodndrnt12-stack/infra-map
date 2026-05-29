@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P3.3 · 도구 전 훅</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#d4604f;--soft:#fbe2dd;--bd:#f4c9c0;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#fbe0da 0%,#fae8e2 55%,#f8efe9 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#b94a3a;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a463f;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:20px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+.lead .blk{background:var(--ac);color:#fff;border-radius:5px;padding:1px 7px;font-weight:700;font-size:12.5px;}
+
+/* gate strip */
+.gates{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px;}
+.gate{flex:1;min-width:150px;background:var(--soft);border:1px solid var(--bd);border-radius:12px;padding:13px;text-align:center;}
+.gate.block{background:#fbe2dd;border:2px solid var(--ac);}
+.gate .ge{font-size:22px;} .gate .gn{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3a3f48;margin-top:5px;}
+.gate .gs{font-size:11px;color:#8a7570;margin-top:2px;}
+.gate .gb{display:inline-block;font-size:10px;font-weight:700;color:#fff;background:var(--ac);border-radius:10px;padding:1px 8px;margin-top:6px;}
+
+.cards{display:flex;flex-direction:column;gap:13px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:15px;padding:17px 20px;}
+.card.danger{border-left:5px solid var(--ac);}
+.chead{display:flex;align-items:center;gap:10px;}
+.cico{width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.cname{font-family:'JetBrains Mono',monospace;font-size:16.5px;font-weight:700;color:#3a3f48;}
+.cwhen{font-size:11px;color:#8a7570;margin-left:auto;}
+.rows{margin-top:11px;display:flex;flex-direction:column;gap:7px;}
+.row{display:flex;gap:10px;align-items:flex-start;}
+.rk{font-size:11px;font-weight:900;color:var(--ac);background:#fff;border:1px solid var(--bd);
+  border-radius:6px;padding:3px 8px;flex-shrink:0;min-width:58px;text-align:center;}
+.rv{font-size:12.5px;color:#5d6370;line-height:1.55;padding-top:2px;}
+.rv b{color:#3a3f48;} .rv code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:#fff;border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:#b94a3a;}
+.rv .hl{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+.rv .hlc{background:linear-gradient(transparent 58%,#cfe6e0 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .gate{min-width:0;flex:1 1 calc(50% - 9px);}
+  .card{padding:15px 16px;}
+  .chead{flex-wrap:wrap;gap:8px 10px;}
+  .cname{font-size:15px;}
+  .cwhen{margin-left:0;flex-basis:100%;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 3 · 3.3</span>
+      <h1>🔒 도구 전 훅 &nbsp;<span style="font-size:20px;color:#b94a3a;">4개</span></h1>
+      <p>위험·실수를 <b>도구 실행 직전</b>에 막거나 대비하는 문지기들. 도구 종류에 따라 다른 문지기가 섭니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead"><span class="blk">빨강 2종</span>은 걸리면 <b>즉시 차단</b>(exit 2), 나머지는 대비·기록용입니다.</p>
+
+      <div class="gates">
+        <div class="gate block"><div class="ge">🚨</div><div class="gn">guard</div><div class="gs">위험 명령 차단</div><div class="gb">차단</div></div>
+        <div class="gate"><div class="ge">💾</div><div class="gn">checkpoint-pre</div><div class="gs">원본 백업</div></div>
+        <div class="gate block"><div class="ge">🔑</div><div class="gn">credential-guard</div><div class="gs">비밀키 차단</div><div class="gb">차단</div></div>
+        <div class="gate"><div class="ge">🤖</div><div class="gn">agent-tracker-pre</div><div class="gs">시작 기록</div></div>
+      </div>
+
+      <div class="cards">
+        <div class="card danger">
+          <div class="chead"><div class="cico">🚨</div><div class="cname">guard</div><div class="cwhen">Bash·PS 실행 직전</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">위험한 명령 <span class="hl">8종</span>(전체 삭제 <code>rm -rf /</code>, main 강제 푸시, <code>DROP DATABASE</code>, 드라이브 포맷 등)을 정규식으로 검사해, 걸리면 <span class="hl">즉시 차단</span>(exit 2).</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">명령어를 읽고, 차단 기록을 <code>guard.log</code>에 남김.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">💾</div><div class="cname">checkpoint-pre</div><div class="cwhen">Write·Edit 직전</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">수정 대상 파일(10MB 이하)의 원본을 <span class="hlc">백업</span>해 둡니다(되돌리기용, 파일당 최대 5개).</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">대상 파일을 읽어 <code>~/.claude/checkpoints/</code>에 타임스탬프 이름으로 복사.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">git을 안 쓰는 작업에서도 "실행 전 되돌릴 수단"을 보장(VE 규칙의 ③번 안전망).</span></div>
+          </div>
+        </div>
+
+        <div class="card danger">
+          <div class="chead"><div class="cico">🔑</div><div class="cname">credential-guard</div><div class="cwhen">Write·Edit 직전</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">쓰려는 내용에 <span class="hl">자격증명 15종</span>(AWS키, GitHub 토큰, 텔레그램 토큰 등)이 섞여 있으면 차단(exit 2). 단, 훅 폴더·예시·플레이스홀더는 허용.</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">쓸 내용을 검사하고, 차단 기록을 <code>credential-guard.log</code>에.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">🤖</div><div class="cname">agent-tracker-pre</div><div class="cwhen">Agent·Task 호출 직전</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">누구에게·무슨 모델로·무슨 프롬프트로 시켰는지 "시작" 기록을 남깁니다.</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">호출 정보를 읽어 <code>~/.claude/logs/agents/</code>에 <span class="hl">start 이벤트</span>로 기록.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">끝나면 <code>dispatcher</code>가 같은 파일에 "완료"를 적습니다 → <span class="hl">에이전트 수명 추적 물길</span>(P3.6).</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
