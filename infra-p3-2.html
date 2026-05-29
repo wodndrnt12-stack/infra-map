@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P3.2 · 입력·시작 훅</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#d39b34;--soft:#fbf0d3;--bd:#f1e2a9;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#fbefcf 0%,#faf1da 55%,#f8f3e7 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#ac7e22;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a5a2e;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:22px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#f1e2a9 58%);font-weight:700;padding:0 2px;}
+
+.cards{display:flex;flex-direction:column;gap:15px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;}
+.chead{display:flex;align-items:center;gap:11px;}
+.cico{width:42px;height:42px;border-radius:12px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.cname{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#3a3f48;}
+.cwhen{font-size:11.5px;color:#fff;background:var(--ac);border-radius:20px;padding:3px 11px;font-weight:700;margin-left:auto;}
+.rows{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
+.row{display:flex;gap:11px;align-items:flex-start;}
+.rk{font-size:11.5px;font-weight:900;color:var(--ac);background:#fff;border:1px solid var(--bd);
+  border-radius:7px;padding:4px 9px;flex-shrink:0;min-width:62px;text-align:center;}
+.rv{font-size:13px;color:#5d6370;line-height:1.6;padding-top:2px;}
+.rv b{color:#3a3f48;} .rv code{font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  background:#fff;border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:#9a7424;}
+.rv .hl{background:linear-gradient(transparent 58%,#f1e2a9 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .card{padding:16px 16px;}
+  .chead{flex-wrap:wrap;gap:9px;}
+  .cname{font-size:15px;}
+  .cwhen{margin-left:0;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 3 · 3.2</span>
+      <h1>📥 입력·시작 훅 &nbsp;<span style="font-size:20px;color:#ac7e22;">2개</span></h1>
+      <p>내가 <b>말을 걸거나 세션이 시작될 때</b> 도는 훅 — 규칙을 상기시키고, 직전 대화를 기억한 채 시작하게 합니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">매번 백지에서 시작하지 않으려면 두 가지가 필요합니다. <span class="hl">"규칙을 다시 일러주기"</span>와 <span class="hl">"어제 무슨 얘기 했는지 떠올리기"</span>.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="chead">
+            <div class="cico">💡</div>
+            <div class="cname">rule-reminder</div>
+            <div class="cwhen">매 입력 시</div>
+          </div>
+          <div class="rows">
+            <div class="row"><span class="rk">언제</span><span class="rv">내가 메시지를 보낼 때마다(UserPromptSubmit).</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv"><b>"승인 전 실행 금지 / 완료 시 검증 / 애매하면 질문"</b> 핵심 규칙을 자동으로 다시 일러줍니다. 설정·훅 관련 키워드가 보이면 "검증 절차 대상"을 덧붙입니다.</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">내 입력을 읽고, 규칙 글귀를 답변 위에 붙입니다(파일엔 안 씀).</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv"><span class="hl">규칙 체계(P2)</span>를 매 턴 상기시키는 역할.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead">
+            <div class="cico">🌅</div>
+            <div class="cname">restore-context</div>
+            <div class="cwhen">세션 시작 시</div>
+          </div>
+          <div class="rows">
+            <div class="row"><span class="rk">언제</span><span class="rv">세션이 새로 시작될 때(SessionStart: 시작·초기화·압축).</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv">직전 대화 <b>최대 5줄</b>을 불러와 "어제 무슨 얘기 했는지" 기억한 채로 시작하게 합니다.</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv"><code>~/.cc-connect/sessions/*.json</code>과 <code>config.toml</code>을 읽음.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv"><span class="hl">cc-connect 대화 기록</span>에 직접 연결. (압축 시 복원은 <code>restore-session</code>이 따로 담당 → P3.4)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
