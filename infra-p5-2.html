@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P5.2 · 에이전트 호출 규칙</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#ad5fc0;--soft:#f0e2f4;--bd:#e4cbec;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#efe0f3 0%,#f2e6f4 55%,#f5eef6 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#9248a8;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#5e4868;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+
+.q4{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.q4row{display:flex;gap:11px;align-items:flex-start;background:var(--soft);border:1px solid var(--bd);
+  border-radius:11px;padding:11px 15px;}
+.q4row.warn{background:#fbeeec;border-color:#f4c9c0;}
+.q4k{font-size:11px;font-weight:900;color:#fff;background:var(--ac);border-radius:7px;padding:4px 9px;flex-shrink:0;min-width:54px;text-align:center;}
+.q4row.warn .q4k{background:#d4604f;}
+.q4v{font-size:12.5px;color:#5d6370;line-height:1.55;padding-top:2px;}
+.q4v b{color:#3a3f48;}
+
+.seclab{font-size:16px;font-weight:900;margin:24px 0 12px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+.step{font-size:13px;color:#4a5060;line-height:1.7;margin-bottom:10px;}
+.step b{color:#2b2f38;} .step .hl{background:linear-gradient(transparent 58%,#e4cbec 58%);font-weight:700;padding:0 2px;}
+
+/* table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:4px;font-size:12.5px;
+  border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.tbl th{background:var(--ac);color:#fff;font-weight:700;padding:10px 12px;text-align:left;font-size:12px;}
+.tbl td{padding:9px 12px;border-top:1px solid #f1e8f4;color:#5d6370;vertical-align:top;line-height:1.5;}
+.tbl tr:nth-child(even) td{background:#faf6fb;}
+.tbl .pr{font-weight:800;color:#3a3f48;white-space:nowrap;}
+.tbl .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+
+/* model 3-step */
+.models{display:flex;gap:10px;margin-top:4px;}
+.mdl{flex:1;background:var(--soft);border:1px solid var(--bd);border-radius:13px;padding:15px 12px;text-align:center;}
+.mdl .me{font-size:24px;} .mdl .mn{font-size:15px;font-weight:900;color:#3a3f48;margin-top:4px;}
+.mdl .ms{font-size:11.5px;color:#6a7076;margin-top:2px;}
+
+.cal{display:flex;gap:13px;background:var(--soft);border:1px solid var(--bd);border-left:5px solid var(--ac);
+  border-radius:11px;padding:15px 18px;margin-top:18px;}
+.cal .ci{font-size:21px;flex-shrink:0;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd em{color:#7a7f8c;font-style:normal;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#e4cbec 58%);font-weight:700;padding:0 2px;}
+.cal .cd .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:22px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .q4row{flex-wrap:wrap;gap:6px 10px;}
+  .tbl{font-size:11px;}
+  .tbl th{padding:8px 8px;font-size:11px;}
+  .tbl td{padding:7px 8px;}
+  .models{flex-direction:column;}
+  .cal{padding:13px 15px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 5 · 5.2</span>
+      <h1>🤖 에이전트 호출 규칙</h1>
+      <p>"내가 직접 할까, <b>보조 일꾼에게 넘길까</b>" — 위임 게이트와 모델 3단 분류.</p>
+    </div>
+
+    <div class="body">
+      <div class="q4">
+        <div class="q4row"><span class="q4k">뭔가요</span><span class="q4v">큰 일을 <b>보조 일꾼(에이전트)</b>에게 떼어 맡기는 것.</span></div>
+        <div class="q4row warn"><span class="q4k">안 하면</span><span class="q4v">모든 걸 메인이 직접 해서, 긴 탐색 결과가 <b>대화 맥락을 잡아먹습니다.</b></span></div>
+        <div class="q4row"><span class="q4k">하면</span><span class="q4v">일꾼이 따로 일하고 <b>요약만</b> 가져와 메인 맥락이 깨끗해집니다.</span></div>
+        <div class="q4row warn"><span class="q4k">주의</span><span class="q4v">위임 한 번에 <b>고정 비용(약 16K~25K 토큰)</b>이 들어, 작은 일은 직접 하는 게 이득.</span></div>
+      </div>
+
+      <div class="seclab">① 위임 게이트</div>
+      <p class="step">모델을 고르기 전에 "넘길지 말지"부터 판단합니다. 기준은 "코드냐"가 아니라 <span class="hl">독립성·규모·맥락 격리</span>예요.</p>
+      <table class="tbl">
+        <thead><tr><th>조건</th><th>처리</th></tr></thead>
+        <tbody>
+          <tr><td>독립 항목 <span class="hly">3개 이상</span> (서로 의존 없음·다른 파일)</td><td class="pr">병렬 위임 (fan-out)</td></tr>
+          <tr><td>대량 탐색·파싱 (다수 파일·로그 읽기)</td><td class="pr">위임 (메인 맥락 격리)</td></tr>
+          <tr><td>단일 파일 + <span class="hly">20줄 이하</span> 단순 수정</td><td class="pr">메인이 직접 (위임 면제)</td></tr>
+          <tr><td>디버깅·판단·설계 주도</td><td class="pr">메인 Opus 직접</td></tr>
+        </tbody>
+      </table>
+
+      <div class="seclab">② 모델 3단</div>
+      <p class="step">위임하기로 했다면 일의 성격에 맞는 모델을 고릅니다.</p>
+      <div class="models">
+        <div class="mdl"><div class="me">🧠</div><div class="mn">Opus</div><div class="ms">계획·설계·대화</div></div>
+        <div class="mdl"><div class="me">⚙️</div><div class="mn">Sonnet</div><div class="ms">실행·코딩</div></div>
+        <div class="mdl"><div class="me">🔍</div><div class="mn">Haiku</div><div class="ms">검색·파싱</div></div>
+      </div>
+
+      <div class="cal">
+        <div class="ci">💡</div>
+        <div>
+          <div class="ct">왜 "코드면 위임"이 아닌가</div>
+          <div class="cd">예전엔 "코드 작업 = Sonnet 위임"으로 봤지만, 실제론 대부분 <span class="hly">디버깅 주도 + 1~2줄 편집</span>이라 위임 면제에 걸렸습니다. 그래서 <span class="hl">2026-05-28</span>에 기준을 "코드냐"에서 <b>변경량 + 판단 비중 + 독립 항목 수</b>로 다시 정의했습니다. 의존 관계가 있는 일(B가 A의 결과 필요)은 병렬 이득이 없어 직렬이나 직접이 낫습니다. <em>(근거: Anthropic "Building Effective Agents")</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
