@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P2.3 · 안전장치</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#9070c4;--soft:#e8e0f4;--bd:#d8cbed;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#e8def5 0%,#ece5f4 55%,#f1edf6 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#7a5cb0;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#574a68;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:22px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#dccbf0 58%);font-weight:700;padding:0 2px;}
+
+.rules{display:flex;flex-direction:column;gap:14px;}
+.rule{display:flex;gap:16px;background:var(--soft);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;}
+.rnum{width:38px;height:38px;border-radius:11px;background:var(--ac);color:#fff;font-size:18px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rmain{flex:1;min-width:0;}
+.rt{font-size:17px;font-weight:900;}
+.rd{font-size:13px;color:#5d6370;line-height:1.65;margin-top:7px;}
+.rd b{color:#3a3f48;}
+
+/* safety items */
+.safelist{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.si{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--bd);border-radius:10px;padding:9px 13px;}
+.si .ico{font-size:15px;}
+.si .st{font-size:13px;font-weight:700;color:#3a3f48;}
+.si .sd{font-size:12px;color:#7a7585;margin-left:auto;}
+.si .sd code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#f0ebf8;border-radius:4px;padding:1px 5px;color:#6b50a0;}
+
+/* defense grid */
+.defs{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px;}
+.df{display:flex;gap:9px;background:#fff;border:1px solid var(--bd);border-radius:10px;padding:10px 13px;align-items:center;}
+.df .dn{width:24px;height:24px;border-radius:7px;background:var(--soft);color:var(--ac);font-size:12px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.df .dt{font-size:12.5px;font-weight:700;color:#3a3f48;}
+.df .dsub{font-size:11px;color:#8a8594;display:block;font-weight:400;margin-top:1px;}
+.tagline{font-size:11.5px;color:#8a8f9b;margin-top:10px;}
+.tagline b{color:var(--ac);}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:25px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .rule{gap:13px;padding:15px 16px;}
+  .rnum{width:32px;height:32px;font-size:16px;}
+  .si{flex-wrap:wrap;gap:6px 10px;}
+  .si .sd{margin-left:0;flex-basis:100%;}
+  .defs{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 2 · 2.3</span>
+      <h1>🛡️ 안전장치</h1>
+      <p>봇이 <b>스스로를 망가뜨리지 못하게</b> 막는 2개의 안전핀 — 설정과 기억을 함부로 덮어쓰지 못합니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">규칙·훅 파일과 메모리는 봇의 <span class="hl">뇌와 척추</span>입니다. 잘못 건드리면 시스템 전체가 흔들리기 때문에, 수정에 별도의 안전 절차를 둡니다.</p>
+
+      <div class="rules">
+        <div class="rule">
+          <div class="rnum">8</div>
+          <div class="rmain">
+            <div class="rt">설정 안전</div>
+            <div class="rd"><code>settings.json</code>·규칙 파일을 수정할 때 반드시 <b>백업 + 변경이력</b>을 남깁니다.</div>
+            <div class="safelist">
+              <div class="si"><span class="ico">💾</span><span class="st">백업 동기화</span><span class="sd"><code>settings.backup.json</code></span></div>
+              <div class="si"><span class="ico">📝</span><span class="st">변경 이력 기록</span><span class="sd"><code>*-changelog.md</code></span></div>
+              <div class="si"><span class="ico">🚫</span><span class="st">Stop 훅 삭제 금지</span><span class="sd">편집 후 Read로 재확인</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">9</div>
+          <div class="rmain">
+            <div class="rt">기억 안전 — 메모리 중독 방어</div>
+            <div class="rd">오래된 메모리나 외부 데이터가 현재 시스템 상태를 덮어쓰는 <b>공격(OWASP ASI06)</b>을 막는 4중 방어.</div>
+            <div class="defs">
+              <div class="df"><span class="dn">1</span><span class="dt">현재 파일 우선<span class="dsub">충돌 시 파일시스템 신뢰</span></span></div>
+              <div class="df"><span class="dn">2</span><span class="dt">메모리 실행 금지<span class="dsub">참고용, 코드로 실행 안 함</span></span></div>
+              <div class="df"><span class="dn">3</span><span class="dt">모순 검사<span class="dsub">기존과 충돌 시 사용자 확인</span></span></div>
+              <div class="df"><span class="dn">4</span><span class="dt">출처 명시<span class="dsub">외부 데이터는 source 표기</span></span></div>
+            </div>
+            <div class="tagline">위반 감지 시 → <b>작업 중단 후 보고</b>, 사용자 지시 대기.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
