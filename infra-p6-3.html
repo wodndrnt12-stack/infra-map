@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P6.3 · 다음 후보</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#5aa06a;--soft:#dcefdf;--bd:#c2e2c8;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#daeede 0%,#e1f0e4 55%,#ecf5ee 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#3f8350;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#3c5f44;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:18px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#c2e2c8 58%);font-weight:700;padding:0 2px;}
+.lead .hlc{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+
+/* table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:4px;font-size:12.5px;
+  border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.tbl th{background:var(--ac);color:#fff;font-weight:700;padding:10px 12px;text-align:left;font-size:12px;}
+.tbl td{padding:10px 12px;border-top:1px solid #e7f2e9;color:#5d6370;vertical-align:top;line-height:1.55;}
+.tbl tr:nth-child(even) td{background:#f6fbf7;}
+.tbl .nm{font-weight:800;color:#3a3f48;white-space:nowrap;}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--soft);
+  border-radius:4px;padding:1px 5px;color:#3f8350;}
+.tbl .hl{background:linear-gradient(transparent 58%,#c2e2c8 58%);font-weight:700;padding:0 2px;}
+.tbl .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.tbl .hlc{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+.tbl .hlg{background:linear-gradient(transparent 58%,#c2e2c8 58%);font-weight:700;padding:0 2px;}
+
+.cal{display:flex;gap:13px;background:var(--soft);border:1px solid var(--bd);border-left:5px solid var(--ac);
+  border-radius:11px;padding:16px 19px;margin-top:20px;}
+.cal .ci{font-size:22px;flex-shrink:0;}
+.cal .ct{font-size:14px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.7;margin-top:5px;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+
+.pathline{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;}
+.pchip{font-size:11px;font-weight:700;color:#3f8350;background:#fff;border:1px solid var(--bd);
+  border-radius:20px;padding:4px 11px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .tbl{font-size:11.5px;}
+  .tbl th{padding:8px 9px;font-size:11px;}
+  .tbl td{padding:8px 9px;}
+  .tbl .nm{white-space:normal;}
+  .cal{padding:14px 16px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 6 · 6.3</span>
+      <h1>🔭 다음 후보</h1>
+      <p>아직 안 했지만 <b>"하면 좋을"</b> 개선 방향 — 우선순위는 미정.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">대부분 <span class="hlc">조사까지는 끝나고</span> 착수만 남은 것들입니다. 공통 테마는 <b>"지금 수동인 걸 자동으로, 안 보이는 걸 보이게"</b>.</p>
+
+      <table class="tbl">
+        <thead><tr><th>후보</th><th>무엇을 / 왜</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">📈 관측성 대시보드</td><td>봇이 뭘·얼마나 했는지 <span class="hly">한눈에</span> 보는 화면 (OpenLIT·Langfuse, 셀프호스팅이면 무료)</td></tr>
+          <tr><td class="nm">💰 비용 로깅</td><td>훅으로 토큰·비용을 직접 기록 (<span class="hlg">비용 0</span> 커스텀 방식). 하네스 벤치마크의 약점 보완</td></tr>
+          <tr><td class="nm">🧠 메모리 업그레이드</td><td>md 파일 메모리의 검색·토큰 한계 해결 (basic-memory·DevRag — <span class="hlc">한국어 검증 후</span>)</td></tr>
+          <tr><td class="nm">🔁 doom-loop 차단</td><td>같은 상태·행동 반복을 <span class="hlc">지문(해시)</span>으로 감지 + 누적 비용 임계 시 자동 중단</td></tr>
+          <tr><td class="nm">🧽 보조 유틸 자동화</td><td><code>log-rotate</code>·<code>analyze-errors</code>를 주기 실행으로 (지금은 손으로 돌려야 함, P3.7)</td></tr>
+          <tr><td class="nm">🔌 전원 설계 AI</td><td>SMPS 작업용 — KiCad MCP·Nexar 부품 검색 등 (별도 스코프, 사용자 판단)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="cal">
+        <div class="ci">🏁</div>
+        <div>
+          <div class="ct">여기까지 — 전체 명세 끝</div>
+          <div class="cd">이 봇을 떠받치는 모든 장치를 한 바퀴 돌았습니다. 흩어져 있던 6곳이 <span class="hl">하나의 지도</span>로 모인 셈이에요.
+            <div class="pathline">
+              <span class="pchip">P1 조감도</span>
+              <span class="pchip">P2 규칙 14</span>
+              <span class="pchip">P3 훅 18</span>
+              <span class="pchip">P4 기억</span>
+              <span class="pchip">P5 외부연결·위임</span>
+              <span class="pchip">P6 운영 현황</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
