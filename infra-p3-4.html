@@ -107,7 +107,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="card">
           <div class="chead"><div class="cico">🧹</div><div class="cname">restore-settings</div><div class="cwhen">도구 사용 후</div></div>
           <div class="rows">
-            <div class="row"><span class="rk">하는 일</span><span class="rv">설정이 의도치 않게 틀어졌으면 원래대로 되돌립니다.</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv"><code>settings.json</code>에 <span class="hl">Stop 훅이 살아있는지</span> 검사 → 사라졌으면 <code>settings.backup.json</code>에서 통째로 복구하고 <code>settings-changelog.md</code>에 <code>[AUTO-RESTORE]</code> 기록.</span></div>
+            <div class="row"><span class="rk">왜</span><span class="rv">Stop 훅은 출력 규칙을 끝에서 검문하는 핵심(P3.5)이라 <b>사라지면 안 됨</b>. 유일한 PowerShell(.ps1) 훅.</span></div>
             <div class="row"><span class="rk">연결</span><span class="rv">P2.3 "설정 안전" 규칙의 자동 복구 장치.</span></div>
           </div>
         </div>
@@ -115,7 +116,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="card">
           <div class="chead"><div class="cico">✨</div><div class="cname">auto-lint</div><div class="cwhen">Edit·Write 직후</div></div>
           <div class="rows">
-            <div class="row"><span class="rk">하는 일</span><span class="rv">확장자에 맞춰 서식 정리 도구를 자동 실행: <code>ruff</code>(파이썬)·<code>biome</code>(JS/TS)·<code>prettier</code>(CSS/JSON/MD).</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv">확장자에 맞춰 서식 정리 도구를 자동 실행: <code>ruff --fix</code>(파이썬)·<code>biome check --write</code>(JS/TS)·<code>prettier --write</code>(CSS/JSON/MD). 그 외 확장자는 건너뜀.</span></div>
+            <div class="row"><span class="rk">안전</span><span class="rv"><span class="hl">재진입 방지</span> — 린터가 파일을 또 고쳐 훅이 무한히 도는 걸 막으려 <code>CLAUDE_HOOK_DEPTH</code> 플래그로 한 겹만 실행. 린터당 <span class="hl">15초</span> 타임아웃.</span></div>
             <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">외부 린터를 불러 대상 파일을 직접 다듬음.</span></div>
           </div>
         </div>

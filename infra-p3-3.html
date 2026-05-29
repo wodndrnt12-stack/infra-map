@@ -108,7 +108,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="card danger">
           <div class="chead"><div class="cico">🔑</div><div class="cname">credential-guard</div><div class="cwhen">Write·Edit 직전</div></div>
           <div class="rows">
-            <div class="row"><span class="rk">하는 일</span><span class="rv">쓰려는 내용에 <span class="hl">자격증명 15종</span>(AWS키, GitHub 토큰, 텔레그램 토큰 등)이 섞여 있으면 차단(exit 2). 단, 훅 폴더·예시·플레이스홀더는 허용.</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv">쓰려는 내용(Write=<code>content</code>·Edit=<code>new_string</code>)에 <span class="hl">자격증명 15종</span>(AWS <code>AKIA…</code>·GitHub <code>ghp_…</code>·텔레그램 <code>숫자:A…</code>·OpenAI <code>sk-…</code>·Anthropic <code>sk-ant-…</code>·JWT 등)이 섞여 있으면 <span class="hl">즉시 차단</span>(exit 2).</span></div>
+            <div class="row"><span class="rk">예외</span><span class="rv">스캔 <b>전에 먼저</b> 통과시키는 화이트리스트: 경로가 <code>.claude/hooks/</code>·<code>.env.example</code>이거나, 내용에 <code>YOUR_…_HERE</code>·<code>CHANGEME</code>·<code>EXAMPLE</code>·<code>placeholder</code>가 있으면 검사 생략.</span></div>
             <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">쓸 내용을 검사하고, 차단 기록을 <code>credential-guard.log</code>에.</span></div>
           </div>
         </div>

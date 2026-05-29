@@ -93,6 +93,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="chead"><div class="cico">🔍</div><div class="cname">analyze-errors</div><div class="cwhen">수동 실행</div></div>
           <div class="rows">
             <div class="row"><span class="rk">하는 일</span><span class="rv"><code>errors.jsonl</code>을 읽어 <span class="hlr">3회 이상 반복된 에러 패턴</span>을 묶어 보여줍니다.</span></div>
+            <div class="row"><span class="rk">판정</span><span class="rv">묶기 전에 경로 속 <b>임의 ID·날짜를 <code>&lt;id&gt;</code>·<code>&lt;date&gt;</code>로 치환</b>해 정규화 — 그래야 매번 다른 ID가 붙은 에러도 "같은 패턴"으로 셉니다. 3회 이상이면 규칙화 제안.</span></div>
             <div class="row"><span class="rk">연결</span><span class="rv"><code>dispatcher-failure</code>가 쌓은 실패 로그의 <span class="hl">소비자</span>. 즉 "실패 기록 물길"의 마지막 단계입니다.</span></div>
           </div>
         </div>
@@ -100,8 +101,8 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="card">
           <div class="chead"><div class="cico">🧽</div><div class="cname">log-rotate</div><div class="cwhen">수동 실행</div></div>
           <div class="rows">
-            <div class="row"><span class="rk">하는 일</span><span class="rv"><code>~/.claude/</code> 아래 6개 로그 폴더에서 <span class="hlc">30일 넘은 파일</span>을 삭제합니다.</span></div>
-            <div class="row"><span class="rk">연결</span><span class="rv">metrics·agents·errors·summaries 등 <span class="hl">모든 로그의 청소부</span>. 다른 훅이 쌓은 기록이 무한정 쌓이지 않게 합니다.</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv"><code>~/.claude/</code> 아래 <b>6개 폴더</b>(<code>session-logs</code>·<code>error-log</code>·<code>logs/metrics</code>·<code>logs/agents</code>·<code>logs/summaries</code>·<code>hooks-debug</code>)에서 <span class="hlc">30일 넘은</span> <code>.jsonl/.json/.md/.log</code> 파일을 삭제합니다.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">위 6곳의 <span class="hl">모든 로그의 청소부</span>. 다른 훅이 쌓은 기록이 무한정 쌓이지 않게 합니다.</span></div>
           </div>
         </div>
       </div>

@@ -76,8 +76,9 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           </div>
           <div class="rows">
             <div class="row"><span class="rk">언제</span><span class="rv">내가 메시지를 보낼 때마다(UserPromptSubmit).</span></div>
-            <div class="row"><span class="rk">하는 일</span><span class="rv"><b>"승인 전 실행 금지 / 완료 시 검증 / 애매하면 질문"</b> 핵심 규칙을 자동으로 다시 일러줍니다. 설정·훅 관련 키워드가 보이면 "검증 절차 대상"을 덧붙입니다.</span></div>
-            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">내 입력을 읽고, 규칙 글귀를 답변 위에 붙입니다(파일엔 안 씀).</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv"><b>"승인 전 실행 금지 / 완료 시 검증 / 애매하면 질문"</b> 핵심 규칙을 답변 앞에 자동으로 끼워 넣습니다(<code>additionalContext</code>).</span></div>
+            <div class="row"><span class="rk">판정</span><span class="rv">입력을 소문자로 훑어 <span class="hl">키워드 12종</span>(<code>hook</code>·<code>설정</code>·<code>훅</code>·<code>guard</code>·<code>cron</code>·<code>.json</code>·<code>.js</code>·<code>규칙</code>·<code>config</code> 등)이 보이면 <b>"VE 프로세스 적용 대상"</b> 한 줄을 더 붙입니다.</span></div>
+            <div class="row"><span class="rk">제약</span><span class="rv"><b>절대 <code>exit 2</code> 금지</b> — 입력 단계 훅이라 차단하면 내 프롬프트 자체가 막힙니다. 주입 글귀도 <span class="hl">30토큰 이하</span>로 유지. 파일엔 안 씀.</span></div>
             <div class="row"><span class="rk">연결</span><span class="rv"><span class="hl">규칙 체계(P2)</span>를 매 턴 상기시키는 역할.</span></div>
           </div>
         </div>
@@ -90,9 +91,10 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           </div>
           <div class="rows">
             <div class="row"><span class="rk">언제</span><span class="rv">세션이 새로 시작될 때(SessionStart: 시작·초기화·압축).</span></div>
-            <div class="row"><span class="rk">하는 일</span><span class="rv">직전 대화 <b>최대 5줄</b>을 불러와 "어제 무슨 얘기 했는지" 기억한 채로 시작하게 합니다.</span></div>
-            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv"><code>~/.cc-connect/sessions/*.json</code>과 <code>config.toml</code>을 읽음.</span></div>
-            <div class="row"><span class="rk">연결</span><span class="rv"><span class="hl">cc-connect 대화 기록</span>에 직접 연결. (압축 시 복원은 <code>restore-session</code>이 따로 담당 → P3.4)</span></div>
+            <div class="row"><span class="rk">하는 일</span><span class="rv">직전 세션 + 현재 세션에서 각각 <b>최근 5개 메시지</b>를 불러와 "어제 무슨 얘기 했는지" 기억한 채로 시작하게 합니다.</span></div>
+            <div class="row"><span class="rk">판정</span><span class="rv"><code>config.toml</code>의 봇 이름으로 세션 파일을 고르고(없으면 <b>최신 수정본</b>), <code>s1·s2…</code> 키를 번호순 정렬해 끝 5개만. 한 줄이 <span class="hl">200자</span> 넘으면 잘라냄(<code>…</code>).</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv"><code>~/.cc-connect/sessions/*.json</code>·<code>config.toml</code>을 읽고, 디버그 사본을 <code>hooks-debug/</code>에 남김.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv"><span class="hl">cc-connect 대화 기록</span>에 직접 연결. (압축 시 복원은 <code>restore-session</code>이 따로 담당 — <b>15개·3단 폴백</b>으로 더 깊게, P3.4)</span></div>
           </div>
         </div>
       </div>

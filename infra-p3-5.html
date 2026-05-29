@@ -99,7 +99,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="chead"><div class="cico">❌</div><div class="cname">dispatcher-failure</div><div class="cwhen">PostToolUseFailure</div></div>
         <div class="rows">
           <div class="row"><span class="rk">하는 일</span><span class="rv">실패를 세 곳에 적습니다: ①<code>errors.jsonl</code>(에러 모음) ②통계(success:false) ③에이전트 기록(status:failure).</span></div>
-          <div class="row"><span class="rk">연결</span><span class="rv"><code>errors.jsonl</code>은 나중에 <code>analyze-errors</code>가 읽습니다(P3.7) → <span class="hlr">실패 기록 물길</span>.</span></div>
+          <div class="row"><span class="rk">연결</span><span class="rv"><code>errors.jsonl</code>은 날짜로 안 쪼개는 <b>누적 단일 파일</b> — 그래서 <code>analyze-errors</code>가 전 기간 반복 패턴을 한 번에 훑습니다(P3.7) → <span class="hlr">실패 기록 물길</span>.</span></div>
         </div>
       </div>
 
@@ -109,7 +109,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="st"><span class="stn">2</span><div class="std"><code>stop-dump</code> — 대화 스냅샷을 디버그용으로 저장.</div></div>
         <div class="st"><span class="stn">3</span><div class="std"><code>daily-summary</code> — <span class="hlg">통계·에이전트 기록을 읽어</span> 하루 리포트(도구 횟수·성공률 등)를 <code>summaries/</code>에 생성. <em>(dispatcher가 쌓은 기록의 소비자)</em></div></div>
         <div class="st block"><span class="stn">4</span><div class="std"><code>check-response-format</code><span class="blk">막음</span> — 딱 <b>2가지</b>만 검사: ①에이전트 결과 <b>15줄 초과</b> 덤프(=P2.1 5줄 요약) ②긴 기술설명의 <b>4단 구조</b> 누락(=P2.1 쉬운 설명). 어기면 <span class="hlr">다시 쓰게 막음</span>(block). 단 <span class="hlg">표·코드 블록·300자 미만 짧은 답</span>은 면제.</div></div>
-        <div class="st"><span class="stn">5</span><div class="std"><code>cancel-typing</code> — 텔레그램 "입력 중..." 표시를 끔.</div></div>
+        <div class="st"><span class="stn">5</span><div class="std"><code>cancel-typing</code> — 텔레그램 "입력 중..." 표시를 끔. 메시지 도착 타이밍이 흔들려도 확실히 지우려 <b>1·3·6초 세 번</b> 재시도(2개 챗방). 토큰 없으면 그냥 통과.</div></div>
         <div class="st block"><span class="stn">6</span><div class="std"><code>session-log-guard</code><span class="blk">막음</span> — 그날 작업일지(audit) 줄 수를 세어, 일을 많이 했는데 세션 로그를 안 썼으면 <span class="hlr">"일지 쓰라"고 막음</span>(하루 1회).</div></div>
       </div>
 

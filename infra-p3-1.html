@@ -104,12 +104,14 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <tbody>
           <tr><td class="ev">📥 프롬프트 제출</td><td>전체</td><td><code>rule-reminder</code> <span class="arw">→</span> <code>infra-map-link</code></td></tr>
           <tr><td class="ev">🌅 세션 시작</td><td>startup·clear·compact</td><td><code>restore-context</code></td></tr>
+          <tr><td></td><td>전체</td><td><code>error-counter</code></td></tr>
           <tr><td class="ev">🔒 도구 쓰기 전</td><td>Bash·PS</td><td><code>guard</code></td></tr>
           <tr><td></td><td>Write·Edit</td><td><code>checkpoint-pre</code> <span class="arw">→</span> <code>credential-guard</code></td></tr>
           <tr><td></td><td>Agent·Task</td><td><code>agent-tracker-pre</code></td></tr>
+          <tr><td></td><td>ExitPlanMode</td><td>알림음(notify)</td></tr>
           <tr><td class="ev">⚡ 도구 쓴 후</td><td>전체</td><td><code>restore-settings</code> <span class="arw">→</span> <code>compress-output</code> <span class="arw">→</span> <code>dispatcher</code></td></tr>
           <tr><td></td><td>Edit·Write</td><td><code>auto-lint</code></td></tr>
-          <tr><td></td><td>Compact</td><td><code>restore-session</code></td></tr>
+          <tr><td></td><td>Compact</td><td>context-essentials <span class="arw">→</span> <code>restore-session</code></td></tr>
           <tr><td class="ev">❌ 도구 실패</td><td>전체</td><td><code>dispatcher-failure</code></td></tr>
           <tr><td class="ev">🏁 응답 끝(Stop)</td><td>전체</td><td>알림음 <span class="arw">→</span> <code>stop-dump</code> <span class="arw">→</span> <code>daily-summary</code> <span class="arw">→</span> <code>check-response-format</code> <span class="arw">→</span> <code>cancel-typing</code> <span class="arw">→</span> <code>session-log-guard</code></td></tr>
         </tbody>
