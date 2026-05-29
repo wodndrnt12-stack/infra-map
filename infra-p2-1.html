@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P2.1 · 말하는 방식</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#df8a63;--soft:#fdeadf;--bd:#f6d8c6;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#fde6da 0%,#fdeede 55%,#faf0e6 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#c4744f;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a5246;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:22px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#fbdcc8 58%);font-weight:700;padding:0 2px;}
+
+.rules{display:flex;flex-direction:column;gap:14px;}
+.rule{display:flex;gap:16px;background:var(--soft);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;}
+.rnum{width:38px;height:38px;border-radius:11px;background:var(--ac);color:#fff;font-size:18px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rmain{flex:1;min-width:0;}
+.rh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.rt{font-size:17px;font-weight:900;}
+.esc{font-size:11px;font-weight:700;color:var(--ac);background:#fff;border:1px solid var(--bd);
+  border-radius:20px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;}
+.rd{font-size:13px;color:#5d6370;line-height:1.65;margin-top:7px;}
+.rd b{color:#3a3f48;}
+.rx{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:11px;}
+.step{display:flex;align-items:center;gap:6px;}
+.chip{font-size:12px;font-weight:700;color:#fff;background:var(--ac);border-radius:8px;padding:5px 11px;}
+.chip.ghost{background:#fff;color:var(--ac);border:1px solid var(--bd);font-weight:700;}
+.gt{color:var(--ac);font-weight:900;font-size:13px;margin:0 1px;}
+.lab{font-size:11.5px;color:#8a7568;font-weight:700;margin-right:3px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:25px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .rule{gap:13px;padding:15px 16px;}
+  .rnum{width:32px;height:32px;font-size:16px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 2 · 2.1</span>
+      <h1>💬 말하는 방식</h1>
+      <p>봇이 <b>어떻게 전달하는가</b>에 대한 4개 규칙. 셋은 같은 실수를 반복해 정식 규칙으로 <b>승격</b>됐습니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">쉽게, 간결하게, 그리고 결과는 즉시. 말하는 방식 규칙은 대부분 <span class="hl">"또 이러네"라는 지적</span>이 쌓여 만들어졌습니다 — 위반 횟수가 곧 그 흉터입니다.</p>
+
+      <div class="rules">
+        <div class="rule">
+          <div class="rnum">1</div>
+          <div class="rmain">
+            <div class="rh"><span class="rt">쉬운 4단 설명</span><span class="esc">⬆ 위반 4회 → 규칙</span></div>
+            <div class="rd">기술 용어를 나열하지 않고, 항상 <b>4단 구조</b>로 풀어서 설명합니다.</div>
+            <div class="rx">
+              <span class="lab">구조</span>
+              <span class="chip ghost">뭔지</span><span class="gt">·</span>
+              <span class="chip ghost">없으면</span><span class="gt">·</span>
+              <span class="chip ghost">있으면</span><span class="gt">·</span>
+              <span class="chip ghost">주의</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">2</div>
+          <div class="rmain">
+            <div class="rh"><span class="rt">5줄 요약</span><span class="esc">⬆ 위반 3회 → 규칙</span></div>
+            <div class="rd">에이전트 결과를 <b>원문 그대로 덤프 금지</b>. 5줄 안에 핵심만 압축합니다.</div>
+            <div class="rx">
+              <span class="lab">공식</span>
+              <span class="chip">결론 1</span><span class="gt">+</span>
+              <span class="chip">근거 2~3</span><span class="gt">+</span>
+              <span class="chip">다음 단계 1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">3</div>
+          <div class="rmain">
+            <div class="rh"><span class="rt">결과 즉시 전달</span><span class="esc">⬆ 위반 4회 → 규칙</span></div>
+            <div class="rd">병렬 작업 결과가 오는 <b>즉시 하나씩</b> 전달. 모아서 보고하지 않습니다.</div>
+            <div class="rx">
+              <span class="chip ghost">오는 즉시 하나씩</span>
+              <span class="chip ghost">폐기도 한 줄 보고</span>
+              <span class="chip ghost">실패도 한 줄 보고</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">4</div>
+          <div class="rmain">
+            <div class="rh"><span class="rt">전문성 기준</span></div>
+            <div class="rd">개념 설명보다 <b>차이점·한계·트레이드오프</b> 중심으로. 근거에는 우선순위가 있습니다.</div>
+            <div class="rx">
+              <span class="lab">근거 우선순위</span>
+              <span class="chip">물리법칙</span><span class="gt">&gt;</span>
+              <span class="chip">논문·표준</span><span class="gt">&gt;</span>
+              <span class="chip ghost">실무관행</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
