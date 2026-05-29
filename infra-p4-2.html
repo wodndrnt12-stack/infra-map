@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P4.2 · 세션로그 + hot.md</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#4189c8;--soft:#dde9f6;--bd:#bdd6ef;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#dbe8f6 0%,#e3edf6 55%,#ecf2f7 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#3375b0;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#3f5567;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:18px;}
+.lead b{color:#2b2f38;} .lead code{font-family:'JetBrains Mono',monospace;font-size:12px;
+  background:var(--soft);border-radius:4px;padding:1px 6px;color:#3375b0;}
+.lead .hl{background:linear-gradient(transparent 58%,#bdd6ef 58%);font-weight:700;padding:0 2px;}
+.lead .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.seclab{font-size:16px;font-weight:900;margin:24px 0 13px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+
+/* cycle flow */
+.flow{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;margin:6px 0;}
+.fn{flex:1;min-width:120px;background:var(--soft);border:1px solid var(--bd);border-radius:12px;padding:12px 11px;text-align:center;}
+.fn.k{background:#cfe2f5;border:2px solid var(--ac);}
+.fn .fl{font-size:12.5px;font-weight:900;color:#3a3f48;}
+.fn .fs{font-size:11px;color:#6a7689;margin-top:3px;}
+.farw{display:flex;align-items:center;color:#a7c5e6;font-size:18px;font-weight:700;padding:0 6px;}
+
+.cards{display:flex;flex-direction:column;gap:13px;margin-top:6px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:15px;padding:17px 20px;}
+.chead{display:flex;align-items:center;gap:11px;}
+.cico{width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cname{font-size:15.5px;font-weight:900;color:#3a3f48;}
+.cbody{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:10px;}
+.cbody b{color:#3a3f48;} .cbody code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:#fff;border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:#3375b0;}
+.cbody .hl{background:linear-gradient(transparent 58%,#bdd6ef 58%);font-weight:700;padding:0 2px;}
+.cbody .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.cbody .hlr{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+
+/* mini flow inside card */
+.mflow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-top:11px;}
+.mn{background:#fff;border:1px solid var(--bd);border-radius:9px;padding:8px 12px;text-align:center;}
+.mn .ml{font-size:12px;font-weight:800;color:#3a3f48;} .mn .ms{font-size:10.5px;color:#6a7689;margin-top:1px;}
+.marw{margin:0 7px;color:#a7c5e6;font-weight:700;}
+
+.cal{display:flex;gap:13px;background:#fbeeec;border:1px solid #f4c9c0;border-left:5px solid #d4604f;
+  border-radius:11px;padding:15px 18px;margin-top:18px;}
+.cal .ci{font-size:21px;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#fff;border:1px solid #f4c9c0;
+  border-radius:4px;padding:1px 5px;color:#b94a3a;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:23px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .flow{flex-direction:column;}
+  .fn{width:100%;}
+  .farw{justify-content:center;padding:5px 0;transform:rotate(90deg);}
+  .card{padding:15px 16px;}
+  .cname{font-size:14.5px;}
+  .mflow{flex-direction:column;align-items:stretch;}
+  .mn{width:100%;}
+  .marw{margin:5px 0;transform:rotate(90deg);align-self:center;}
+  .cal{padding:13px 15px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 4 · 4.2</span>
+      <h1>📓 세션로그 + hot.md</h1>
+      <p>봇이 매일 한 일을 <b>일지로 남기고</b>, 다음 세션이 그걸 <b>이어받는</b> 법 — 기억의 두 번째 축입니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">메모리(4.1)가 "오래 두고 쓰는 사실"이라면, 세션로그는 <span class="hl">날짜별 업무일지</span>입니다. <code>hot.md</code>는 그 일지들의 <span class="hly">맨 위 요약 카드</span> — 봇이 새 세션을 켤 때 <b>가장 먼저 읽는 파일</b>이에요. 둘이 합쳐 "어제까지 뭘 하고 있었지?"를 매번 복원합니다.</p>
+
+      <div class="seclab">매 세션이 도는 한 바퀴</div>
+      <div class="flow">
+        <span class="fn k"><div class="fl">① 세션 시작</div><div class="fs">hot.md 읽기</div></span>
+        <span class="farw">→</span>
+        <span class="fn"><div class="fl">② 작업</div><div class="fs">도구 사용·진행</div></span>
+        <span class="farw">→</span>
+        <span class="fn"><div class="fl">③ 세션 종료</div><div class="fs">세션로그 쓰기</div></span>
+        <span class="farw">→</span>
+        <span class="fn k"><div class="fl">④ hot.md 갱신</div><div class="fs">다음 세션이 ①에서 다시 읽음 ↻</div></span>
+      </div>
+
+      <div class="seclab">세 가지 장치</div>
+      <div class="cards">
+        <div class="card">
+          <div class="chead"><div class="cico">📝</div><div class="cname">언제 일지를 쓰나 — 5가지 순간</div></div>
+          <div class="cbody"><b>언제</b> — ①"끝 / 로그 남겨" 같은 명시 마무리 ②작업 단위 완료 ③주제 전환 ④계획을 실제로 구현하는 단계 ⑤대화가 압축될 때.<br><b>무엇을</b> — <code>sessions/YYYY-MM-DD.md</code>에 6필드 머리말(<span class="hl">날짜·종류·상태·태그·한줄요약·관련링크</span>)과 <span class="hly">TL;DR 요약</span>(완료 / 결정 / 펜딩)을 적습니다.<br><b>왜</b> — 기록이 곧 다음 세션의 기억. 쓸지 말지 <span class="hl">모호하면 "기록할까요?"</span>라고 먼저 물어봅니다.</div>
+        </div>
+        <div class="card">
+          <div class="chead"><div class="cico">🔥</div><div class="cname">hot.md — 최신 상태 카드</div></div>
+          <div class="cbody"><b>세션 시작</b> — <code>hot.md</code>를 <span class="hly">제일 먼저</span> 읽어 "마지막 세션 / 핵심 결정 / 활성 펜딩 / 현재 포커스"를 복원합니다.<br><b>세션 종료</b> — 일지를 쓴 뒤 <code>hot.md</code>도 같이 갱신해 다음 세션이 최신 상태에서 출발하게 합니다.<br><b>연결</b> — <code>restore-context</code> 훅(P3.2)이 대화 기록 복원에 <span class="hlr">실패하면 이 hot.md로 폴백</span>합니다. 자동 복원의 <span class="hl">최후 안전망</span>이에요.</div>
+        </div>
+        <div class="card">
+          <div class="chead"><div class="cico">🗜️</div><div class="cname">압축 계층 — daily → weekly → monthly</div></div>
+          <div class="cbody">일지가 쌓이면 단계적으로 요약합니다. <span class="hl">원본은 절대 지우지 않고</span> 요약본만 추가해요. <code>MOC.md</code>가 <span class="hl">주제별 색인</span> 역할을 해서, 과거 검색(P2.4 Obsidian 리콜)이 "주제 → 세션 → TL;DR → 본문" 순으로 좁혀 들어갑니다.
+            <div class="mflow">
+              <span class="mn"><div class="ml">daily</div><div class="ms">매일 · sessions/</div></span>
+              <span class="marw">→</span>
+              <span class="mn"><div class="ml">weekly</div><div class="ms">월요일 · weekly/</div></span>
+              <span class="marw">→</span>
+              <span class="mn"><div class="ml">monthly</div><div class="ms">1일 · monthly/</div></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cal">
+        <div class="ci">🚧</div>
+        <div>
+          <div class="ct">말로 끝나지 않게 — 강제 장치</div>
+          <div class="cd">일지 쓰기는 잊기 쉬워서, <code>session-log-guard</code> 훅(P3.5)이 <span class="hl">도구를 15회 넘게 썼는데 그날 세션로그가 없으면</span> 응답 끝에서 "일지 쓰라"고 막습니다(하루 1회). 규칙(P2.4)을 끝에서 검문하는 셈이에요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
