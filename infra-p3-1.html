@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P3.1 · 훅 라이프사이클</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#5b6ee0;--soft:#e4e7fb;--bd:#cdd3f5;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#e2e6fb 0%,#e9ecf8 55%,#eef0f7 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#4a5bc4;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#4a5070;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:22px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#cdd3f5 58%);font-weight:700;padding:0 2px;}
+.seclab{font-size:16px;font-weight:900;margin:26px 0 13px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+
+/* timeline */
+.tl{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;}
+.tn{flex:1;min-width:110px;background:var(--soft);border:1px solid var(--bd);border-radius:13px;padding:14px 10px;text-align:center;}
+.tn .te{font-size:24px;} .tn .tt{font-size:13.5px;font-weight:900;color:#3a3f48;margin-top:5px;}
+.tn .ts{font-size:11px;color:#777e92;margin-top:2px;}
+.tn.r{background:#fdeaea;border-color:#f6cccc;} .tn.y{background:#fbf2d6;border-color:#f0e3a8;}
+.tarw{display:flex;align-items:center;color:#aab1e0;font-size:18px;font-weight:700;padding:0 5px;}
+
+/* table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:6px;font-size:12.5px;
+  border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.tbl th{background:var(--ac);color:#fff;font-weight:700;padding:10px 12px;text-align:left;font-size:12px;}
+.tbl td{padding:9px 12px;border-top:1px solid #eef0f7;color:#4a5060;vertical-align:top;line-height:1.55;}
+.tbl tr:nth-child(even) td{background:#f8f9fe;}
+.tbl .ev{font-weight:900;color:#3a3f48;white-space:nowrap;}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--soft);
+  border-radius:4px;padding:1px 5px;color:#4a5bc4;}
+.tbl .arw{color:#aab1e0;font-weight:700;}
+
+/* callout */
+.cal{display:flex;gap:13px;background:var(--soft);border:1px solid var(--bd);border-left:5px solid var(--ac);
+  border-radius:11px;padding:15px 18px;margin-top:18px;}
+.cal .ci{font-size:21px;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#fff;border:1px solid var(--bd);
+  border-radius:4px;padding:1px 5px;color:#4a5bc4;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#f0e3a8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:25px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .tl{flex-direction:column;}
+  .tn{width:100%;}
+  .tarw{justify-content:center;padding:5px 0;transform:rotate(90deg);}
+  .tbl{font-size:11px;}
+  .tbl th{padding:8px 8px;font-size:11px;}
+  .tbl td{padding:7px 8px;}
+  .tbl code{font-size:10px;padding:1px 4px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 3 · 3.1</span>
+      <h1>⏱️ 훅 라이프사이클</h1>
+      <p>봇이 일하는 동안 <b>어느 순간에 어떤 훅이 도는지</b> — 한 번의 주고받음을 따라가는 전체 타임라인입니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">훅은 <span class="hl">7개 시점(이벤트)</span>에 자동으로 끼어듭니다. 내가 메시지를 보내고 답이 끝날 때까지, 아래 순서로 흐릅니다.</p>
+
+      <div class="seclab">큰 흐름 — 5개 관문</div>
+      <div class="tl">
+        <span class="tn"><div class="te">📥</div><div class="tt">프롬프트</div><div class="ts">내가 입력</div></span>
+        <span class="tarw">→</span>
+        <span class="tn"><div class="te">🌅</div><div class="tt">세션 시작</div><div class="ts">시작·압축 시</div></span>
+        <span class="tarw">→</span>
+        <span class="tn r"><div class="te">🔒</div><div class="tt">도구 전</div><div class="ts">문지기</div></span>
+        <span class="tarw">→</span>
+        <span class="tn y"><div class="te">⚡</div><div class="tt">도구 후</div><div class="ts">뒷정리·기록</div></span>
+        <span class="tarw">→</span>
+        <span class="tn"><div class="te">🏁</div><div class="tt">응답 끝</div><div class="ts">Stop 검문</div></span>
+      </div>
+
+      <div class="seclab">언제 → 무엇이 → 어떤 순서로</div>
+      <table class="tbl">
+        <thead><tr><th>시점 (이벤트)</th><th>조건</th><th>실행 훅 (순서대로)</th></tr></thead>
+        <tbody>
+          <tr><td class="ev">📥 프롬프트 제출</td><td>전체</td><td><code>rule-reminder</code></td></tr>
+          <tr><td class="ev">🌅 세션 시작</td><td>startup·clear·compact</td><td><code>restore-context</code></td></tr>
+          <tr><td class="ev">🔒 도구 쓰기 전</td><td>Bash·PS</td><td><code>guard</code></td></tr>
+          <tr><td></td><td>Write·Edit</td><td><code>checkpoint-pre</code> <span class="arw">→</span> <code>credential-guard</code></td></tr>
+          <tr><td></td><td>Agent·Task</td><td><code>agent-tracker-pre</code></td></tr>
+          <tr><td class="ev">⚡ 도구 쓴 후</td><td>전체</td><td><code>restore-settings</code> <span class="arw">→</span> <code>compress-output</code> <span class="arw">→</span> <code>dispatcher</code></td></tr>
+          <tr><td></td><td>Edit·Write</td><td><code>auto-lint</code></td></tr>
+          <tr><td></td><td>Compact</td><td><code>restore-session</code></td></tr>
+          <tr><td class="ev">❌ 도구 실패</td><td>전체</td><td><code>dispatcher-failure</code></td></tr>
+          <tr><td class="ev">🏁 응답 끝(Stop)</td><td>전체</td><td>알림음 <span class="arw">→</span> <code>stop-dump</code> <span class="arw">→</span> <code>daily-summary</code> <span class="arw">→</span> <code>check-response-format</code> <span class="arw">→</span> <code>cancel-typing</code> <span class="arw">→</span> <code>session-log-guard</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="cal">
+        <div class="ci">📖</div>
+        <div>
+          <div class="ct">읽는 법</div>
+          <div class="cd">한 도구를 쓰면 보통 <span class="hl">"쓰기 전 훅 → 도구 실행 → 쓴 후 훅"</span> 순서로 흐릅니다. 예를 들어 파일을 고치면: <code>checkpoint-pre</code>(백업)·<code>credential-guard</code>(검사) → 수정 → <code>auto-lint</code>(서식정리)·<code>dispatcher</code>(기록)가 차례로 돕니다. 각 훅의 자세한 동작은 3.2~3.5에서 봅니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
