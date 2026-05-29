@@ -109,12 +109,12 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="st s-ok">
           <div class="sh"><span class="se">✅</span>① 성공 기록 물길</div>
           <div class="miniflow"><span class="mf">도구</span><span class="mfa">→</span><span class="mf acc">dispatcher</span><span class="mfa">→</span><span class="mf">로그 3종</span><span class="mfa">→</span><span class="mf">daily-summary</span></div>
-          <div class="desc">도구를 쓸 때마다 <code>dispatcher</code>가 받아 작업일지·통계·에이전트기록에 동시 기록. <code>session-log-guard</code>가 "일은 많은데 일지를 안 썼네?"를 감시합니다.</div>
+          <div class="desc">도구를 쓸 때마다 <code>dispatcher</code>가 받아 세 폴더(<code>session-logs/</code>·<code>logs/metrics/</code>·<code>logs/agents/</code>)에 동시 기록. <code>session-log-guard</code>가 "일은 많은데 일지를 안 썼네?"를 감시합니다.</div>
         </div>
         <div class="st s-no">
           <div class="sh"><span class="se">❌</span>② 실패 기록 물길</div>
           <div class="miniflow"><span class="mf">도구 실패</span><span class="mfa">→</span><span class="mf acc">dispatcher-failure</span><span class="mfa">→</span><span class="mf">errors.jsonl</span><span class="mfa">→</span><span class="mf">analyze-errors</span></div>
-          <div class="desc">실패하면 <code>dispatcher-failure</code>가 <code>errors.jsonl</code>과 실패 통계에 기록. 나중에 <code>analyze-errors</code>를 돌리면 <b>3회 이상 반복된 에러</b>를 묶어 보여줍니다.</div>
+          <div class="desc">실패하면 <code>dispatcher-failure</code>가 <code>errors.jsonl</code>(날짜로 안 쪼개는 <b>누적 단일파일</b>)과 실패 통계에 기록. <code>analyze-errors</code>는 경로 속 ID·날짜를 <code>&lt;id&gt;</code>·<code>&lt;date&gt;</code>로 정규화한 뒤 <b>3회 이상 반복된 에러</b>를 묶어 보여줍니다.</div>
         </div>
         <div class="st s-ag">
           <div class="sh"><span class="se">🤖</span>③ 에이전트 수명 추적</div>
@@ -130,7 +130,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
 
       <div class="tip">
         <div class="tt">💡 기억해 둘 한 가지</div>
-        <p>거의 모든 기록은 <code>~/.claude/logs/</code> <b>한곳으로 모입니다</b>. 그래서 "봇이 뭘 했나"가 궁금하면 이 폴더만 보면 됩니다. (오래되면 <code>log-rotate</code>가 청소)</p>
+        <p>거의 모든 기록은 <code>~/.claude/logs/</code> <b>한곳으로 모입니다</b>. 그래서 "봇이 뭘 했나"가 궁금하면 이 폴더만 보면 됩니다. (<code>log-rotate</code>가 6개 폴더에서 <b>30일</b> 지난 파일을 청소)</p>
       </div>
     </div>
   </div>

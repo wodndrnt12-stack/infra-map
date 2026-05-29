@@ -96,14 +96,14 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <thead><tr><th>항목</th><th>상태 / 다음 행동</th></tr></thead>
         <tbody>
           <tr><td class="it">notebooklm 인증</td><td>봇이 headless라 불가 → 사람이 <span class="hl">앞단 터미널</span>에서 <code>setup_auth</code> 1회</td></tr>
-          <tr><td class="it">Google Drive 스코프</td><td>권한 부족 → claude.ai 커넥터 <span class="hl">재인증</span> (봇 불가)</td></tr>
+          <tr><td class="it">Google Drive 스코프</td><td>OAuth <span class="hl">권한 범위 부족</span> → claude.ai 커넥터 재인증 필요 (봇이 토큰 못 건드림)</td></tr>
           <tr><td class="it">"입력중" 표시 지속</td><td>간헐적 발생, cron 연관 <span class="hlr">추정</span>. 현재는 정상</td></tr>
           <tr><td class="it">cron 실제 동작</td><td>생성·활성은 확인, <span class="hlr">실제 메시지 수신 미확인</span> (이전 PC 버그로 검증 보류)</td></tr>
           <tr><td class="it">Daily Insight Pipeline</td><td>timeout 10→20분 상향 후 동작률 1주 관찰 + <span class="hlc">~2026-06-16</span> 주간 전환 판단</td></tr>
           <tr><td class="it">카피봇 복제 재검증</td><td><code>-InfraOnly</code> 재실행 end-to-end 확인 (이월)</td></tr>
           <tr><td class="it">결함 E — work_dir 정렬</td><td>봇 작업폴더 ≠ 클론 위치 → 메모리 슬러그 불일치. <span class="hl">사용자 판단 대기</span></td></tr>
           <tr><td class="it">위임 게이트 강제력</td><td>P5.2 규칙을 훅으로 강제할지 여부 (이월)</td></tr>
-          <tr><td class="it">보조 스크립트 등록</td><td><code>analyze-errors</code>·<code>log-rotate</code> 미등록이 의도인지 확인 (P3.7)</td></tr>
+          <tr><td class="it">보조 스크립트 등록</td><td><code>analyze-errors</code>·<code>log-rotate</code>는 <span class="hl">수동 실행 의도</span>로 미등록(이벤트 없는 유틸 — 고아 아님). 등록 전환 여부만 판단 대기 (P3.7)</td></tr>
         </tbody>
       </table>
 

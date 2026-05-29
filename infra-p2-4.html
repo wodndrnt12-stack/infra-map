@@ -94,7 +94,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rnum">11</div>
           <div class="rmain">
             <div class="rt">기억 유효기간 (TTL)</div>
-            <div class="rd">메모리 종류에 따라 보관 기간이 다릅니다. 만료돼도 <b>자동 삭제는 안 함</b> — 사용자 승인 후에만 정리.</div>
+            <div class="rd">메모리 종류에 따라 보관 기간이 다릅니다. <b>세션 시작 시</b> <code>expires</code> 날짜가 지난 프로젝트 메모리를 자동 점검해 보고하지만, 만료돼도 <b>자동 삭제는 안 함</b> — 사용자 승인 후에만 정리. <b>행동지침은 expires를 안 붙여 영구</b>.</div>
             <div class="ttl">
               <div class="tt"><div class="k">행동지침</div><div class="v">영구</div></div>
               <div class="tt"><div class="k">프로젝트</div><div class="v">90일</div></div>
@@ -107,7 +107,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rnum">12</div>
           <div class="rmain">
             <div class="rt">과거 검색 (리콜)</div>
-            <div class="rd"><b>좁혀가며</b> 검색합니다 — 넓은 색인에서 시작해 점점 세부로. 한 번에 최대 <b>5개 세션</b>까지만.</div>
+            <div class="rd"><b>좁혀가며</b> 검색합니다 — 넓은 색인에서 시작해 점점 세부로. "지난주에·전에·그때·이력" 같은 <b>트리거어</b>에 발동, <b>Obsidian MCP <code>search_notes</code></b>로 찾고 실패 시 <b>Grep 폴백</b>. 한 번에 최대 <b>5개 세션</b>까지만(컨텍스트 오버플로우 방지).</div>
             <div class="rx">
               <span class="chip">MOC 색인</span><span class="arw">→</span>
               <span class="chip">요약(summary)</span><span class="arw">→</span>
@@ -121,7 +121,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rnum">13</div>
           <div class="rmain">
             <div class="rt">긴 출력 자동 압축</div>
-            <div class="rd">훅이 도구 출력을 자동으로 줄입니다. 단, <b>에러 출력은 압축하지 않음</b>(디버깅 정보 보존).</div>
+            <div class="rd"><code>compress-output</code> 훅이 <b>Bash·Read·Grep·Glob·PowerShell·Monitor</b> 6개 도구 출력만 자동으로 줄입니다(Edit·Write·Agent는 제외). 단, <b>에러 출력(exit≠0)은 압축하지 않음</b>(디버깅 정보 보존).</div>
             <div class="cmp">
               <span class="cmpbox">4000자 초과<span class="s">~1000 토큰</span></span>
               <span class="arw">→</span>

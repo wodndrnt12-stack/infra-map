@@ -84,11 +84,11 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rnum">8</div>
           <div class="rmain">
             <div class="rt">설정 안전</div>
-            <div class="rd"><code>settings.json</code>·규칙 파일을 수정할 때 반드시 <b>백업 + 변경이력</b>을 남깁니다.</div>
+            <div class="rd"><code>settings.json</code>·규칙 파일을 수정할 때 반드시 <b>백업 + 변경이력</b>을 남깁니다. 별개 안전핀 <code>credential-guard</code> 훅은 Write/Edit 시 <b>자격증명 15종</b>(AWS·GitHub·텔레그램 토큰 등)을 정규식으로 차단(<code>.env.example</code>·플레이스홀더는 허용).</div>
             <div class="safelist">
               <div class="si"><span class="ico">💾</span><span class="st">백업 동기화</span><span class="sd"><code>settings.backup.json</code></span></div>
               <div class="si"><span class="ico">📝</span><span class="st">변경 이력 기록</span><span class="sd"><code>*-changelog.md</code></span></div>
-              <div class="si"><span class="ico">🚫</span><span class="st">Stop 훅 삭제 금지</span><span class="sd">편집 후 Read로 재확인</span></div>
+              <div class="si"><span class="ico">🚫</span><span class="st">Stop 훅 삭제 금지</span><span class="sd">삭제돼도 <code>restore-settings</code>가 backup에서 자동복구</span></div>
             </div>
           </div>
         </div>

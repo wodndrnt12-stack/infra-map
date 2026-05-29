@@ -93,7 +93,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
         <div class="rnum">14</div>
         <div style="flex:1;min-width:0;">
           <div class="rt">피드백 카운터 (Reflexion 패턴)</div>
-          <div class="rd">반복되는 실수를 감지하면 카운트를 올리고, <b>3회에 도달하면</b> 메모리 레이어의 약한 지침을 정식 규칙으로 <b>승격</b>합니다.</div>
+          <div class="rd">반복되는 실수를 감지하면 <code>feedback-violations.json</code>의 카운트를 올리고, <b>3회에 도달하면</b> <code>escalate_suggested=true</code>로 표시해 사용자에게 승격을 제안 — 승인하면 <code>rules/&lt;slug&gt;.md</code>를 만들고 카운트를 <b>0으로 리셋</b>(규칙이 역할을 대신). 별개로 <code>check-response-format</code> 훅이 <b>4단 설명·5줄 요약</b>을 출력 단계에서 강제합니다.</div>
           <div class="loop">
             <span class="ln"><div class="le">🔍</div><div class="ll">반복 실수 감지</div></span>
             <span class="larw">→</span>

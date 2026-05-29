@@ -96,7 +96,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
       <div class="cards">
         <div class="card">
           <div class="chead"><div class="cico">🔍</div><div class="cname">"등록 ≠ 동작" — 6건 적발</div><div class="cbadge">교훈</div></div>
-          <div class="cbody">새 PC 복제 후 전수 검증에서, "Connected / 배치됨 / 설치 기록됨"인데도 <span class="hlr">실제로는 안 도는</span> 결함 6건이 나왔습니다: 린터 미설치 · notebooklm 미인증 · Google Drive 스코프 · restore 훅 2종(이름 prefix·work_dir) · 날짜 4종이 <span class="hly">UTC라 하루 어긋남</span>.<br>가장 무서웠던 건 <code>setup-new-pc.ps1</code>이 <span class="hlr">BOM 없는 UTF-8</span>이라 한글 리터럴이 깨져 파싱 단계에서 즉사한 것 — "파일은 있는데 안 돌던" 진짜 원인이었습니다.
+          <div class="cbody">새 PC 복제 후 전수 검증에서, "Connected / 배치됨 / 설치 기록됨"인데도 <span class="hlr">실제로는 안 도는</span> 결함 6건이 나왔습니다: 린터 미설치 · notebooklm 미인증 · Google Drive 스코프 · restore 훅 2종(이름 prefix·work_dir) · 날짜 4종이 <code>toISOString()</code>의 <span class="hly">UTC 기준이라 KST(+9) 자정~오전 9시엔 하루 어긋남</span>.<br>가장 무서웠던 건 <code>setup-new-pc.ps1</code>이 <span class="hlr">BOM 없는 UTF-8</span>이라 한글 리터럴이 깨져 파싱 단계에서 즉사한 것 — "파일은 있는데 안 돌던" 진짜 원인이었습니다.
             <div class="mflow">
               <span class="mn g"><div class="ml">자동 수정 4</div><div class="ms">VE 7단계·CoVe 통과</div></span>
               <span class="mn r"><div class="ml">사람 몫 2</div><div class="ms">인증 → P6.1</div></span>
@@ -118,7 +118,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
 
         <div class="card">
           <div class="chead"><div class="cico">🧭</div><div class="cname">굳어진 설계 결정 4가지</div></div>
-          <div class="cbody">• <strong>규칙은 삭제 말고 계층화</strong> — 지우면 동작이 멈춰서, <span class="hly">훅(100%) → 규칙(70~80%) → 메모리(30~50%)</span> 3층으로 강제력을 나눔.<br>• <strong>위임 기준 재정의</strong> — "코드냐"에서 "변경량·판단 비중·독립 항목 수"로 (P5.2).<br>• <strong>체크포인트는 파일 복사 방식</strong> — git을 안 쓰는 환경이라 <code>~/.claude/checkpoints/</code>에 원본 백업.<br>• <strong>자기개선 MCP 보류</strong> — 외부 도구가 피드백 카운터와 <span class="hlg">80~90% 겹치고</span> 메모리 안전 규칙과 충돌해, 지금 체계로 충분하다고 판단.</div>
+          <div class="cbody">• <strong>규칙은 삭제 말고 계층화</strong> — 지우면 동작이 멈춰서, <span class="hly">훅(100%) → 규칙(70~80%) → 메모리(30~50%)</span> 3층으로 강제력을 나눔.<br>• <strong>위임 기준 재정의</strong> — "코드냐"에서 "변경량·판단 비중·독립 항목 수"로 (P5.2).<br>• <strong>체크포인트는 파일 복사 방식</strong> — git을 안 쓰는 환경이라 <code>checkpoint-pre</code> 훅이 PreToolUse(Edit·Write)에서 수정 직전 원본을 <code>~/.claude/checkpoints/</code>로 복사 백업.<br>• <strong>자기개선 MCP 보류</strong> — 외부 도구가 피드백 카운터와 <span class="hlg">80~90% 겹치고</span> 메모리 안전 규칙과 충돌해, 지금 체계로 충분하다고 판단.</div>
         </div>
       </div>
 

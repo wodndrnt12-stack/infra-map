@@ -82,7 +82,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rnum">5</div>
           <div class="rmain">
             <div class="rt">검증 7단계 (VE)</div>
-            <div class="rd"><b>승인 게이트</b> 전에는 파일을 고치지 않습니다. 같은 접근으로 <b>2회 실패 시 재시도 금지</b>.</div>
+            <div class="rd"><b>승인 게이트</b> 전에는 파일을 고치지 않습니다. 같은 접근으로 <b>2회 실패 시 재시도 금지</b>(접근 재설계 — Anthropic <i>Building Effective Agents</i> 권장). 단 1~2개 파일 단순 수정은 면제.</div>
             <div class="rx">
               <span class="chip">①조사</span><span class="arw">→</span>
               <span class="chip">②계획</span><span class="arw">→</span>
@@ -99,7 +99,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
           <div class="rnum">6</div>
           <div class="rmain">
             <div class="rt">진입점 열거</div>
-            <div class="rd">동작에 도달하는 <b>모든 경로</b>를 나열한 뒤에만 수정합니다. 한 경로만 고치고 다른 경로를 빠뜨리는 실수를 막습니다.</div>
+            <div class="rd">동작에 도달하는 <b>모든 경로</b>를 나열한 뒤에만 수정합니다. 명령어 계열·자동실행 계열·컴포넌트 경계는 <b>각각 별개 경로</b> — 실제로 #18·#19·#25가 "CLI/스케줄/자동시작 한쪽만 고쳐" 재발했습니다.</div>
             <div class="statbox">
               <div class="big">52%</div>
               <div class="txt">전체 버그의 <b>절반 이상</b>이 "경로 누락"에서 발생 — 설계 미비 32% + 경로 누락 20%</div>
@@ -117,7 +117,7 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
               <div class="mdl"><div class="mn">Sonnet</div><div class="mr">실행 · 코딩 · 수정</div></div>
               <div class="mdl"><div class="mn">Haiku</div><div class="mr">검색 · 파싱</div></div>
             </div>
-            <div class="costnote">⚠ 위임은 공짜가 아님 — 1건당 고정비용 <b>16~25K 토큰</b>. 소규모 작업은 메인이 직접 처리.</div>
+            <div class="costnote">⚠ 위임 판단은 "코드냐"가 아니라 <b>독립항목 ≥3·대량탐색·맥락격리</b>(상세 P5.2). 1건당 고정비용 <b>16~25K 토큰</b>이라 소규모는 메인 직접 — 진짜 이득은 비용이 아닌 <b>컨텍스트 보존</b>.</div>
           </div>
         </div>
       </div>
