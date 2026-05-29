@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
 <title>P1.1 · 인프라란 무엇인가</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
 body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
   -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
 .poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
@@ -64,6 +66,21 @@ body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
 .term .root{color:#8fd4ff;font-weight:700;}
 .term .cmt{color:#6b7488;}
 .term .dir{color:#aee571;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:25px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .dev{flex-wrap:wrap;gap:11px 13px;padding:13px 15px;}
+  .dev .meta{flex:1 1 auto;min-width:0;}
+  .dev .path{flex:1 1 100%;text-align:left;max-width:100%;margin-top:2px;}
+  .dev .path code{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-all;}
+  .term pre{font-size:11px;padding:14px 14px;}
+}
 </style>
 </head>
 <body>
