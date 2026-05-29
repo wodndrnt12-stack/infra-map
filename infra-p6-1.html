@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P6.1 · 펜딩 현황</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#cf8a3c;--soft:#fbecd4;--bd:#f2d8ab;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#fbead0 0%,#faeeda 55%,#f8f2e8 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#ad6d28;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a5436;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:18px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#f2d8ab 58%);font-weight:700;padding:0 2px;}
+.lead .hlc{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+
+/* stat boxes */
+.stat{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.stbox{flex:1;min-width:160px;border-radius:11px;padding:13px 16px;}
+.stbox.y{background:#fbf2d6;border:1px solid #f0e0a8;}
+.stbox.c{background:#d9eef1;border:1px solid #bce0e7;}
+.stbox.g{background:#dcefdf;border:1px solid #c2e2c8;}
+.stbox .stt{font-size:17px;font-weight:900;}
+.stbox.y .stt{color:#b58420;} .stbox.c .stt{color:#2f8595;} .stbox.g .stt{color:#458a56;}
+.stbox .sts{font-size:11.5px;color:#6a7076;margin-top:3px;}
+
+.seclab{font-size:15px;font-weight:900;margin:22px 0 11px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:16px;border-radius:3px;background:var(--ac);}
+.seclab.hold::before{background:#9aa0ae;}
+
+/* table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;
+  border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.tbl.hold{border-color:#d9dce2;}
+.tbl th{background:var(--ac);color:#fff;font-weight:700;padding:10px 12px;text-align:left;font-size:12px;}
+.tbl.hold th{background:#8b909c;}
+.tbl td{padding:9px 12px;border-top:1px solid #f3e9d8;color:#5d6370;vertical-align:top;line-height:1.5;}
+.tbl.hold td{border-top:1px solid #eef0f3;}
+.tbl tr:nth-child(even) td{background:#fdf8f0;}
+.tbl.hold tr:nth-child(even) td{background:#f8f9fb;}
+.tbl .it{font-weight:800;color:#3a3f48;}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--soft);
+  border-radius:4px;padding:1px 5px;color:#ad6d28;}
+.tbl .hl{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.tbl .hlr{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+.tbl .hlc{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+.tbl .hlg{background:linear-gradient(transparent 58%,#c2e2c8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .stbox{min-width:0;flex:1 1 100%;}
+  .tbl{font-size:11px;}
+  .tbl th{padding:8px 8px;font-size:11px;}
+  .tbl td{padding:7px 8px;}
+  .tbl code{font-size:10px;padding:1px 4px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 6 · 6.1</span>
+      <h1>📌 펜딩 현황</h1>
+      <p>지금 미해결로 남아 있는 것들 — <b>"대기 중"과 "조건부 보류"</b>로 나눠서 (2026-05-29 기준).</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">대부분의 인프라 구축은 끝났고, 남은 건 <span class="hl">사람 손이 필요한 인증</span>이나 <span class="hlc">실제 동작 확인</span>처럼 봇 혼자 못 끝내는 항목들입니다.</p>
+
+      <div class="stat">
+        <div class="stbox y"><div class="stt">👤 사람 몫 5</div><div class="sts">인증·스코프·판단 — 봇이 못 끝냄</div></div>
+        <div class="stbox c"><div class="stt">👁 관찰 중 3</div><div class="sts">동작 확인 대기 (입력중·cron·Insight)</div></div>
+        <div class="stbox g"><div class="stt">🤖 봇 가능 1</div><div class="sts">카피봇 재검증 (이월)</div></div>
+      </div>
+
+      <div class="seclab">🟡 대기 중 — 막혀 있거나 사람 확인을 기다림</div>
+      <table class="tbl">
+        <thead><tr><th>항목</th><th>상태 / 다음 행동</th></tr></thead>
+        <tbody>
+          <tr><td class="it">notebooklm 인증</td><td>봇이 headless라 불가 → 사람이 <span class="hl">앞단 터미널</span>에서 <code>setup_auth</code> 1회</td></tr>
+          <tr><td class="it">Google Drive 스코프</td><td>권한 부족 → claude.ai 커넥터 <span class="hl">재인증</span> (봇 불가)</td></tr>
+          <tr><td class="it">"입력중" 표시 지속</td><td>간헐적 발생, cron 연관 <span class="hlr">추정</span>. 현재는 정상</td></tr>
+          <tr><td class="it">cron 실제 동작</td><td>생성·활성은 확인, <span class="hlr">실제 메시지 수신 미확인</span> (이전 PC 버그로 검증 보류)</td></tr>
+          <tr><td class="it">Daily Insight Pipeline</td><td>timeout 10→20분 상향 후 동작률 1주 관찰 + <span class="hlc">~2026-06-16</span> 주간 전환 판단</td></tr>
+          <tr><td class="it">카피봇 복제 재검증</td><td><code>-InfraOnly</code> 재실행 end-to-end 확인 (이월)</td></tr>
+          <tr><td class="it">결함 E — work_dir 정렬</td><td>봇 작업폴더 ≠ 클론 위치 → 메모리 슬러그 불일치. <span class="hl">사용자 판단 대기</span></td></tr>
+          <tr><td class="it">위임 게이트 강제력</td><td>P5.2 규칙을 훅으로 강제할지 여부 (이월)</td></tr>
+          <tr><td class="it">보조 스크립트 등록</td><td><code>analyze-errors</code>·<code>log-rotate</code> 미등록이 의도인지 확인 (P3.7)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="seclab hold">⏸️ 조건부 보류 — 조사 끝, "지금은 안 함"</div>
+      <table class="tbl hold">
+        <thead><tr><th>항목</th><th>보류 이유 / 재개 조건</th></tr></thead>
+        <tbody>
+          <tr><td class="it">자기개선 MCP (instinct·reflexio)</td><td>피드백 카운터+규칙 승격이 <span class="hlg">80~90% 대체</span>, 보안 충돌 → 성숙도 오르면 재검토</td></tr>
+          <tr><td class="it">메모리 시스템 업그레이드</td><td>후보 확보(basic-memory·DevRag) → <span class="hlc">한국어 적합성</span> 심층 검증 필요</td></tr>
+          <tr><td class="it">doom-loop 감지 3단계</td><td>조사 완료(지문화·비용 차단), Tier 1 구현 <span class="hl">미착수</span></td></tr>
+          <tr><td class="it">비용 거버넌스 + 관측성</td><td>하네스 벤치마크 잔여 갭 — 우선순위 결정 대기 (→ P6.3)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
