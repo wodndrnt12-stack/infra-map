@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P6.2 · 결함·설계 결정</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#cf6f4a;--soft:#f6ddd1;--bd:#eec3af;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#f6ddd1 0%,#f7e3d8 55%,#f8eee7 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#b3522e;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a4636;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:18px;}
+.lead b{color:#2b2f38;}
+
+.cards{display:flex;flex-direction:column;gap:13px;margin-top:6px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:15px;padding:17px 20px;}
+.chead{display:flex;align-items:center;gap:11px;}
+.cico{width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cname{font-size:15.5px;font-weight:900;color:#3a3f48;}
+.cbadge{font-size:11px;font-weight:700;color:#fff;background:#d4604f;border-radius:20px;padding:2px 10px;margin-left:auto;}
+.cbody{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:10px;}
+.cbody b,.cbody strong{color:#3a3f48;}
+.cbody code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#fff;border:1px solid var(--bd);
+  border-radius:4px;padding:1px 5px;color:#b3522e;}
+.cbody .hl{background:linear-gradient(transparent 58%,#eec3af 58%);font-weight:700;padding:0 2px;}
+.cbody .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.cbody .hlr{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+.cbody .hlg{background:linear-gradient(transparent 58%,#c2e2c8 58%);font-weight:700;padding:0 2px;}
+.cbody .hlc{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+
+/* mini flow inside card */
+.mflow{display:flex;gap:9px;margin-top:11px;}
+.mn{flex:1;background:#fff;border:1px solid var(--bd);border-radius:9px;padding:9px 11px;text-align:center;}
+.mn.r{border-color:#f4c9c0;} .mn.g{border-color:#c2e2c8;}
+.mn .ml{font-size:12px;font-weight:800;color:#3a3f48;} .mn .ms{font-size:10.5px;color:#6a7689;margin-top:1px;}
+
+/* bug pattern bar */
+.pbar{display:flex;height:32px;border-radius:7px;overflow:hidden;font-size:11.5px;font-weight:800;margin-top:12px;}
+.pbar div{display:flex;align-items:center;justify-content:center;}
+.pbar .s1{flex:32;background:#f4c9c0;color:#b94a3a;}
+.pbar .s2{flex:20;background:#f6dcc4;color:#b3672e;}
+.pbar .s3{flex:48;background:#e8eaee;color:#7a7f8c;}
+.pbarcap{font-size:11px;color:#8a8f9b;margin-top:6px;}
+
+.cal{display:flex;gap:13px;background:#fbf2d6;border:1px solid #f0e0a8;border-left:5px solid #d39b34;
+  border-radius:11px;padding:15px 18px;margin-top:18px;}
+.cal .ci{font-size:21px;flex-shrink:0;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:23px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .card{padding:15px 16px;}
+  .chead{flex-wrap:wrap;gap:8px 10px;}
+  .cbadge{margin-left:0;}
+  .cname{font-size:14.5px;}
+  .mflow{flex-direction:column;}
+  .pbar{height:auto;flex-direction:column;}
+  .pbar div{padding:8px 0;}
+  .cal{padding:13px 15px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 6 · 6.2</span>
+      <h1>⚡ 결함·설계 결정</h1>
+      <p>검증하다 드러난 결함들과, 그걸 겪으며 굳어진 <b>설계 원칙</b>.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">대부분의 규칙·훅은 <b>"앞서 터진 버그를 다시 안 겪으려고"</b> 생긴 것입니다. 그래서 이 페이지를 읽으면 P2~P3 장치들이 <b>왜</b> 존재하는지 거꾸로 보입니다.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="chead"><div class="cico">🔍</div><div class="cname">"등록 ≠ 동작" — 6건 적발</div><div class="cbadge">교훈</div></div>
+          <div class="cbody">새 PC 복제 후 전수 검증에서, "Connected / 배치됨 / 설치 기록됨"인데도 <span class="hlr">실제로는 안 도는</span> 결함 6건이 나왔습니다: 린터 미설치 · notebooklm 미인증 · Google Drive 스코프 · restore 훅 2종(이름 prefix·work_dir) · 날짜 4종이 <span class="hly">UTC라 하루 어긋남</span>.<br>가장 무서웠던 건 <code>setup-new-pc.ps1</code>이 <span class="hlr">BOM 없는 UTF-8</span>이라 한글 리터럴이 깨져 파싱 단계에서 즉사한 것 — "파일은 있는데 안 돌던" 진짜 원인이었습니다.
+            <div class="mflow">
+              <span class="mn g"><div class="ml">자동 수정 4</div><div class="ms">VE 7단계·CoVe 통과</div></span>
+              <span class="mn r"><div class="ml">사람 몫 2</div><div class="ms">인증 → P6.1</div></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">📊</div><div class="cname">버그 패턴 분석 — 절반이 같은 함정</div></div>
+          <div class="cbody">지금까지 잡은 버그를 유형별로 세보니 <span class="hlr">설계 미비 32%</span> + <span class="hlr">경로 누락 20%</span> = 절반 이상이 "한 곳만 고치고 다른 곳을 빠뜨림"이었습니다. 특히 경로 누락은 #17→#18→#19→#20→#25로 <span class="hly">연쇄 재발</span>한 최다 유형.<br>그래서 만든 방어가 P2의 규칙들입니다: <span class="hlc">진입점 열거 체크</span>(경로 누락 대비) · <span class="hlc">설계 5차 반복 검토</span>(설계 미비) · <span class="hlc">Stop 포맷 훅</span>(자의적 판단 대비). 규칙이 그냥 생긴 게 아니라 <strong>버그가 만든 흉터</strong>예요.
+            <div class="pbar">
+              <div class="s1">설계미비 32%</div>
+              <div class="s2">경로누락 20%</div>
+              <div class="s3">나머지 48%</div>
+            </div>
+            <div class="pbarcap">절반 이상(<b>52%</b>)이 "한 곳만 고치고 다른 곳을 빠뜨림" — 진입점 열거·설계 반복검토가 이걸 막습니다.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">🧭</div><div class="cname">굳어진 설계 결정 4가지</div></div>
+          <div class="cbody">• <strong>규칙은 삭제 말고 계층화</strong> — 지우면 동작이 멈춰서, <span class="hly">훅(100%) → 규칙(70~80%) → 메모리(30~50%)</span> 3층으로 강제력을 나눔.<br>• <strong>위임 기준 재정의</strong> — "코드냐"에서 "변경량·판단 비중·독립 항목 수"로 (P5.2).<br>• <strong>체크포인트는 파일 복사 방식</strong> — git을 안 쓰는 환경이라 <code>~/.claude/checkpoints/</code>에 원본 백업.<br>• <strong>자기개선 MCP 보류</strong> — 외부 도구가 피드백 카운터와 <span class="hlg">80~90% 겹치고</span> 메모리 안전 규칙과 충돌해, 지금 체계로 충분하다고 판단.</div>
+        </div>
+      </div>
+
+      <div class="cal">
+        <div class="ci">💡</div>
+        <div>
+          <div class="ct">한 줄 요약</div>
+          <div class="cd">이 시스템의 규칙·훅 대부분은 <span class="hl">"앞서 터진 버그를 다시 안 겪으려고"</span> 생긴 것입니다. 그래서 P2~P3을 읽으면 P6.2의 사고 이력이 거꾸로 보입니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
