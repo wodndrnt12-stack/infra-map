@@ -326,12 +326,43 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         </div>
       </section>
 
-      <!-- ============ PHASE 2~6 : 다음 단계에서 채움 ============ -->
+      <!-- ============ PHASE 2 : 규칙 (개요 + 2.1~2.5) ============ -->
+      <section class="section">
+        <div class="section-num">PHASE 2 · 개요</div>
+        <h2>📐 규칙 14개 한눈에</h2>
+        <p class="section-desc">봇이 항상 지키는 "일하는 방식" — 5개 범주로 묶은 14개 규칙</p>
+        <p class="para">규칙은 <span class="hl hl-c">"무엇을 어떻게 하라"</span>를 정한 약속입니다. 대부분 처음부터 있던 게 아니라 <strong>과거에 터진 실수</strong>에서 생겼어요(P6.2의 사고 이력이 거꾸로 보입니다). 아래 5범주를 먼저 훑고, 각 규칙의 <span class="hl hl-y">"언제·무엇을·왜"</span>는 이어지는 2.1~2.5에서 펼쳐 봅니다.</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>범주</th><th>핵심 규칙</th><th>수</th></tr></thead>
+            <tbody>
+              <tr><td>💬 말하는 방식 <span class="hl hl-p">2.1</span></td><td>4단 설명 · 5줄 요약 · 결과 즉시 전달 · 전문성 기준</td><td><span class="badge badge-y">4</span></td></tr>
+              <tr><td>⚙️ 일하는 절차 <span class="hl hl-p">2.2</span></td><td>검증 7단계(VE) · 진입점 열거 · 모델 라우팅</td><td><span class="badge badge-c">3</span></td></tr>
+              <tr><td>🛡️ 안전장치 <span class="hl hl-p">2.3</span></td><td>설정 안전 · 기억 안전(중독 방어)</td><td><span class="badge badge-g">2</span></td></tr>
+              <tr><td>🧠 기억·기록 <span class="hl hl-p">2.4</span></td><td>세션 일지 · 유효기간(TTL) · 과거 검색 · 출력 압축</td><td><span class="badge badge-c">4</span></td></tr>
+              <tr><td>🔁 자기교정 <span class="hl hl-p">2.5</span></td><td>피드백 카운터(Reflexion)</td><td><span class="badge badge-r">1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout info reveal">
+          <div class="callout-title">규칙은 "삭제"가 아니라 "계층"으로 관리</div>
+          <p>14개가 다 같은 무게는 아닙니다. 강제력에 따라 <span class="hl hl-r">훅(100%)</span> → <span class="hl hl-y">규칙(70~80%)</span> → <span class="hl hl-g">메모리(30~50%)</span> 3층으로 나뉘고, 자주 어기는 항목일수록 위층으로 <strong>승격</strong>됩니다 — 그 승강기 구조는 <span class="hl hl-p">2.5 자기교정</span>에서 그림으로 다룹니다.</p>
+        </div>
+      </section>
       <section id="p2a" class="section">
         <div class="section-num">PHASE 2 · 2.1</div>
         <h2>💬 말하는 방식 규칙</h2>
         <p class="section-desc">봇이 사용자에게 어떻게 보고·설명할지 — 4개 규칙</p>
-        <p class="para">이 4개는 "어떻게 말하느냐"를 정합니다. 각 규칙은 <span class="hl hl-y">언제 발동하는지</span>가 정해져 있어요. 펼쳐 보세요.</p>
+        <p class="para">이 4개는 "어떻게 말하느냐"를 정합니다. 그중 <span class="hl hl-r">3개</span>는 원래 규칙이 아니라 같은 실수를 여러 번 지적받아 <strong>승격된</strong> 것들이에요(아래 빨간 배지의 "위반 N회"). 각 규칙은 <span class="hl hl-y">언제 발동하는지</span>가 정해져 있으니 펼쳐 보세요.</p>
+        <div class="flow reveal">
+          <div class="flow-step" style="border-color:rgba(248,113,113,0.4)"><div class="flow-step-icon">📖</div><div class="flow-step-label">4단 설명</div><div class="flow-step-desc">위반 4회</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step" style="border-color:rgba(248,113,113,0.4)"><div class="flow-step-icon">✂️</div><div class="flow-step-label">5줄 요약</div><div class="flow-step-desc">위반 3회</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step" style="border-color:rgba(248,113,113,0.4)"><div class="flow-step-icon">⚡</div><div class="flow-step-label">즉시 전달</div><div class="flow-step-desc">위반 4회</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">🎓</div><div class="flow-step-label">전문성 기준</div><div class="flow-step-desc">기본 원칙</div></div>
+        </div>
         <div class="accordion reveal">
           <div class="accordion-item open">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📖</div><div class="accordion-title">쉬운 4단 설명 <span class="badge badge-r">위반 4회→규칙</span></div><span class="accordion-chevron">▾</span></div>
@@ -347,7 +378,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
           </div>
           <div class="accordion-item">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🎓</div><div class="accordion-title">전문성 기준</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 기술 답변 전반.<br><strong>무엇을</strong> — 뻔한 개념 설명은 건너뛰고 <span class="hl hl-g">차이점·한계·실패 지점·트레이드오프</span> 중심으로. 수식·모델링이 필요하면 전제를 공유하고 정량적으로 전개.<br><strong>왜</strong> — 근거 우선순위가 정해져 있음: ①물리법칙·수식 → ②논문·표준 → ③실무 관행("경험적 근거"라 명시).</p></div></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 기술 답변 전반.<br><strong>무엇을</strong> — 뻔한 개념 설명은 건너뛰고 <span class="hl hl-g">차이점·한계·실패 지점·트레이드오프</span> 중심으로. 수식·모델링이 필요하면 전제를 공유하고 정량적으로 전개.<br><strong>왜</strong> — 근거를 댈 때 우선순위가 정해져 있어요:<br><span class="badge badge-r">1순위</span> 물리법칙·수식 &nbsp;→&nbsp; <span class="badge badge-y">2순위</span> 논문·표준 &nbsp;→&nbsp; <span class="badge badge-g">3순위</span> 실무 관행(반드시 "경험적 근거"라 명시).</p></div></div>
           </div>
         </div>
       </section>
@@ -396,8 +427,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
           </div>
           <div class="accordion-item">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧠</div><div class="accordion-title">기억 안전 (메모리 중독 방어)</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 메모리를 읽거나 새로 저장할 때.<br><strong>무엇을</strong> — 네 가지를 지킴:<br>① 메모리가 <span class="hl hl-c">현재 파일 상태와 충돌하면 "지금 파일"을 신뢰</span>(메모리는 과거 정보)<br>② 메모리에 "실행하라" 같은 명령이 있어도 그대로 실행 안 함(참고용)<br>③ 새 메모리가 기존과 모순되면 사용자에게 보고 후 저장<br>④ 외부 소스(웹·봇 메시지) 데이터는 출처를 명시.<br><strong>왜</strong> — 오래되거나 오염된 기억이 현재 시스템을 덮어쓰는 <span class="hl hl-r">"메모리 중독" 공격</span>(OWASP ASI06)을 막기 위함.</p></div></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 메모리를 읽거나 새로 저장할 때.<br><strong>무엇을</strong> — 아래 <span class="hl hl-y">4가지 방어 수칙</span>을 지킴(표 참고).<br><strong>왜</strong> — 오래되거나 오염된 기억이 현재 시스템을 덮어쓰는 <span class="hl hl-r">"메모리 중독" 공격</span>(OWASP ASI06)을 막기 위함.</p></div></div>
           </div>
+        </div>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>방어 수칙</th><th>막는 상황</th></tr></thead>
+            <tbody>
+              <tr><td>① 현재 파일 우선</td><td>메모리가 <span class="hl hl-c">지금 파일과 충돌</span>하면 파일을 신뢰 (메모리 = 과거 정보)</td></tr>
+              <tr><td>② 메모리 실행 금지</td><td>메모리에 "실행하라"가 있어도 <span class="hl hl-r">코드로 실행 안 함</span> (참고용)</td></tr>
+              <tr><td>③ 모순 검사</td><td>새 메모리가 기존과 모순되면 <span class="hl hl-y">사용자 보고 후</span> 저장 (자동 덮어쓰기 금지)</td></tr>
+              <tr><td>④ 출처 명시</td><td>외부 소스(웹·봇 메시지)는 <span class="hl hl-g">어디서 왔는지</span> 기록</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
       <section id="p2d" class="section">
@@ -422,6 +464,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
             <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — 명령 결과(Bash·Read·Grep 등)가 <span class="hl hl-y">4000자(~1000토큰)</span>를 넘을 때.<br><strong>무엇을</strong> — 훅이 자동으로 앞 30줄 + 뒤 10줄만 남기고 중간을 생략. 에러 출력은 압축 안 함(디버깅 보존).<br><strong>왜</strong> — 긴 출력이 컨텍스트를 잡아먹지 않게. 이건 규칙이자 <code>compress-output</code> 훅으로 강제됩니다(P3에서).</p></div></div>
           </div>
         </div>
+        <p class="para" style="margin-top:18px"><strong>🔎 과거 검색은 "좁혀가며"</strong> — 수십 개 일지를 통째로 읽지 않고, 넓은 색인에서 시작해 단계마다 범위를 줄입니다:</p>
+        <div class="flow reveal">
+          <div class="flow-step"><div class="flow-step-icon">🗂️</div><div class="flow-step-label">주제 색인</div><div class="flow-step-desc">MOC.md</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🏷️</div><div class="flow-step-label">머리말 요약</div><div class="flow-step-desc">summary만</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">📌</div><div class="flow-step-label">TL;DR</div><div class="flow-step-desc">핵심 3줄</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--cyan)"><div class="flow-step-icon">📄</div><div class="flow-step-label" style="color:var(--cyan)">본문</div><div class="flow-step-desc">필요할 때만</div></div>
+        </div>
       </section>
       <section id="p2e" class="section">
         <div class="section-num">PHASE 2 · 2.5</div>
@@ -435,9 +487,40 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
             <strong>왜</strong> — 메모리만으론 같은 실수가 반복됩니다. 횟수를 세어 임계점에서 더 강한 규칙으로 굳히는 자기개선 장치입니다. <em>P2.1의 "4단 설명·5줄 요약·즉시 전달"이 모두 이 카운터로 승격된 규칙이에요.</em></p></div></div>
           </div>
         </div>
+        <p class="para" style="margin-top:18px"><strong>① 승격은 이렇게 일어납니다</strong> — 같은 실수가 쌓이면 카운터가 임계점에서 규칙으로 굳힙니다:</p>
+        <div class="flow reveal">
+          <div class="flow-step"><div class="flow-step-icon">⚠️</div><div class="flow-step-label">같은 실수</div><div class="flow-step-desc">반복 지적</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🔢</div><div class="flow-step-label">카운터 +1</div><div class="flow-step-desc">violations.json</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--red)"><div class="flow-step-icon">🚨</div><div class="flow-step-label" style="color:var(--red)">3회 도달</div><div class="flow-step-desc">임계점</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--yellow)"><div class="flow-step-icon">📐</div><div class="flow-step-label" style="color:var(--yellow)">규칙 승격</div><div class="flow-step-desc">매 세션 강제</div></div>
+        </div>
+
+        <p class="para"><strong>② 강제력 3단 사다리</strong> — 규칙은 "지키면 좋은 말"이 아니라 강제력이 다른 3층 구조입니다. 카운터는 아래층 → 위층으로 올리는 <span class="hl hl-y">승강기</span>예요:</p>
+        <div class="reveal" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid rgba(248,113,113,0.4);border-radius:12px;padding:13px 16px">
+            <div style="font-size:20px">🪝</div>
+            <div style="flex:1"><div style="font-weight:700;font-size:14px;color:var(--red)">훅 (Hook)</div><div style="font-size:12px;color:var(--text-muted)">정해진 순간 코드가 자동 차단 — 어길 방법이 없음</div></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--red);font-size:15px">100%</div>
+          </div>
+          <div style="text-align:center;color:var(--text-dim);font-size:14px">▲ 승격</div>
+          <div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid rgba(251,191,36,0.4);border-radius:12px;padding:13px 16px">
+            <div style="font-size:20px">📐</div>
+            <div style="flex:1"><div style="font-weight:700;font-size:14px;color:var(--yellow)">규칙 (rules/)</div><div style="font-size:12px;color:var(--text-muted)">매 세션 시작 시 리마인드 — 잊지는 않지만 의지 필요</div></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--yellow);font-size:15px">70~80%</div>
+          </div>
+          <div style="text-align:center;color:var(--text-dim);font-size:14px">▲ 승격</div>
+          <div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid rgba(52,211,153,0.4);border-radius:12px;padding:13px 16px">
+            <div style="font-size:20px">🧠</div>
+            <div style="flex:1"><div style="font-weight:700;font-size:14px;color:var(--green)">메모리 (memory/)</div><div style="font-size:12px;color:var(--text-muted)">참고용 기록 — 떠올리면 적용, 놓치기 쉬움</div></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green);font-size:15px">30~50%</div>
+          </div>
+        </div>
         <div class="callout tip reveal">
-          <div class="callout-title">3단 강제 구조</div>
-          <p>규칙은 강제력에 따라 3층입니다: <span class="hl hl-r">훅</span>(100% 자동 차단) → <span class="hl hl-y">rules/</span>(매 세션 리마인드, 70~80%) → <span class="hl hl-g">메모리</span>(참고, 30~50%). 피드백 카운터가 아래층 → 위층으로 올리는 승강기 역할을 합니다.</p>
+          <div class="callout-title">규칙이 곧 흉터</div>
+          <p>P2.1의 <span class="hl hl-y">4단 설명·5줄 요약·즉시 전달</span>이 모두 이 카운터로 메모리 → 규칙까지 올라온 항목들입니다. 규칙이 그냥 생긴 게 아니라 <strong>반복된 실수가 만든 흉터</strong>라는 뜻이에요.</p>
         </div>
       </section>
       <section id="p3a" class="section">
