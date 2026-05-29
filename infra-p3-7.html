@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P3.7 · 수동 유틸</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#cf8240;--soft:#fbe8d4;--bd:#f3d3ad;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#fbe6cf 0%,#faecda 55%,#f8f1e8 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#b06b2c;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#6a5236;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:18px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#f3d3ad 58%);font-weight:700;padding:0 2px;}
+
+.cal{display:flex;gap:13px;border-radius:11px;padding:15px 18px;margin:16px 0;}
+.cal .ci{font-size:21px;flex-shrink:0;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd code{font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:4px;padding:1px 5px;}
+.cal.warn{background:#fbf0d6;border:1px solid #f0e0a8;border-left:5px solid #d39b34;}
+.cal.warn .cd code{background:#fff;border:1px solid #f0e0a8;color:#9a7424;}
+.cal.warn .cd .hl{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.cal.info{background:var(--soft);border:1px solid var(--bd);border-left:5px solid var(--ac);}
+.cal.info .cd code{background:#fff;border:1px solid var(--bd);color:#b06b2c;}
+.cal.info .cd .hl{background:linear-gradient(transparent 58%,#f3d3ad 58%);font-weight:700;padding:0 2px;}
+
+.cards{display:flex;flex-direction:column;gap:13px;margin-top:4px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:15px;padding:17px 20px;}
+.chead{display:flex;align-items:center;gap:10px;}
+.cico{width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.cname{font-family:'JetBrains Mono',monospace;font-size:16.5px;font-weight:700;color:#3a3f48;}
+.cwhen{font-size:11px;color:#fff;background:#a98a6a;border-radius:20px;padding:3px 11px;font-weight:700;margin-left:auto;}
+.rows{margin-top:11px;display:flex;flex-direction:column;gap:7px;}
+.row{display:flex;gap:10px;align-items:flex-start;}
+.rk{font-size:11px;font-weight:900;color:var(--ac);background:#fff;border:1px solid var(--bd);
+  border-radius:6px;padding:3px 8px;flex-shrink:0;min-width:58px;text-align:center;}
+.rv{font-size:12.5px;color:#5d6370;line-height:1.55;padding-top:2px;}
+.rv b{color:#3a3f48;} .rv code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:#fff;border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:#b06b2c;}
+.rv .hl{background:linear-gradient(transparent 58%,#f3d3ad 58%);font-weight:700;padding:0 2px;}
+.rv .hlr{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+.rv .hlc{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .cal{padding:13px 15px;}
+  .card{padding:15px 16px;}
+  .chead{flex-wrap:wrap;gap:8px 10px;}
+  .cname{font-size:15px;}
+  .cwhen{margin-left:0;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 3 · 3.7</span>
+      <h1>🔧 수동 유틸 &nbsp;<span style="font-size:20px;color:#b06b2c;">2개</span></h1>
+      <p>자동 실행엔 안 걸렸지만, <b>데이터 흐름엔 연결</b>된 두 스크립트 — 필요할 때 손으로 돌리는 유지보수 도구입니다.</p>
+    </div>
+
+    <div class="body">
+      <div class="cal warn">
+        <div class="ci">⚠️</div>
+        <div>
+          <div class="ct">"고아 훅"이라던 오해 정정</div>
+          <div class="cd">이전엔 이 둘이 <code>settings.json</code>에 등록 안 됐다고 "고아"로 봤습니다. 하지만 조사해 보니 <span class="hl">데이터 흐름엔 분명히 연결</span>돼 있습니다 — <b>자동 실행만 안 걸렸을 뿐, 시스템의 일부</b>입니다.</div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="chead"><div class="cico">🔍</div><div class="cname">analyze-errors</div><div class="cwhen">수동 실행</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv"><code>errors.jsonl</code>을 읽어 <span class="hlr">3회 이상 반복된 에러 패턴</span>을 묶어 보여줍니다.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv"><code>dispatcher-failure</code>가 쌓은 실패 로그의 <span class="hl">소비자</span>. 즉 "실패 기록 물길"의 마지막 단계입니다.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">🧽</div><div class="cname">log-rotate</div><div class="cwhen">수동 실행</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv"><code>~/.claude/</code> 아래 6개 로그 폴더에서 <span class="hlc">30일 넘은 파일</span>을 삭제합니다.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">metrics·agents·errors·summaries 등 <span class="hl">모든 로그의 청소부</span>. 다른 훅이 쌓은 기록이 무한정 쌓이지 않게 합니다.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cal info">
+        <div class="ci">💡</div>
+        <div>
+          <div class="ct">개선 여지</div>
+          <div class="cd">둘 다 <span class="hl">수동</span>이라, 잊으면 안 돌아갑니다. <code>log-rotate</code>는 주기 실행(cron/스케줄)으로, <code>analyze-errors</code>는 가끔 점검용으로 자동화할 수 있습니다 — 펜딩 후보로 P6에 적어뒀습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
