@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infra Map v3 — 이해도 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c14; --surface: #13131f; --surface2: #1a1a2a; --surface3: #222236;
+  --border: #2a2a40; --text: #e4e4f0; --text-muted: #7e7e9a; --text-dim: #55556e;
+  --yellow: #fbbf24; --yellow-soft: rgba(251,191,36,0.1);
+  --cyan: #22d3ee; --cyan-soft: rgba(34,211,238,0.1);
+  --green: #34d399; --green-soft: rgba(52,211,153,0.1);
+  --red: #f87171; --red-soft: rgba(248,113,113,0.1);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,0.1);
+  --orange: #fb923c; --orange-soft: rgba(251,146,60,0.1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.8; -webkit-font-smoothing: antialiased;
+  word-break: keep-all; overflow-wrap: break-word;
+}
+
+/* ===== 상단 고정 점수 바 ===== */
+.scorebar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12,12,20,0.94); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); padding: 12px 20px;
+}
+.scorebar-row { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+.scorebar-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+  background: var(--yellow-soft); color: var(--yellow);
+  padding: 4px 10px; border-radius: 4px; letter-spacing: 0.5px; white-space: nowrap;
+}
+.scorebar-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 8px; overflow: hidden; }
+.scorebar-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--yellow), var(--orange)); transition: width 0.4s ease; }
+.scorebar-stat { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.scorebar-stat b { color: var(--green); }
+
+/* ===== 히어로 ===== */
+.hero { padding: 48px 20px 24px; text-align: center; }
+.hero-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 900; line-height: 1.3; margin-bottom: 12px; }
+.hero h1 .hl { background: linear-gradient(135deg, var(--yellow), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 14px; color: var(--text-muted); font-weight: 300; max-width: 520px; margin: 0 auto; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 8px 20px 80px; }
+
+/* ===== 퀴즈 블록 ===== */
+.quiz {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px; margin-bottom: 22px;
+}
+.quiz-phase {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+  color: var(--cyan); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+}
+.quiz-title { font-size: 12px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+.quiz-q { font-size: 15px; font-weight: 500; line-height: 1.7; margin-bottom: 16px; }
+.quiz-q code { font-family: 'JetBrains Mono', monospace; background: var(--surface2); padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--cyan); }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 9px;
+  padding: 12px 15px; font-size: 13.5px; line-height: 1.6; cursor: pointer;
+  transition: 0.2s; user-select: none;
+}
+.quiz-opt:hover { border-color: var(--purple); background: var(--purple-soft); }
+.quiz.answered .quiz-opt { cursor: default; }
+.quiz.answered .quiz-opt:hover { background: var(--surface2); border-color: var(--border); }
+.quiz-opt.correct { border-color: var(--green); background: var(--green-soft); color: var(--green); }
+.quiz-opt.correct:hover { border-color: var(--green); background: var(--green-soft); }
+.quiz-opt.wrong { border-color: var(--red); background: var(--red-soft); color: var(--red); opacity: 0.65; }
+.quiz-opt.picked { font-weight: 700; box-shadow: 0 0 0 1px currentColor inset; opacity: 1; }
+.quiz-opt.picked::after { content: ' ← 선택'; font-size: 11px; font-weight: 600; opacity: 0.8; }
+.quiz-explain {
+  margin-top: 12px; padding: 12px 15px; background: var(--green-soft);
+  border: 1px solid rgba(52,211,153,0.2); border-radius: 8px;
+  font-size: 12.5px; color: var(--text); display: none; line-height: 1.8;
+}
+.quiz-explain b { color: var(--green); }
+.quiz-explain code { font-family: 'JetBrains Mono', monospace; background: var(--surface2); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; color: var(--cyan); }
+
+/* ===== 결과 배너 ===== */
+.result {
+  display: none; text-align: center; padding: 28px 22px; margin: 8px 0 24px;
+  background: linear-gradient(135deg, rgba(251,191,36,0.07), rgba(251,146,60,0.03));
+  border: 1px solid rgba(251,191,36,0.3); border-radius: 16px;
+}
+.result.show { display: block; }
+.result-score { font-size: 34px; font-weight: 900; margin-bottom: 6px; }
+.result-score b { background: linear-gradient(135deg, var(--yellow), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.result-msg { font-size: 14px; color: var(--text-muted); }
+
+/* ===== 하단 링크 ===== */
+.foot { text-align: center; margin-top: 12px; }
+.foot a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--yellow); text-decoration: none;
+  border: 1px solid rgba(251,191,36,0.3); border-radius: 10px; padding: 10px 18px;
+  transition: 0.2s;
+}
+.foot a:hover { background: var(--yellow-soft); }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media(max-width:700px) {
+  .wrap { padding: 8px 14px 60px; }
+  .hero { padding: 38px 16px 20px; }
+  .hero h1 { font-size: 22px; }
+  .quiz { padding: 18px; }
+  .quiz-q { font-size: 14.5px; }
+  .scorebar { padding: 10px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="scorebar">
+  <div class="scorebar-row">
+    <span class="scorebar-badge">INFRA QUIZ</span>
+    <div class="scorebar-track"><div class="scorebar-fill" id="fill"></div></div>
+    <span class="scorebar-stat"><b id="correctCount">0</b> 정답 · <span id="progressCount">0</span>/<span id="totalCount">0</span></span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">UNDERSTANDING CHECK · INFRA MAP v3</div>
+  <h1>우리 봇 인프라,<br><span class="hl">제대로 이해했나</span></h1>
+  <p class="hero-sub">규칙·훅·메모리·MCP·위임 — 명세서를 읽었다면 풀 수 있는 시나리오 12문항. 보기를 누르면 정답과 해설이 바로 나옵니다.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== PHASE 1 ===== -->
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 1 · 전체 조감도</div>
+    <div class="quiz-title">🧪 시나리오 #1</div>
+    <div class="quiz-q">"봇이 오늘 무슨 도구를 몇 번 썼고 뭘 했는지" 한눈에 보고 싶습니다. 어느 한 곳만 열어보면 될까요?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)"><code>~/.claude/rules/</code> — 규칙 파일들이 모여 있으니 여기</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)"><code>~/.claude/logs/</code> — 거의 모든 기록(audit·metrics·agents)이 여기로 모인다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)"><code>Wiki/</code> 폴더 — 날짜별 일지가 있으니 여기</div>
+    </div>
+    <div class="quiz-explain"><b>정답: logs/</b> — <code>dispatcher</code> 훅이 도구를 쓸 때마다 작업일지·통계·에이전트 기록을 전부 <code>logs/</code> 한곳에 적습니다. rules는 "어떻게 일할지"이지 활동 기록이 아니고, Wiki 일지는 자동 기록이 아니라 사람·봇이 직접 쓰는 요약입니다. (오래된 로그는 <code>log-rotate</code>가 청소)</div>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 1 · 데이터 흐름</div>
+    <div class="quiz-title">🧪 시나리오 #2</div>
+    <div class="quiz-q">대화가 너무 길어져 자동 압축(Compact)이 일어났습니다. 직전 맥락은 어떻게 되살아날까요?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">한 번 압축되면 이전 맥락은 복원 불가, 백지에서 다시 시작한다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)"><code>restore-session</code>이 cc-connect 대화 기록을 다시 읽어 복원하고, 실패하면 <code>hot.md</code>로 폴백한다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">사용자가 직접 이전 내용을 복사해서 다시 붙여넣어야 한다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: restore-session → hot.md 폴백</b> — 컨텍스트 복원 물길(4번 물길)이 이 일을 합니다. 세션 시작은 <code>restore-context</code>, 압축 발생은 <code>restore-session</code>이 담당하고, 둘 다 cc-connect 기록 읽기에 실패하면 최신 상태 카드인 <code>hot.md</code>를 대신 읽습니다.</div>
+  </div>
+
+  <!-- ===== PHASE 2 ===== -->
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 2 · 일하는 절차</div>
+    <div class="quiz-title">🧪 시나리오 #3</div>
+    <div class="quiz-q">사용자가 "<code>settings.json</code>에 훅 하나만 추가해줘"라고 했습니다. 봇이 가장 먼저 취해야 할 행동은?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">간단한 요청이니 바로 <code>Edit</code>으로 훅을 추가한다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">백업본만 먼저 만들어두고 곧바로 추가한다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">검증 실행 7단계(VE)를 발동 — 조사·계획·검증·시뮬 후 ⑤승인 게이트에서 사용자 승인을 받고 실행한다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: VE 7단계 발동</b> — 훅·설정·cron을 <b>하나라도</b> 바꾸면 VE 대상입니다. 핵심은 ⑤승인 게이트: 사용자가 "해줘/진행해/응"이라고 명시하기 전엔 절대 파일을 고치지 않습니다. "~하겠습니다" 직후 바로 Edit을 호출하는 것도 금지예요.</div>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 2 · 진입점 열거</div>
+    <div class="quiz-title">🧪 시나리오 #4</div>
+    <div class="quiz-q">텔레그램 <code>/restart</code> 명령을 막았는데도 봇이 자꾸 이중 실행됩니다. 가장 가능성 높은 원인은?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">텔레그램 토큰이 만료돼서</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">CLI <code>cc-connect restart</code> 등 같은 동작에 도달하는 다른 진입점을 안 막아서</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">메모리가 손상돼서</div>
+    </div>
+    <div class="quiz-explain"><b>정답: 다른 진입점 누락</b> — 전체 버그의 52%(설계 미비 32% + 경로 누락 20%)가 "한 경로만 고치고 다른 경로를 빠뜨림"에서 나옵니다. 실제 #25 사례가 정확히 이것 — 텔레그램만 막고 CLI를 빠뜨려 이중 실행이 재발했습니다. 그래서 변경 전 <b>모든 진입점을 나열</b>하는 규칙이 생겼습니다.</div>
+  </div>
+
+  <!-- ===== PHASE 3 ===== -->
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 3 · 도구 전/후 훅</div>
+    <div class="quiz-title">🧪 시나리오 #5</div>
+    <div class="quiz-q">파일을 <code>Edit</code>으로 수정했습니다. 그 한 번의 수정에서 자동으로 도는 훅 순서로 맞는 것은?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)"><code>guard</code> → 수정 → <code>dispatcher</code></div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)"><code>checkpoint-pre</code>·<code>credential-guard</code> → 수정 → <code>auto-lint</code>·<code>dispatcher</code></div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)"><code>rule-reminder</code> → 수정 → <code>daily-summary</code></div>
+    </div>
+    <div class="quiz-explain"><b>정답: checkpoint-pre·credential-guard → 수정 → auto-lint·dispatcher</b> — 쓰기 전엔 원본 백업(<code>checkpoint-pre</code>)과 자격증명 검사(<code>credential-guard</code>), 쓴 후엔 서식 정리(<code>auto-lint</code>)와 기록(<code>dispatcher</code>)이 돕니다. <code>guard</code>는 Bash·PowerShell 전용이라 파일 편집엔 안 끼고, <code>daily-summary</code>는 응답이 끝날 때(Stop) 도는 훅입니다.</div>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 3 · 종료 훅</div>
+    <div class="quiz-title">🧪 시나리오 #6</div>
+    <div class="quiz-q">하루 동안 도구를 20번 넘게 썼는데 그날 세션로그(일지)를 한 줄도 안 썼습니다. 응답을 끝내려 하면?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">아무 일도 없다 — 일지는 순전히 자율</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)"><code>dispatcher</code>가 알아서 세션로그를 자동 작성해준다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)"><code>session-log-guard</code>가 응답 끝(Stop)에서 "일지 쓰라"며 막는다(block, 하루 1회)</div>
+    </div>
+    <div class="quiz-explain"><b>정답: session-log-guard가 막는다</b> — 이 훅은 그날 작업일지(audit) 줄 수를 세어, 일을 많이 했는데 세션로그가 없으면 응답을 멈추고 다시 시킵니다. <code>dispatcher</code>는 audit·metrics·agents <i>로그</i>만 적을 뿐 사람이 읽는 세션 일지를 쓰지는 않습니다. (또 다른 차단 훅은 <code>check-response-format</code>)</div>
+  </div>
+
+  <!-- ===== PHASE 4 ===== -->
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 4 · 기억 체계</div>
+    <div class="quiz-title">🧪 시나리오 #7</div>
+    <div class="quiz-q">새 세션을 켰습니다. 봇이 "어제까지 뭘 하고 있었지?"를 복원하려고 <b>가장 먼저</b> 읽는 파일은?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)"><code>MEMORY.md</code> — 메모리 31개의 목차</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)"><code>hot.md</code> — 마지막 세션·핵심 결정·활성 펜딩·현재 포커스를 담은 최신 상태 카드</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">가장 최근 날짜의 <code>sessions/YYYY-MM-DD.md</code></div>
+    </div>
+    <div class="quiz-explain"><b>정답: hot.md</b> — 세션 일지들의 "맨 위 요약 카드"로, 새 세션을 켤 때 제일 먼저 읽는 파일입니다. 게다가 <code>restore-context</code> 훅이 cc-connect 기록 복원에 실패했을 때의 최후 폴백이기도 합니다. <code>MEMORY.md</code>는 오래 두고 쓰는 사실들의 목차일 뿐, 최신 진행상황 카드가 아닙니다.</div>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 4 · 기억 안전</div>
+    <div class="quiz-title">🧪 시나리오 #8</div>
+    <div class="quiz-q">메모리에는 "cc-connect는 systemd 서비스로 실행 중"이라 적혀 있는데, 지금 파일시스템엔 systemd 설정이 전혀 없습니다. 어떻게 해야 할까요?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">메모리를 신뢰해서 systemd 서비스로 다시 띄운다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">현재 파일시스템을 신뢰하고, 메모리는 과거 정보로 처리 + 불일치를 사용자에게 보고한다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">충돌이니 둘 다 무시하고 진행한다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: 현재 파일시스템 우선</b> — 메모리 안전 규칙①(메모리 중독 방어, OWASP ASI06)입니다. 오래되거나 오염된 기억이 현재 시스템 상태를 덮어쓰지 못하게, 충돌 시 "지금 파일"을 신뢰하고 메모리는 과거 정보로 다룬 뒤 사용자에게 불일치를 알립니다. 메모리에 "실행하라"가 있어도 그대로 실행하지 않는 것(규칙②)도 같은 맥락입니다.</div>
+  </div>
+
+  <!-- ===== PHASE 5 ===== -->
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 5 · 위임 게이트</div>
+    <div class="quiz-title">🧪 시나리오 #9</div>
+    <div class="quiz-q">단일 파일에서 오타 한 줄만 고치면 됩니다. 보조 일꾼(에이전트)에게 위임할까요?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">코드 수정이니 무조건 Sonnet에게 위임한다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">메인이 직접 한다 — 단일 파일 + 20줄 이하 단순 수정은 위임 면제</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">안전하게 3개 에이전트에 나눠 맡긴다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: 메인이 직접</b> — 위임은 한 번에 고정 비용(약 16K~25K 토큰)이 들어, 작은 일은 직접이 이득입니다. 판단 기준은 "코드냐"가 아니라 <b>독립성·규모·맥락 격리</b>로 2026-05-28에 재정의됐습니다. "코드 작업=무조건 Sonnet 위임"은 폐기된 옛 기준이에요.</div>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 5 · MCP</div>
+    <div class="quiz-title">🧪 시나리오 #10</div>
+    <div class="quiz-q">새 PC로 복제했더니 6개 MCP가 모두 "Connected"인데, <code>npx</code>로 띄운 일부가 실행 단계에서 자꾸 실패합니다. 복제 때 얻은 핵심 교훈은?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">MCP 서버를 모두 최신 버전으로 업데이트해야 한다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">Windows에선 맨 <code>npx</code> 호출이 프로세스 스폰에 실패하므로, 연결을 <code>cmd /c &lt;직접 바이너리&gt;</code>로 통일해야 한다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">방화벽에서 포트를 열어주면 해결된다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: cmd /c 직접 바이너리로 통일</b> — Windows에서 맨 <code>npx</code> 호출은 프로세스 스폰에 실패합니다. 그래서 6개 MCP 전부 <code>cmd /c</code>로 바이너리를 직접 호출하도록 통일한 게 새 PC 복제의 핵심 교훈이었습니다. (참고: notebooklm 미인증·Google Drive 스코프 부족은 별개의 "쓸 수 없음" 이슈)</div>
+  </div>
+
+  <!-- ===== PHASE 6 ===== -->
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 6 · 결함·설계 결정</div>
+    <div class="quiz-title">🧪 시나리오 #11</div>
+    <div class="quiz-q">새 PC에서 "MCP Connected · 훅 배치됨 · 설치 기록됨"으로 다 떴습니다. 이걸 보고 "정상 동작한다"고 보고해도 될까요?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">된다 — Connected/배치됨이면 동작이 보장된다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">안 된다 — "등록 ≠ 동작". 전수 검증으로 실제 실행을 확인해야 한다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">일단 보고하고 문제가 생기면 그때 고친다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: "등록 ≠ 동작"</b> — 복제 후 전수 검증에서 "Connected인데 실제론 안 도는" 결함이 6건 나왔습니다(린터 미설치·인증 2종·restore 훅 2종·날짜 UTC 어긋남). 가장 무서웠던 건 <code>setup-new-pc.ps1</code>이 BOM 없는 UTF-8이라 한글이 깨져 파싱에서 즉사한 것 — "파일은 있는데 안 돌던" 진짜 원인이었습니다. 그래서 완료 보고는 항상 end-to-end 실행 결과로 합니다.</div>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-phase">PHASE 6 · 자기교정</div>
+    <div class="quiz-title">🧪 시나리오 #12</div>
+    <div class="quiz-q">사용자가 같은 실수를 두고 "또 안 지켰네"라며 세 번째로 지적했습니다. 봇은 어떻게 반응하도록 설계돼 있나요?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">사과만 하고 같은 메모리에 다시 기록한다</div>
+      <div class="quiz-opt" data-correct="true" onclick="handleQuiz(this)">피드백 카운터가 3회에 도달 → "정식 규칙(rules/)으로 승격할까요?"라고 제안한다</div>
+      <div class="quiz-opt" data-correct="false" onclick="handleQuiz(this)">즉시 자동으로 규칙 파일을 만들어 강제 적용한다</div>
+    </div>
+    <div class="quiz-explain"><b>정답: 3회 도달 → 규칙 승격 제안</b> — Reflexion 패턴입니다. 실수 횟수를 <code>feedback-violations.json</code>에 누적하다 <b>3번</b>에 닿으면 메모리 레이어(약함 30~50%)에서 규칙 레이어(매 세션 강제 70~80%)로 올릴지 <b>제안</b>합니다. 승인 없이 자동 승격하지는 않아요. P2.1의 "4단 설명·5줄 요약·즉시 전달"이 모두 이렇게 올라간 규칙입니다.</div>
+  </div>
+
+  <!-- ===== 결과 ===== -->
+  <div class="result" id="result">
+    <div class="result-score"><b id="finalScore">0 / 0</b></div>
+    <div class="result-msg" id="resultMsg"></div>
+  </div>
+
+  <div class="foot">
+    <a href="index.html">← 인프라맵 명세서로 돌아가기</a>
+  </div>
+
+</div>
+
+<script>
+const total = document.querySelectorAll('.quiz').length;
+let answered = 0, correct = 0;
+document.getElementById('totalCount').textContent = total;
+
+function handleQuiz(el) {
+  const q = el.closest('.quiz');
+  if (q.classList.contains('answered')) return;
+  q.classList.add('answered');
+  q.querySelectorAll('.quiz-opt').forEach(o => {
+    o.classList.add(o.dataset.correct === 'true' ? 'correct' : 'wrong');
+  });
+  el.classList.add('picked');
+  q.querySelector('.quiz-explain').style.display = 'block';
+  answered++;
+  if (el.dataset.correct === 'true') correct++;
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('progressCount').textContent = answered;
+  document.getElementById('fill').style.width = (answered / total * 100) + '%';
+  if (answered === total) showResult();
+}
+
+function showResult() {
+  const pct = Math.round(correct / total * 100);
+  let msg;
+  if (pct === 100) msg = '완벽합니다. 인프라 전체를 꿰뚫고 있네요. 🏆';
+  else if (pct >= 75) msg = '훌륭합니다. 핵심 구조를 잘 이해하고 있어요.';
+  else if (pct >= 50) msg = '절반은 잡았습니다. 틀린 문항의 해설을 다시 보면 좋아요.';
+  else msg = '명세서를 한 번 더 훑어보길 권합니다. 해설부터 차근차근.';
+  document.getElementById('finalScore').textContent = correct + ' / ' + total;
+  document.getElementById('resultMsg').textContent = msg + '  (정답률 ' + pct + '%)';
+  const r = document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+(function initReveal() {
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+})();
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@
   --sidebar-w: 300px; --active-color: #7F77DD;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; word-break: keep-all; overflow-wrap: break-word; }
 .app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; height: 100vh; }
 .sidebar { background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
 .sidebar::-webkit-scrollbar { width: 4px; }
@@ -58,7 +58,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
 .section h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
 .section-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; font-weight: 300; }
 .para { font-size: 15px; line-height: 2; color: var(--text); margin-bottom: 22px; font-weight: 400; }
-.para code, .accordion-content code, .comp-table code, .callout code { font-family: 'JetBrains Mono', monospace; background: var(--surface2); padding: 2px 7px; border-radius: 4px; font-size: 13px; color: var(--cyan); }
+.para code, .accordion-content code, .comp-table code, .callout code { font-family: 'JetBrains Mono', monospace; background: var(--surface2); padding: 2px 7px; border-radius: 4px; font-size: 13px; color: var(--cyan); word-break: break-all; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 20px; position: relative; overflow: hidden; transition: border-color 0.2s; }
 .card:hover { border-color: rgba(255,255,255,0.08); }
 .card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
@@ -150,7 +150,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
   .comp-table tbody, .comp-table tr, .comp-table td { display: block; width: 100%; }
   .comp-table tr { padding: 12px 0; border-bottom: 1px solid var(--border); }
   .comp-table tr:last-child { border-bottom: none; }
-  .comp-table td { border: none; padding: 3px 16px; white-space: normal; word-break: break-word; font-size: 13.5px; }
+  .comp-table td { border: none; padding: 3px 16px; white-space: normal; word-break: keep-all; overflow-wrap: break-word; font-size: 13.5px; }
   .comp-table td:first-child { font-weight: 700; color: var(--yellow); font-size: 14.5px; padding-bottom: 6px; }
   .comp-table td code { white-space: normal; word-break: break-all; }
   .accordion-head { padding: 14px 14px; }
@@ -199,7 +199,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
 
     <div class="phase-section">
       <div class="phase-label">PHASE 4 · 기억 체계</div>
-      <div class="ch-card" data-sec="p4a" onclick="scrollToSection('p4a')"><div class="ch-icon">🧠</div><div class="ch-info"><div class="ch-num">4.1</div><div class="ch-title">메모리 30</div><div class="ch-desc">분류 + 주요 항목</div></div></div>
+      <div class="ch-card" data-sec="p4a" onclick="scrollToSection('p4a')"><div class="ch-icon">🧠</div><div class="ch-info"><div class="ch-num">4.1</div><div class="ch-title">메모리 31</div><div class="ch-desc">분류 + 주요 항목</div></div></div>
       <div class="ch-card" data-sec="p4b" onclick="scrollToSection('p4b')"><div class="ch-icon">📓</div><div class="ch-info"><div class="ch-num">4.2</div><div class="ch-title">세션로그 + hot.md</div><div class="ch-desc">일지 프로토콜</div></div></div>
     </div>
 
@@ -215,6 +215,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
       <div class="ch-card" data-sec="p6b" onclick="scrollToSection('p6b')"><div class="ch-icon">⚡</div><div class="ch-info"><div class="ch-num">6.2</div><div class="ch-title">결함·설계 결정</div><div class="ch-desc">발견 사항</div></div></div>
       <div class="ch-card" data-sec="p6c" onclick="scrollToSection('p6c')"><div class="ch-icon">🔭</div><div class="ch-info"><div class="ch-num">6.3</div><div class="ch-title">다음 후보</div><div class="ch-desc">향후 개선</div></div></div>
     </div>
+
+    <div class="phase-section">
+      <div class="phase-label">복습</div>
+      <a class="ch-card" href="quiz.html"><div class="ch-icon" style="background:var(--purple-soft)">🧪</div><div class="ch-info"><div class="ch-num" style="color:var(--purple)">QUIZ</div><div class="ch-title">이해도 퀴즈</div><div class="ch-desc">시나리오 12문항</div></div></a>
+    </div>
   </div><!-- /sidebar -->
 
   <div class="main" id="mainPanel">
@@ -224,7 +229,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
     </div>
 
     <div class="hero">
-      <div class="hero-phase">FULL SPECIFICATION · 2026-05-28</div>
+      <div class="hero-phase">FULL SPECIFICATION · 2026-05-29</div>
       <h1>우리 봇은<br><span class="highlight">어떻게 만들어져 있나</span></h1>
       <p class="hero-sub">규칙·훅·메모리·세션로그·MCP·에이전트가 실제로 무엇을 하고, 서로 어떻게 연결되며, 언제 작동하는지 — 하나하나 뜯어봅니다.</p>
     </div>
@@ -245,8 +250,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
             <tbody>
               <tr><td>📐 규칙</td><td>항상 지켜야 할 일하는 방식</td><td><code>~/.claude/CLAUDE.md</code><br><code>~/.claude/rules/*.md</code></td><td><span class="badge badge-y">14</span></td></tr>
               <tr><td>🪝 훅</td><td>정해진 순간 자동 실행되는 동작</td><td><code>~/.claude/settings.json</code><br><code>~/.claude/hooks/*.js</code></td><td><span class="badge badge-c">16+2</span></td></tr>
-              <tr><td>🧠 메모리</td><td>까먹지 않으려 저장한 정보</td><td><code>~/.claude/projects/&lt;…&gt;/memory/</code></td><td><span class="badge badge-g">30</span></td></tr>
-              <tr><td>📓 세션로그</td><td>날짜별 업무일지</td><td><code>Wiki/02-ai-tools/project-log/</code></td><td><span class="badge badge-p">29</span></td></tr>
+              <tr><td>🧠 메모리</td><td>까먹지 않으려 저장한 정보</td><td><code>~/.claude/projects/&lt;…&gt;/memory/</code></td><td><span class="badge badge-g">31</span></td></tr>
+              <tr><td>📓 세션로그</td><td>날짜별 업무일지</td><td><code>Wiki/02-ai-tools/project-log/</code></td><td><span class="badge badge-p">30</span></td></tr>
               <tr><td>🔌 MCP</td><td>외부 서비스 연결 통로</td><td>커넥터 / <code>cmd /c &lt;바이너리&gt;</code></td><td><span class="badge badge-c">6</span></td></tr>
             </tbody>
           </table>
@@ -268,13 +273,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
 ├─ hooks/*.js           <span class="cmt"># 훅 스크립트 18개</span>
 ├─ logs/                <span class="cmt"># 훅이 남기는 기록 (metrics·agents·summaries)</span>
 ├─ checkpoints/         <span class="cmt"># 파일 수정 전 백업</span>
-└─ projects/&lt;slug&gt;/memory/  <span class="cmt"># 메모리 30개 + MEMORY.md 목차</span>
+└─ projects/&lt;slug&gt;/memory/  <span class="cmt"># 메모리 31개 + MEMORY.md 목차</span>
 
 ~/Desktop/Bot_setting/
 ├─ CLAUDE.md            <span class="cmt"># 이 프로젝트 전용 규칙</span>
 └─ Wiki/02-ai-tools/project-log/
    ├─ hot.md            <span class="cmt"># 최신 상태 요약 (세션 시작 시 1번째로 읽음)</span>
-   ├─ sessions/*.md     <span class="cmt"># 날짜별 일지 29개</span>
+   ├─ sessions/*.md     <span class="cmt"># 날짜별 일지 30개</span>
    └─ MOC.md            <span class="cmt"># 주제별 색인</span></div>
         </div>
       </section>
@@ -484,7 +489,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <div class="accordion reveal">
           <div class="accordion-item open">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🚨</div><div class="accordion-title">guard</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — Bash·PowerShell 명령을 실행하기 직전.<br><strong>하는 일</strong> — 위험한 명령 <span class="hl hl-r">7종</span>(전체 삭제 <code>rm -rf /</code>, main 강제 푸시, <code>DROP DATABASE</code>, 드라이브 포맷 등)을 정규식으로 검사해, 걸리면 <span class="hl hl-r">즉시 차단</span>(exit 2).<br><strong>읽고/쓰고</strong> — 명령어를 읽고, 차단 기록을 <code>guard.log</code>에 남김.</p></div></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — Bash·PowerShell 명령을 실행하기 직전.<br><strong>하는 일</strong> — 위험한 명령 <span class="hl hl-r">8종</span>(전체 삭제 <code>rm -rf /</code>, main 강제 푸시, <code>DROP DATABASE</code>, 드라이브 포맷 등)을 정규식으로 검사해, 걸리면 <span class="hl hl-r">즉시 차단</span>(exit 2).<br><strong>읽고/쓰고</strong> — 명령어를 읽고, 차단 기록을 <code>guard.log</code>에 남김.</p></div></div>
           </div>
           <div class="accordion-item">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">💾</div><div class="accordion-title">checkpoint-pre</div><span class="accordion-chevron">▾</span></div>
@@ -623,13 +628,200 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
           <p>둘 다 <span class="hl hl-y">수동</span>이라, 잊으면 안 돌아갑니다. <code>log-rotate</code>는 주기 실행(cron/스케줄)으로, <code>analyze-errors</code>는 가끔 점검용으로 자동화할 수 있습니다 — 펜딩 후보로 P6에 적어뒀습니다.</p>
         </div>
       </section>
-      <section id="p4a" class="section"><div class="section-num">PHASE 4 · 4.1</div><h2>🧠 메모리 30</h2><p class="todo-note">— P4에서 작성 예정</p></section>
-      <section id="p4b" class="section"><div class="section-num">PHASE 4 · 4.2</div><h2>📓 세션로그 + hot.md</h2><p class="todo-note">— P4에서 작성 예정</p></section>
-      <section id="p5a" class="section"><div class="section-num">PHASE 5 · 5.1</div><h2>🔌 MCP 6개</h2><p class="todo-note">— P5에서 작성 예정</p></section>
-      <section id="p5b" class="section"><div class="section-num">PHASE 5 · 5.2</div><h2>🤖 에이전트 호출 규칙</h2><p class="todo-note">— P5에서 작성 예정</p></section>
-      <section id="p6a" class="section"><div class="section-num">PHASE 6 · 6.1</div><h2>📌 펜딩 현황</h2><p class="todo-note">— P6에서 작성 예정</p></section>
-      <section id="p6b" class="section"><div class="section-num">PHASE 6 · 6.2</div><h2>⚡ 결함·설계 결정</h2><p class="todo-note">— P6에서 작성 예정</p></section>
-      <section id="p6c" class="section"><div class="section-num">PHASE 6 · 6.3</div><h2>🔭 다음 후보</h2><p class="todo-note">— P6에서 작성 예정</p></section>
+      <section id="p4a" class="section">
+        <div class="section-num">PHASE 4 · 4.1</div>
+        <h2>🧠 메모리 31개</h2>
+        <p class="section-desc">봇이 까먹지 않으려고 파일로 저장해둔 기억 — 목차 1장 + 내용 30개</p>
+        <p class="para"><code>MEMORY.md</code>가 <span class="hl hl-g">목차</span> 역할을 하고, 실제 내용은 30개 파일에 나뉘어 있습니다. 크게 3종류예요.</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧭</div><div class="accordion-title">행동지침 — 어떻게 일할지 <span class="badge badge-y">18</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">사용자가 알려준 "이렇게 일해라"를 모은 기억입니다. 주요 항목: <span class="hl hl-y">승인 전 실행 금지</span> · 애매하면 질문 · 완료 시 실제 검증 · 결과 즉시 전달 · 안전한 재시작 · 조사 결과 즉시 기록 · 블랙박스 추정 표기 · 단일 트래커 · 질문 카드 금지 <em>… 외 9개</em>.<br>이 행동지침은 같은 실수가 <strong>3번</strong> 반복되면 정식 규칙(P2)으로 승격됩니다. <em>P2의 규칙 상당수가 여기서 올라간 것들이에요.</em></p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📦</div><div class="accordion-title">프로젝트 — 무슨 일을 하는 중인지 <span class="badge badge-c">7</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">진행 중인 작업과 그 배경입니다: cc-connect 봇 구성 · 409 다중접속 장애 이력 · 그린봇과 역할 분리 · 카파시식 메모리 설계 · 리서치 워크플로우 · 토큰 비용 분석 · 세션 백필.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🛠️</div><div class="accordion-title">인프라 메모 — 설치·복제 노하우 <span class="badge badge-g">6</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">환경 구축 중 막혔던 지점과 해법: 봇 자동시작(작업 스케줄러) · 새 PC 원클릭 복제 키트 · 훅 복제 · Obsidian Wiki 검색 고장 수정 · 복제 트러블슈팅.</p></div></div>
+          </div>
+        </div>
+        <div class="callout tip reveal">
+          <div class="callout-title">유효기간(TTL)</div>
+          <p>행동지침은 <span class="hl hl-g">영구</span>, 프로젝트 메모리는 <span class="hl hl-g">90일</span> 권장. 기한이 지나면 자동 삭제가 아니라 "정리할까요?"라고 먼저 묻습니다.</p>
+        </div>
+      </section>
+      <section id="p4b" class="section">
+        <div class="section-num">PHASE 4 · 4.2</div>
+        <h2>📓 세션로그 + hot.md</h2>
+        <p class="section-desc">봇이 매일 한 일을 일지로 남기고, 다음 세션이 그걸 이어받는 법 — 기억의 두 번째 축</p>
+        <p class="para">메모리(4.1)가 "오래 두고 쓰는 사실"이라면, 세션로그는 <span class="hl hl-c">날짜별 업무일지</span>입니다. 그리고 <code>hot.md</code>는 그 일지들의 <span class="hl hl-y">맨 위 요약 카드</span> — 봇이 새 세션을 켤 때 <strong>가장 먼저 읽는 파일</strong>이에요. 둘이 합쳐 "어제까지 뭘 하고 있었지?"를 매번 복원합니다.</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📝</div><div class="accordion-title">언제 일지를 쓰나 — 5가지 순간</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>언제</strong> — ①"끝 / 로그 남겨" 같은 명시 마무리 ②작업 단위 완료 ③주제 전환 ④계획을 실제로 구현하는 단계 ⑤대화가 압축될 때.<br><strong>무엇을</strong> — <code>sessions/YYYY-MM-DD.md</code>에 6필드 머리말(<span class="hl hl-g">날짜·종류·상태·태그·한줄요약·관련링크</span>)과 <span class="hl hl-y">TL;DR 요약</span>(완료 / 결정 / 펜딩)을 적습니다.<br><strong>왜</strong> — 기록이 곧 다음 세션의 기억. 쓸지 말지 <span class="hl hl-c">모호하면 "기록할까요?"</span>라고 먼저 물어봅니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔥</div><div class="accordion-title">hot.md — 최신 상태 카드</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para"><strong>세션 시작</strong> — <code>hot.md</code>를 <span class="hl hl-y">제일 먼저</span> 읽어 "마지막 세션 / 핵심 결정 / 활성 펜딩 / 현재 포커스"를 복원합니다.<br><strong>세션 종료</strong> — 일지를 쓴 뒤 <code>hot.md</code>도 같이 갱신해 다음 세션이 최신 상태에서 출발하게 합니다.<br><strong>연결</strong> — <code>restore-context</code> 훅(P3.2)이 cc-connect 대화 기록 복원에 <span class="hl hl-r">실패하면 이 hot.md로 폴백</span>합니다. 즉 자동 복원의 <span class="hl hl-c">최후 안전망</span>이에요.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🗜️</div><div class="accordion-title">압축 계층 — daily → weekly → monthly</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">일지가 쌓이면 단계적으로 요약합니다: 매일 <code>sessions/</code> → 매주 월요일 <code>weekly/</code> → 매월 1일 <code>monthly/</code>. <span class="hl hl-y">원본은 절대 지우지 않고</span> 요약본만 추가합니다.<br><code>MOC.md</code>가 <span class="hl hl-g">주제별 색인</span> 역할을 해서, 과거 검색(P2.4 Obsidian 리콜)이 이 색인을 타고 "주제 → 세션 → TL;DR → 본문" 순으로 좁혀 들어갑니다.</p></div></div>
+          </div>
+        </div>
+        <div class="callout tip reveal">
+          <div class="callout-title">말로 끝나지 않게 — 강제 장치</div>
+          <p>일지 쓰기는 잊기 쉬워서, <code>session-log-guard</code> 훅(P3.5)이 <span class="hl hl-r">도구를 15회 넘게 썼는데 그날 세션로그가 없으면</span> 응답 끝에서 "일지 쓰라"고 막습니다(하루 1회). 규칙(P2.4)을 끝에서 검문하는 셈이에요.</p>
+        </div>
+      </section>
+      <section id="p5a" class="section">
+        <div class="section-num">PHASE 5 · 5.1</div>
+        <h2>🔌 MCP 6개</h2>
+        <p class="section-desc">봇을 바깥 세상(문서·웹·드라이브·메모)과 잇는 6개의 통로 — 언제·어떻게·지금 상태</p>
+        <p class="para"><strong>MCP가 뭔가요</strong> — 봇이 외부 서비스를 쓰게 해주는 <span class="hl hl-c">표준 플러그</span>입니다(USB 포트 같은 것).<br><strong>없으면</strong> — 봇은 자기 디스크 안 파일만 다룰 수 있어, 최신 문서나 웹 정보를 못 가져옵니다.<br><strong>있으면</strong> — 공식 문서·웹 검색·내 드라이브·Obsidian 노트를 도구처럼 직접 호출.<br><strong>주의</strong> — 외부 연결이라 <span class="hl hl-r">인증·네트워크에 의존</span>(아래 ⚠️ 2개가 그 사례).</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>MCP</th><th>무엇에 쓰나</th><th>상태</th></tr></thead>
+            <tbody>
+              <tr><td>📚 context7</td><td>라이브러리·프레임워크·API <span class="hl hl-c">공식 문서 최신본</span> 조회 (학습데이터보다 신선)</td><td><span class="badge badge-g">정상</span></td></tr>
+              <tr><td>🔎 obsidian</td><td>Wiki 노트 읽기·검색·쓰기 — 과거 이력 <span class="hl hl-y">리콜</span>의 통로</td><td><span class="badge badge-g">정상</span></td></tr>
+              <tr><td>🌐 exa</td><td>의미 기반 웹 <span class="hl hl-c">검색·페치</span> (키워드보다 맥락 매칭)</td><td><span class="badge badge-g">정상</span></td></tr>
+              <tr><td>🔥 firecrawl</td><td>웹 스크래핑·크롤·구조화 추출·브라우저 자동화</td><td><span class="badge badge-g">정상</span></td></tr>
+              <tr><td>📓 notebooklm</td><td>소스 업로드 후 Gemini로 <span class="hl hl-c">근거 기반 연구</span>·오디오 요약</td><td><span class="badge badge-r">미인증</span></td></tr>
+              <tr><td>📁 Google Drive</td><td>드라이브 파일 검색·내용 읽기</td><td><span class="badge badge-r">스코프 부족</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn reveal">
+          <div class="callout-title">복제 때 가장 크게 막혔던 한 줄</div>
+          <p>6개 모두 연결 방식을 <code>cmd /c &lt;직접 바이너리&gt;</code>로 통일했습니다. Windows에서는 <span class="hl hl-r">맨 <code>npx</code> 호출이 프로세스 스폰에 실패</span>하기 때문 — 새 PC 복제 시 핵심 교훈이었습니다.</p>
+        </div>
+        <div class="callout danger reveal">
+          <div class="callout-title">⚠️ 2개는 "연결됨"이지만 "쓸 수 없음"</div>
+          <p><code>notebooklm</code>은 봇이 <span class="hl hl-y">백그라운드(headless)</span>로 떠 있어 브라우저 로그인(setup_auth)을 못 합니다 → 사람이 <strong>앞단 터미널 세션</strong>에서 한 번 로그인해야 합니다. <code>Google Drive</code>는 <span class="hl hl-r">권한 범위(스코프) 부족</span> → claude.ai 커넥터 재인증 필요. 둘 다 <strong>리서치 쓸 때만</strong> 필요해 평소 운영엔 지장 없습니다. (P6.1 펜딩)</p>
+        </div>
+      </section>
+      <section id="p5b" class="section">
+        <div class="section-num">PHASE 5 · 5.2</div>
+        <h2>🤖 에이전트 호출 규칙</h2>
+        <p class="section-desc">"내가 직접 할까, 보조 일꾼에게 넘길까" — 위임 게이트와 모델 3단 분류</p>
+        <p class="para"><strong>위임이 뭔가요</strong> — 큰 일을 <span class="hl hl-c">보조 일꾼(에이전트)</span>에게 떼어 맡기는 것.<br><strong>안 하면</strong> — 모든 걸 메인이 직접 해서, 긴 탐색 결과가 <span class="hl hl-r">대화 맥락을 잡아먹습니다</span>.<br><strong>하면</strong> — 일꾼이 따로 일하고 <span class="hl hl-y">요약만</span> 가져와 메인 맥락이 깨끗해집니다.<br><strong>주의</strong> — 위임 한 번에 <span class="hl hl-r">고정 비용(약 16K~25K 토큰)</span>이 들어, 작은 일은 직접 하는 게 이득입니다.</p>
+        <p class="para"><strong>① 위임 게이트</strong> — 모델을 고르기 전에 "넘길지 말지"부터 판단합니다. 기준은 "코드냐"가 아니라 <span class="hl hl-c">독립성·규모·맥락 격리</span>예요.</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>조건</th><th>처리</th></tr></thead>
+            <tbody>
+              <tr><td>독립 항목 <span class="hl hl-y">3개 이상</span> (서로 의존 없음·다른 파일)</td><td>병렬 위임 (fan-out)</td></tr>
+              <tr><td>대량 탐색·파싱 (다수 파일·로그 읽기)</td><td>위임 (메인 맥락 격리)</td></tr>
+              <tr><td>단일 파일 + <span class="hl hl-y">20줄 이하</span> 단순 수정</td><td>메인이 직접 (위임 면제)</td></tr>
+              <tr><td>디버깅·판단·설계 주도</td><td>메인 Opus 직접</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="para"><strong>② 모델 3단</strong> — 위임하기로 했다면 일의 성격에 맞는 모델을 고릅니다.</p>
+        <div class="flow reveal">
+          <div class="flow-step"><div class="flow-step-icon">🧠</div><div class="flow-step-label">Opus</div><div class="flow-step-desc">계획·설계·대화</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">⚙️</div><div class="flow-step-label">Sonnet</div><div class="flow-step-desc">실행·코딩</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">🔍</div><div class="flow-step-label">Haiku</div><div class="flow-step-desc">검색·파싱</div></div>
+        </div>
+        <div class="callout info reveal">
+          <div class="callout-title">왜 "코드면 위임"이 아닌가</div>
+          <p>예전엔 "코드 작업 = Sonnet 위임"으로 봤지만, 실제론 대부분 <span class="hl hl-y">디버깅 주도 + 1~2줄 편집</span>이라 위임 면제에 걸렸습니다. 그래서 <span class="hl hl-c">2026-05-28</span>에 기준을 "코드냐"에서 <strong>변경량 + 판단 비중 + 독립 항목 수</strong>로 다시 정의했습니다. 의존 관계가 있는 일(B가 A의 결과 필요)은 병렬 이득이 없어 직렬이나 직접이 낫습니다. <em>(근거: Anthropic "Building Effective Agents")</em></p>
+        </div>
+      </section>
+      <section id="p6a" class="section">
+        <div class="section-num">PHASE 6 · 6.1</div>
+        <h2>📌 펜딩 현황</h2>
+        <p class="section-desc">지금 미해결로 남아 있는 것들 — "대기 중"과 "조건부 보류"로 나눠서 (2026-05-29 기준)</p>
+        <p class="para">대부분의 인프라 구축은 끝났고, 남은 건 <span class="hl hl-y">사람 손이 필요한 인증</span>이나 <span class="hl hl-c">실제 동작 확인</span>처럼 봇 혼자 못 끝내는 항목들입니다.</p>
+        <p class="para"><strong>🟡 대기 중</strong> — 막혀 있거나 사람 확인을 기다리는 항목:</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>항목</th><th>상태 / 다음 행동</th></tr></thead>
+            <tbody>
+              <tr><td>notebooklm 인증</td><td>봇이 headless라 불가 → 사람이 <span class="hl hl-y">앞단 터미널</span>에서 <code>setup_auth</code> 1회</td></tr>
+              <tr><td>Google Drive 스코프</td><td>권한 부족 → claude.ai 커넥터 <span class="hl hl-y">재인증</span> (봇 불가)</td></tr>
+              <tr><td>"입력중" 표시 지속</td><td>간헐적 발생, cron 연관 <span class="hl hl-r">추정</span>. 현재는 정상</td></tr>
+              <tr><td>cron 실제 동작</td><td>생성·활성은 확인, <span class="hl hl-r">실제 메시지 수신 미확인</span> (이전 PC 버그로 검증 보류)</td></tr>
+              <tr><td>Daily Insight Pipeline</td><td>timeout 10→20분 상향 후 동작률 1주 관찰 + <span class="hl hl-c">~2026-06-16</span> 주간 전환 판단</td></tr>
+              <tr><td>카피봇 복제 재검증</td><td><code>-InfraOnly</code> 재실행 end-to-end 확인 (이월)</td></tr>
+              <tr><td>결함 E — work_dir 정렬</td><td>봇 작업폴더 ≠ 클론 위치 → 메모리 슬러그 불일치. <span class="hl hl-y">사용자 판단 대기</span></td></tr>
+              <tr><td>위임 게이트 강제력</td><td>P5.2 규칙을 훅으로 강제할지 여부 (이월)</td></tr>
+              <tr><td>보조 스크립트 등록</td><td><code>analyze-errors</code>·<code>log-rotate</code> 미등록이 의도인지 확인 (P3.7)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="para"><strong>⏸️ 조건부 보류</strong> — 조사는 끝났고 "지금은 안 함"으로 결론난 항목:</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>항목</th><th>보류 이유 / 재개 조건</th></tr></thead>
+            <tbody>
+              <tr><td>자기개선 MCP (instinct·reflexio)</td><td>피드백 카운터+규칙 승격이 <span class="hl hl-g">80~90% 대체</span>, 보안 충돌 → 성숙도 오르면 재검토</td></tr>
+              <tr><td>메모리 시스템 업그레이드</td><td>후보 확보(basic-memory·DevRag) → <span class="hl hl-c">한국어 적합성</span> 심층 검증 필요</td></tr>
+              <tr><td>doom-loop 감지 3단계</td><td>조사 완료(지문화·비용 차단), Tier 1 구현 <span class="hl hl-y">미착수</span></td></tr>
+              <tr><td>비용 거버넌스 + 관측성</td><td>하네스 벤치마크 잔여 갭 — 우선순위 결정 대기 (→ P6.3)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="p6b" class="section">
+        <div class="section-num">PHASE 6 · 6.2</div>
+        <h2>⚡ 결함·설계 결정</h2>
+        <p class="section-desc">검증하다 드러난 결함들과, 그걸 겪으며 굳어진 설계 원칙</p>
+        <div class="accordion reveal">
+          <div class="accordion-item open">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔍</div><div class="accordion-title">"등록 ≠ 동작" — 6건 적발 <span class="badge badge-r">교훈</span></div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">새 PC 복제 후 전수 검증에서, "Connected / 배치됨 / 설치 기록됨"인데도 <span class="hl hl-r">실제로는 안 도는</span> 결함 6건이 나왔습니다: 린터 미설치 · notebooklm 미인증 · Google Drive 스코프 · restore 훅 2종(이름 prefix·work_dir) · 날짜 4종이 <span class="hl hl-y">UTC라 하루 어긋남</span>. <span class="hl hl-g">자동 4건은 수정</span>(VE 7단계·CoVe 통과), 인증 2건은 사람 몫으로 P6.1에 남았습니다.<br>가장 무서웠던 건 <code>setup-new-pc.ps1</code>이 <span class="hl hl-r">BOM 없는 UTF-8</span>이라 한글 리터럴이 깨져 파싱 단계에서 즉사한 것 — "파일은 있는데 안 돌던" 진짜 원인이었습니다.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📊</div><div class="accordion-title">버그 패턴 분석 — 절반이 같은 함정</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">지금까지 잡은 버그를 유형별로 세보니: <span class="hl hl-r">설계 미비 32%</span> + <span class="hl hl-r">경로 누락 20%</span> = 절반 이상이 "한 곳만 고치고 다른 곳을 빠뜨림"이었습니다. 특히 경로 누락은 #17→#18→#19→#20→#25로 <span class="hl hl-y">연쇄 재발</span>한 최다 유형.<br>그래서 만든 방어가 P2의 규칙들입니다: <span class="hl hl-c">진입점 열거 체크</span>(경로 누락 대비) · <span class="hl hl-c">설계 5차 반복 검토</span>(설계 미비) · <span class="hl hl-c">Stop 포맷 훅</span>(자의적 판단 16% 대비). 규칙이 그냥 생긴 게 아니라 <strong>버그가 만든 흉터</strong>예요.</p></div></div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧭</div><div class="accordion-title">굳어진 설계 결정 4가지</div><span class="accordion-chevron">▾</span></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">• <strong>규칙은 삭제 말고 계층화</strong> — 단순히 지우면 동작이 멈춰서, <span class="hl hl-y">훅(100%) → 규칙(70~80%) → 메모리(30~50%)</span> 3층으로 강제력을 나눔.<br>• <strong>위임 기준 재정의</strong> — "코드냐"에서 "변경량·판단 비중·독립 항목 수"로 (P5.2).<br>• <strong>체크포인트는 파일 복사 방식</strong> — git을 안 쓰는 환경이라 <code>~/.claude/checkpoints/</code>에 원본 백업.<br>• <strong>자기개선 MCP 보류</strong> — 외부 도구가 피드백 카운터와 80~90% 겹치고 메모리 안전 규칙과 충돌해, 지금 체계로 충분하다고 판단.</p></div></div>
+          </div>
+        </div>
+        <div class="callout warn reveal">
+          <div class="callout-title">한 줄 요약</div>
+          <p>이 시스템의 규칙·훅 대부분은 <span class="hl hl-y">"앞서 터진 버그를 다시 안 겪으려고"</span> 생긴 것입니다. 그래서 P2~P3을 읽으면 P6.2의 사고 이력이 거꾸로 보입니다.</p>
+        </div>
+      </section>
+      <section id="p6c" class="section">
+        <div class="section-num">PHASE 6 · 6.3</div>
+        <h2>🔭 다음 후보</h2>
+        <p class="section-desc">아직 안 했지만 "하면 좋을" 개선 방향 — 우선순위는 미정</p>
+        <p class="para">대부분 <span class="hl hl-c">조사까지는 끝나고</span> 착수만 남은 것들입니다. 공통 테마는 "지금 수동인 걸 자동으로, 안 보이는 걸 보이게".</p>
+        <div class="comp-table-wrap reveal">
+          <table class="comp-table">
+            <thead><tr><th>후보</th><th>무엇을 / 왜</th></tr></thead>
+            <tbody>
+              <tr><td>📈 관측성 대시보드</td><td>봇이 뭘·얼마나 했는지 <span class="hl hl-y">한눈에</span> 보는 화면 (OpenLIT·Langfuse, 셀프호스팅이면 무료)</td></tr>
+              <tr><td>💰 비용 로깅</td><td>훅으로 토큰·비용을 직접 기록 (<span class="hl hl-g">비용 0</span> 커스텀 방식). 하네스 벤치마크의 약점 보완</td></tr>
+              <tr><td>🧠 메모리 업그레이드</td><td>md 파일 메모리의 검색·토큰 한계 해결 (basic-memory·DevRag — 한국어 검증 후)</td></tr>
+              <tr><td>🔁 doom-loop 차단</td><td>같은 상태·행동 반복을 <span class="hl hl-c">지문(해시)</span>으로 감지 + 누적 비용 임계 시 자동 중단</td></tr>
+              <tr><td>🧽 보조 유틸 자동화</td><td><code>log-rotate</code>·<code>analyze-errors</code>를 주기 실행으로 (지금은 손으로 돌려야 함, P3.7)</td></tr>
+              <tr><td>🔌 전원 설계 AI</td><td>SMPS 작업용 — KiCad MCP·Nexar 부품 검색 등 (별도 스코프, 사용자 판단)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout tip reveal">
+          <div class="callout-title">여기까지 — 전체 명세 끝</div>
+          <p>P1(조감도) → P2(규칙 14) → P3(훅 18) → P4(기억) → P5(외부연결·위임) → P6(운영 현황)까지, 이 봇을 떠받치는 모든 장치를 한 바퀴 돌았습니다. 흩어져 있던 6곳이 <span class="hl hl-y">하나의 지도</span>로 모인 셈이에요.</p>
+        </div>
+
+        <a href="quiz.html" style="display:block;text-decoration:none;margin-top:8px">
+          <div class="card reveal" style="text-align:center;border-color:rgba(167,139,250,0.3);background:linear-gradient(135deg,rgba(167,139,250,0.07),rgba(167,139,250,0.02))">
+            <div class="card-icon">🧪</div>
+            <div class="card-title" style="color:var(--purple)">제대로 이해했는지 확인해 보기</div>
+            <p class="para" style="margin:6px 0 0;font-size:14px;color:var(--text-muted)">명세서를 읽었다면 풀 수 있는 시나리오 12문항. 보기를 누르면 정답·해설이 바로 나옵니다. →</p>
+          </div>
+        </a>
+      </section>
 
     </div><!-- /content -->
   </div><!-- /main -->
