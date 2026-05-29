@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P4.1 · 메모리 31개</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#6d5fc8;--soft:#e6e3f5;--bd:#d2cbed;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#e4def4 0%,#ebe6f5 55%,#f0eef7 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#5a4cb0;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#4f4868;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:18px;}
+.lead b{color:#2b2f38;} .lead code{font-family:'JetBrains Mono',monospace;font-size:12px;
+  background:var(--soft);border-radius:4px;padding:1px 6px;color:#5a4cb0;}
+.lead .hl{background:linear-gradient(transparent 58%,#d2cbed 58%);font-weight:700;padding:0 2px;}
+.seclab{font-size:16px;font-weight:900;margin:24px 0 13px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+
+/* stacked bar */
+.bar{display:flex;height:40px;border-radius:10px;overflow:hidden;font-size:12.5px;font-weight:900;}
+.bar div{display:flex;align-items:center;justify-content:center;color:#fff;}
+.b1{flex:18;background:#d39b34;} .b2{flex:7;background:#3f9fb0;} .b3{flex:6;background:#57a06a;}
+.barcap{font-size:11.5px;color:#8a8f9b;margin-top:7px;}
+.barcap b{color:var(--ac);}
+
+.cards{display:flex;flex-direction:column;gap:13px;margin-top:6px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:15px;padding:17px 20px;}
+.chead{display:flex;align-items:center;gap:11px;}
+.cico{width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cname{font-size:15.5px;font-weight:900;color:#3a3f48;}
+.cbadge{font-size:11px;font-weight:700;color:#fff;border-radius:20px;padding:2px 10px;margin-left:auto;}
+.bg-y{background:#d39b34;} .bg-c{background:#3f9fb0;} .bg-g{background:#57a06a;}
+.cbody{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:10px;}
+.cbody b{color:#3a3f48;} .cbody em{color:#7a7f8c;font-style:normal;}
+.cbody .hl{background:linear-gradient(transparent 58%,#f0e3a8 58%);font-weight:700;padding:0 2px;}
+
+/* flow */
+.flow{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;margin:6px 0;}
+.fn{flex:1;min-width:110px;background:var(--soft);border:1px solid var(--bd);border-radius:12px;padding:12px 10px;text-align:center;}
+.fn.r{background:#fbeeec;border-color:#f4c9c0;} .fn.y{background:#fbf2d6;border-color:#f0e0a8;}
+.fn .fl{font-size:12.5px;font-weight:900;color:#3a3f48;}
+.fn .fs{font-size:11px;color:#777e92;margin-top:3px;}
+.farw{display:flex;align-items:center;color:#bcb4e0;font-size:18px;font-weight:700;padding:0 7px;}
+
+/* callout */
+.cal{display:flex;gap:13px;background:#fbf2d6;border:1px solid #f0e0a8;border-left:5px solid #d39b34;
+  border-radius:11px;padding:15px 18px;margin-top:18px;}
+.cal .ci{font-size:21px;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .bar{height:auto;flex-direction:column;}
+  .bar div{padding:9px 0;}
+  .card{padding:15px 16px;}
+  .chead{flex-wrap:wrap;gap:8px 10px;}
+  .cbadge{margin-left:0;}
+  .flow{flex-direction:column;}
+  .fn{width:100%;}
+  .farw{justify-content:center;padding:5px 0;transform:rotate(90deg);}
+  .cal{padding:13px 15px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 4 · 4.1</span>
+      <h1>🧠 메모리 &nbsp;<span style="font-size:20px;color:#5a4cb0;">31개</span></h1>
+      <p>봇이 까먹지 않으려고 <b>파일로 저장해 둔 기억</b> — 목차 1장 + 내용 30개. 크게 세 종류로 나뉩니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead"><code>MEMORY.md</code>가 <span class="hl">목차</span> 역할을 하고, 실제 내용은 30개 파일에 나뉘어 있습니다. <b>행동지침이 절반 이상</b>으로, "어떻게 일할지"가 기억의 중심이에요.</p>
+
+      <div class="bar">
+        <div class="b1">🧭 행동지침 18</div>
+        <div class="b2">📦 프로젝트 7</div>
+        <div class="b3">🛠️ 인프라 6</div>
+      </div>
+      <div class="barcap">총 <b>31개</b> — 행동지침(18)이 가장 많고, 프로젝트(7)·인프라 메모(6)가 뒤를 잇습니다.</div>
+
+      <div class="seclab">세 종류의 기억</div>
+      <div class="cards">
+        <div class="card">
+          <div class="chead"><div class="cico">🧭</div><div class="cname">행동지침 — 어떻게 일할지</div><div class="cbadge bg-y">18</div></div>
+          <div class="cbody">사용자가 알려준 "이렇게 일해라"를 모은 기억입니다. 주요 항목: <b>승인 전 실행 금지</b> · 애매하면 질문 · 완료 시 실제 검증 · 결과 즉시 전달 · 안전한 재시작 · 조사 결과 즉시 기록 · 블랙박스 추정 표기 · 단일 트래커 · 질문 카드 금지 <em>… 외 9개</em>. 같은 실수가 <span class="hl">3번</span> 반복되면 정식 규칙(P2)으로 승격됩니다.</div>
+        </div>
+        <div class="card">
+          <div class="chead"><div class="cico">📦</div><div class="cname">프로젝트 — 무슨 일을 하는 중인지</div><div class="cbadge bg-c">7</div></div>
+          <div class="cbody">진행 중인 작업과 그 배경입니다: cc-connect 봇 구성 · 409 다중접속 장애 이력 · 그린봇과 역할 분리 · 카파시식 메모리 설계 · 리서치 워크플로우 · 토큰 비용 분석 · 세션 백필.</div>
+        </div>
+        <div class="card">
+          <div class="chead"><div class="cico">🛠️</div><div class="cname">인프라 메모 — 설치·복제 노하우</div><div class="cbadge bg-g">6</div></div>
+          <div class="cbody">환경 구축 중 막혔던 지점과 해법: 봇 자동시작(작업 스케줄러) · 새 PC 원클릭 복제 키트 · 훅 복제 · Obsidian Wiki 검색 고장 수정 · 복제 트러블슈팅.</div>
+        </div>
+      </div>
+
+      <div class="seclab">행동지침은 고정이 아니라 승격됩니다</div>
+      <div class="flow">
+        <span class="fn"><div class="fl">📒 메모리</div><div class="fs">행동지침 · 강제력 30~50%</div></span>
+        <span class="farw">→</span>
+        <span class="fn r"><div class="fl">⚠️ 3회 반복 위반</div><div class="fs">같은 실수 누적</div></span>
+        <span class="farw">→</span>
+        <span class="fn y"><div class="fl">📌 규칙 승격 (P2)</div><div class="fs">강제력 70~80%</div></span>
+      </div>
+
+      <div class="cal">
+        <div class="ci">⏳</div>
+        <div>
+          <div class="ct">유효기간(TTL)</div>
+          <div class="cd">행동지침은 <span class="hl">영구</span>, 프로젝트 메모리는 <span class="hl">90일</span> 권장. 기한이 지나면 자동 삭제가 아니라 "정리할까요?"라고 먼저 묻습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
