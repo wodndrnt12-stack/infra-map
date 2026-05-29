@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P3.6 · 훅 연결 관계도</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#8a6fc0;--soft:#e7e0f3;--bd:#d6cbec;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#e6def4 0%,#ebe4f3 55%,#f1edf6 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#735bad;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#564a68;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:20px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#d6cbec 58%);font-weight:700;padding:0 2px;}
+.seclab{font-size:16px;font-weight:900;margin:24px 0 13px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+
+/* pipelines */
+.pipe{border-left:4px solid var(--pc);border-radius:0 12px 12px 0;background:#fafafe;
+  padding:12px 16px 14px;margin-bottom:12px;}
+.plab{font-size:13.5px;font-weight:900;color:var(--pc);margin-bottom:9px;}
+.pflow{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;}
+.pn{background:#fff;border:1px solid #e3e0ec;border-radius:10px;padding:9px 12px;font-size:12px;
+  display:flex;flex-direction:column;justify-content:center;line-height:1.4;}
+.pn code{font-family:'JetBrains Mono',monospace;font-size:11px;color:#735bad;font-weight:600;}
+.pn .sub{font-size:10.5px;color:#9aa0ae;margin-top:1px;}
+.pn b{color:#3a3f48;}
+.parw{display:flex;align-items:center;color:#c3b8df;font-size:15px;font-weight:700;padding:0 6px;}
+.p1{--pc:#57a06a;} .p2{--pc:#d4604f;} .p3{--pc:#d39b34;} .p4{--pc:#3f9fb0;}
+.p1 .pn.k{border-color:#c2e2c8;} .p2 .pn.k{border-color:#f4c9c0;}
+.p3 .pn.k{border-color:#f1e2a9;} .p4 .pn.k{border-color:#bce0e7;}
+
+/* table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:6px;font-size:12px;
+  border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.tbl th{background:var(--ac);color:#fff;font-weight:700;padding:9px 12px;text-align:left;font-size:11.5px;}
+.tbl td{padding:8px 12px;border-top:1px solid #f0edf6;color:#5d6370;vertical-align:top;line-height:1.5;}
+.tbl tr:nth-child(even) td{background:#faf8fe;}
+.tbl code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--soft);
+  border-radius:4px;padding:1px 5px;color:#735bad;}
+
+.cal{display:flex;gap:13px;background:var(--soft);border:1px solid var(--bd);border-left:5px solid var(--ac);
+  border-radius:11px;padding:15px 18px;margin-top:18px;}
+.cal .ci{font-size:21px;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#fff;border:1px solid var(--bd);
+  border-radius:4px;padding:1px 5px;color:#735bad;}
+.cal .cd .hl{background:linear-gradient(transparent 58%,#f0e3a8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .pipe{padding:11px 13px 12px;}
+  .pflow{flex-direction:column;}
+  .pn{width:100%;}
+  .parw{justify-content:center;padding:5px 0;transform:rotate(90deg);}
+  .tbl{font-size:11px;}
+  .tbl th{padding:8px 8px;font-size:10.5px;}
+  .tbl td{padding:7px 8px;}
+  .tbl code{font-size:10px;padding:1px 4px;}
+  .cal{padding:13px 15px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 3 · 3.6</span>
+      <h1>🕸️ 훅 연결 관계도</h1>
+      <p>훅들은 따로 노는 게 아니라, <b>공유 폴더를 통해 4개의 물길</b>로 이어집니다 — 한쪽은 쓰고 한쪽은 읽으며 간접 연결됩니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">"어떤 훅이 어떤 훅과 연결되나"의 핵심 — 훅들은 <span class="hl">같은 로그 폴더</span>를 통로 삼아 이어집니다. 아래가 그 지도입니다.</p>
+
+      <div class="pipe p1">
+        <div class="plab">✅ 물길 1 — 성공 기록</div>
+        <div class="pflow">
+          <span class="pn">도구 사용</span>
+          <span class="parw">→</span>
+          <span class="pn k"><code>dispatcher</code><span class="sub">로그 3종 기록</span></span>
+          <span class="parw">→</span>
+          <span class="pn"><b>작업일지·통계·에이전트</b></span>
+          <span class="parw">→</span>
+          <span class="pn"><code>daily-summary</code> 리포트<span class="sub">session-log-guard 감시</span></span>
+        </div>
+      </div>
+
+      <div class="pipe p2">
+        <div class="plab">❌ 물길 2 — 실패 기록</div>
+        <div class="pflow">
+          <span class="pn">도구 실패</span>
+          <span class="parw">→</span>
+          <span class="pn k"><code>dispatcher-failure</code></span>
+          <span class="parw">→</span>
+          <span class="pn"><b>errors.jsonl</b> + 통계(실패)</span>
+          <span class="parw">→</span>
+          <span class="pn"><code>analyze-errors</code> 묶기<span class="sub">log-rotate 청소</span></span>
+        </div>
+      </div>
+
+      <div class="pipe p3">
+        <div class="plab">🤖 물길 3 — 에이전트 수명 추적</div>
+        <div class="pflow">
+          <span class="pn k"><code>agent-tracker-pre</code><span class="sub">"시작" 기록</span></span>
+          <span class="parw">→</span>
+          <span class="pn"><b>같은 agents 파일</b><span class="sub">dispatcher가 "완료" 추가</span></span>
+          <span class="parw">→</span>
+          <span class="pn"><code>daily-summary</code><span class="sub">시작·완료 짝 집계</span></span>
+        </div>
+      </div>
+
+      <div class="pipe p4">
+        <div class="plab">🔄 물길 4 — 컨텍스트 복원</div>
+        <div class="pflow">
+          <span class="pn">세션 시작 / 압축</span>
+          <span class="parw">→</span>
+          <span class="pn k"><code>restore-context</code><span class="sub">restore-session</span></span>
+          <span class="parw">→</span>
+          <span class="pn"><b>cc-connect 대화 기록</b> 읽기</span>
+          <span class="parw">→</span>
+          <span class="pn">직전 맥락 복원<span class="sub">실패 시 hot.md 폴백</span></span>
+        </div>
+      </div>
+
+      <div class="seclab">📁 공유 폴더 = 훅끼리 이어지는 통로</div>
+      <table class="tbl">
+        <thead><tr><th>공유 폴더</th><th>쓰는 훅</th><th>읽는 훅</th></tr></thead>
+        <tbody>
+          <tr><td><code>logs/metrics/</code></td><td>dispatcher · dispatcher-failure</td><td>daily-summary · (log-rotate 삭제)</td></tr>
+          <tr><td><code>logs/agents/</code></td><td>agent-tracker-pre · dispatcher · dispatcher-failure</td><td>daily-summary · (log-rotate)</td></tr>
+          <tr><td><code>error-log/errors.jsonl</code></td><td>dispatcher-failure</td><td>analyze-errors · (log-rotate)</td></tr>
+          <tr><td><code>session-logs/</code> (audit)</td><td>dispatcher</td><td>session-log-guard</td></tr>
+          <tr><td><code>summaries/</code></td><td>daily-summary</td><td>(log-rotate)</td></tr>
+          <tr><td><code>checkpoints/</code></td><td>checkpoint-pre</td><td>(수동 복구)</td></tr>
+          <tr><td><code>cc-connect/sessions/</code></td><td>cc-connect 봇(외부)</td><td>restore-context · restore-session</td></tr>
+        </tbody>
+      </table>
+
+      <div class="cal">
+        <div class="ci">🎯</div>
+        <div>
+          <div class="ct">한 문장 요약</div>
+          <div class="cd"><code>dispatcher</code>가 <span class="hl">모든 기록의 중심</span>이고, <code>log-rotate</code>가 <span class="hl">모든 로그의 청소부</span>입니다. 나머지 훅은 이 두 축 사이에서 쓰거나 읽습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
