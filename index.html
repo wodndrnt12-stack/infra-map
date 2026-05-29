@@ -527,7 +527,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <div class="section-num">PHASE 3 · 3.1</div>
         <h2>⏱️ 훅 라이프사이클</h2>
         <p class="section-desc">봇이 일하는 동안 어느 순간에 어떤 훅이 도는지 — 전체 타임라인</p>
-        <p class="para">훅은 <span class="hl hl-c">7개의 시점(이벤트)</span>에 자동으로 끼어듭니다. 아래 표가 "언제 → 무엇이 → 어떤 순서로" 도는지 전부입니다. 각 훅의 자세한 동작은 3.2~3.5에서 하나하나 봅니다.</p>
+        <p class="para">훅은 <span class="hl hl-c">7개의 시점(이벤트)</span>에 자동으로 끼어듭니다. 한 번의 주고받음은 아래 순서로 흐릅니다:</p>
+        <div class="flow reveal">
+          <div class="flow-step"><div class="flow-step-icon">📥</div><div class="flow-step-label">프롬프트</div><div class="flow-step-desc">내가 입력</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🌅</div><div class="flow-step-label">세션 시작</div><div class="flow-step-desc">시작·압축 시</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:rgba(248,113,113,0.4)"><div class="flow-step-icon">🔒</div><div class="flow-step-label">도구 전</div><div class="flow-step-desc">문지기</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:rgba(251,191,36,0.4)"><div class="flow-step-icon">⚡</div><div class="flow-step-label">도구 후</div><div class="flow-step-desc">뒷정리·기록</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🏁</div><div class="flow-step-label">응답 끝</div><div class="flow-step-desc">Stop 검문</div></div>
+        </div>
+        <p class="para">아래 표가 "언제 → 무엇이 → 어떤 순서로" 도는지 전부입니다. 각 훅의 자세한 동작은 3.2~3.5에서 하나하나 봅니다.</p>
         <div class="comp-table-wrap reveal">
           <table class="comp-table">
             <thead><tr><th>시점 (이벤트)</th><th>조건</th><th>실행 훅 (순서대로)</th></tr></thead>
@@ -569,6 +581,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <div class="section-num">PHASE 3 · 3.3</div>
         <h2>🔒 도구 전 훅 <span class="badge badge-r">4</span></h2>
         <p class="section-desc">위험·실수를 도구 실행 직전에 막거나 대비하는 문지기들</p>
+        <p class="para">도구 종류에 따라 다른 문지기가 섭니다. <span class="hl hl-r">빨강 2종</span>은 걸리면 <strong>즉시 차단</strong>(exit 2), 나머지는 대비·기록용입니다.</p>
+        <div class="flow reveal">
+          <div class="flow-step" style="border-color:var(--red)"><div class="flow-step-icon">🚨</div><div class="flow-step-label" style="color:var(--red)">guard</div><div class="flow-step-desc">위험 명령 차단</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">💾</div><div class="flow-step-label">checkpoint-pre</div><div class="flow-step-desc">원본 백업</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step" style="border-color:var(--red)"><div class="flow-step-icon">🔑</div><div class="flow-step-label" style="color:var(--red)">credential-guard</div><div class="flow-step-desc">비밀키 차단</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">🤖</div><div class="flow-step-label">agent-tracker-pre</div><div class="flow-step-desc">시작 기록</div></div>
+        </div>
         <div class="accordion reveal">
           <div class="accordion-item open">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🚨</div><div class="accordion-title">guard</div><span class="accordion-chevron">▾</span></div>
@@ -592,6 +614,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <div class="section-num">PHASE 3 · 3.4</div>
         <h2>⚡ 도구 후 훅 <span class="badge badge-y">5</span></h2>
         <p class="section-desc">도구를 쓴 직후 뒷정리·기록·복원을 맡는 훅들</p>
+        <p class="para">이 중 <code>dispatcher</code>가 <span class="hl hl-c">모든 기록의 중심</span>입니다(아래 청록). 나머지는 압축·복구·서식 같은 뒷정리예요.</p>
+        <div class="flow reveal">
+          <div class="flow-step" style="border-color:var(--cyan)"><div class="flow-step-icon">📮</div><div class="flow-step-label" style="color:var(--cyan)">dispatcher</div><div class="flow-step-desc">기록 분배·핵심</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">🗜️</div><div class="flow-step-label">compress-output</div><div class="flow-step-desc">긴 출력 압축</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">🧹</div><div class="flow-step-label">restore-settings</div><div class="flow-step-desc">설정 복구</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">✨</div><div class="flow-step-label">auto-lint</div><div class="flow-step-desc">서식 정리</div></div>
+          <div class="flow-arrow">·</div>
+          <div class="flow-step"><div class="flow-step-icon">🔄</div><div class="flow-step-label">restore-session</div><div class="flow-step-desc">압축 시 복원</div></div>
+        </div>
         <div class="accordion reveal">
           <div class="accordion-item open">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📮</div><div class="accordion-title">dispatcher <span class="badge badge-c">핵심</span></div><span class="accordion-chevron">▾</span></div>
@@ -646,22 +680,53 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <p class="section-desc">훅들은 따로 노는 게 아니라, 공유 폴더를 통해 4개의 물길로 이어집니다</p>
         <p class="para">"어떤 훅이 어떤 훅과 연결되나"의 핵심 — 훅들은 <span class="hl hl-c">같은 로그 폴더</span>를 한쪽은 쓰고 한쪽은 읽으며 간접 연결됩니다. 아래가 그 지도입니다.</p>
 
-        <div class="accordion reveal">
-          <div class="accordion-item open">
-            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">✅</div><div class="accordion-title">물길 1 — 성공 기록</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para">도구 사용 → <code>dispatcher</code>가 <span class="hl hl-g">로그 3종</span>(작업일지·통계·에이전트)에 기록 → <code>daily-summary</code>가 통계·에이전트를 읽어 하루 리포트 생성 + <code>session-log-guard</code>가 작업일지 줄 수를 세어 세션 로그 작성 여부 감시.</p></div></div>
+        <div class="pipeline reveal" style="border-left:3px solid var(--green); padding-left:14px; margin:18px 0;">
+          <div class="pipeline-label" style="color:var(--green); font-weight:700; margin-bottom:8px;">✅ 물길 1 — 성공 기록</div>
+          <div class="flow">
+            <div class="flow-step">도구 사용</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="border-color:var(--green-soft)"><code>dispatcher</code><br><span style="font-size:.8em;color:var(--muted)">로그 3종 기록</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="hl hl-g">작업일지·통계·에이전트</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><code>daily-summary</code> 리포트<br><code>session-log-guard</code> 감시</div>
           </div>
-          <div class="accordion-item">
-            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">❌</div><div class="accordion-title">물길 2 — 실패 기록</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para">도구 실패 → <code>dispatcher-failure</code>가 <span class="hl hl-r">errors.jsonl</span> + 통계(실패)에 기록 → (수동) <code>analyze-errors</code>가 errors.jsonl을 읽어 3회 이상 반복된 에러를 묶어줌 → (정리 시) <code>log-rotate</code>가 오래된 errors.jsonl 삭제.</p></div></div>
+        </div>
+
+        <div class="pipeline reveal" style="border-left:3px solid var(--red); padding-left:14px; margin:18px 0;">
+          <div class="pipeline-label" style="color:var(--red); font-weight:700; margin-bottom:8px;">❌ 물길 2 — 실패 기록</div>
+          <div class="flow">
+            <div class="flow-step">도구 실패</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="border-color:var(--red-soft)"><code>dispatcher-failure</code></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="hl hl-r">errors.jsonl</span> + 통계(실패)</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><code>analyze-errors</code> 묶기<br><code>log-rotate</code> 청소</div>
           </div>
-          <div class="accordion-item">
-            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🤖</div><div class="accordion-title">물길 3 — 에이전트 수명 추적</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para"><code>agent-tracker-pre</code>가 "시작"을 적음 → 끝나면 <code>dispatcher</code>(성공) 또는 <code>dispatcher-failure</code>(실패)가 <span class="hl hl-y">같은 agents 파일</span>에 "완료"를 추가 → <code>daily-summary</code>가 시작·완료 짝을 맞춰 집계.</p></div></div>
+        </div>
+
+        <div class="pipeline reveal" style="border-left:3px solid var(--yellow); padding-left:14px; margin:18px 0;">
+          <div class="pipeline-label" style="color:var(--yellow); font-weight:700; margin-bottom:8px;">🤖 물길 3 — 에이전트 수명 추적</div>
+          <div class="flow">
+            <div class="flow-step" style="border-color:var(--yellow-soft)"><code>agent-tracker-pre</code><br><span style="font-size:.8em;color:var(--muted)">"시작" 기록</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="hl hl-y">같은 agents 파일</span><br><code>dispatcher(-failure)</code> "완료" 추가</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><code>daily-summary</code><br>시작·완료 짝 집계</div>
           </div>
-          <div class="accordion-item">
-            <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🔄</div><div class="accordion-title">물길 4 — 컨텍스트 복원</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para">세션 시작 → <code>restore-context</code>, 압축 발생 → <code>restore-session</code>이 둘 다 <span class="hl hl-c">cc-connect 대화 기록</span>을 읽어 직전 맥락을 되살림. 실패하면 <code>hot.md</code>로 폴백.</p></div></div>
+        </div>
+
+        <div class="pipeline reveal" style="border-left:3px solid var(--cyan); padding-left:14px; margin:18px 0;">
+          <div class="pipeline-label" style="color:var(--cyan); font-weight:700; margin-bottom:8px;">🔄 물길 4 — 컨텍스트 복원</div>
+          <div class="flow">
+            <div class="flow-step">세션 시작 / 압축 발생</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="border-color:var(--cyan-soft)"><code>restore-context</code><br><code>restore-session</code></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="hl hl-c">cc-connect 대화 기록</span> 읽기</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">직전 맥락 복원<br><span style="font-size:.8em;color:var(--muted)">실패 시 hot.md 폴백</span></div>
           </div>
         </div>
 
