@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P1.2 · 데이터 흐름 큰그림</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+
+/* header */
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#e3f0ef 0%,#e7eef8 55%,#ece7f4 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#4e8c84;
+  background:rgba(255,255,255,0.65);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#5a6070;line-height:1.65;max-width:760px;}
+
+.body{padding:28px 44px 40px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:24px;}
+.lead b{color:#2b2f38;}
+.lead .hl{background:linear-gradient(transparent 58%,#cfe9df 58%);font-weight:700;padding:0 2px;}
+.seclab{font-size:17px;font-weight:900;margin:6px 0 6px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:18px;border-radius:3px;background:#5aa17e;}
+.seclab.s2::before{background:#6b8fc4;}
+.secsub{font-size:13px;color:#8a8f9b;margin-bottom:16px;}
+
+/* main pipeline */
+.pipe{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;
+  background:#f3f8f6;border:1px solid #dcebe4;border-radius:16px;padding:20px 14px;}
+.pnode{background:#fff;border:1px solid #e1e8e5;border-radius:13px;padding:12px 18px;text-align:center;min-width:124px;
+  box-shadow:0 3px 8px rgba(60,90,80,0.06);}
+.pnode .pe{font-size:22px;}
+.pnode .pl{font-size:14px;font-weight:900;margin-top:3px;}
+.pnode .ps{font-size:11px;color:#8a8f9b;margin-top:1px;}
+.parw{margin:0 12px;color:#9cc4b5;font-size:22px;font-weight:700;}
+
+/* 4 streams */
+.streams{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.st{background:var(--soft);border:1px solid var(--bd);border-left:5px solid var(--c);border-radius:14px;padding:16px 18px;}
+.st .sh{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#2b2f38;}
+.st .sh .se{font-size:19px;}
+.miniflow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:12px 0 9px;}
+.mf{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#3f4659;
+  background:#fff;border:1px solid var(--bd);border-radius:7px;padding:4px 9px;}
+.mf.acc{background:var(--c);color:#fff;border-color:var(--c);font-weight:700;}
+.mfa{margin:0 6px;color:var(--c);font-size:13px;font-weight:700;}
+.st .desc{font-size:12.5px;color:#5d6370;line-height:1.6;}
+.st .desc code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,0.7);border-radius:4px;padding:1px 5px;color:#46566e;}
+.s-ok{--soft:#e3f1e8;--bd:#c8e3d2;--c:#5aa17e;}
+.s-no{--soft:#fbe6e3;--bd:#f3cfca;--c:#e07a7a;}
+.s-ag{--soft:#ece4f6;--bd:#dbcdee;--c:#9070c4;}
+.s-rs{--soft:#dfeeec;--bd:#c6e0db;--c:#4d9a92;}
+
+/* tip callout */
+.tip{margin-top:20px;background:#fff7e6;border-left:4px solid #e0aa4e;border-radius:10px;padding:15px 18px;}
+.tip .tt{font-size:14px;font-weight:900;margin-bottom:5px;}
+.tip p{font-size:13px;color:#6a5d3d;line-height:1.65;}
+.tip code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:#f6ebcf;border-radius:4px;padding:1px 6px;color:#8a6d28;}
+.tip b{color:#7a5f1f;}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 1 · 1.2</span>
+      <h1>🌊 데이터 흐름 큰그림</h1>
+      <p>봇이 일하는 동안 정보가 어디로 흘러 어디에 쌓이는지 — <b>4개의 큰 물길</b>.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">훅들은 따로 노는 게 아니라, <span class="hl">4개의 데이터 물길(파이프라인)</span>로 이어져 있습니다. 여기선 <b>큰 그림만</b> 보고, 각 훅의 세부 연결은 P3.6 관계도에서 자세히 다룹니다.</p>
+
+      <div class="seclab">메인 흐름</div>
+      <div class="secsub">도구를 쓸 때마다 기록이 이렇게 흘러갑니다</div>
+      <div class="pipe">
+        <div class="pnode"><div class="pe">🛠️</div><div class="pl">도구 사용</div><div class="ps">매 호출</div></div>
+        <span class="parw">→</span>
+        <div class="pnode"><div class="pe">📮</div><div class="pl">dispatcher</div><div class="ps">기록 분배</div></div>
+        <span class="parw">→</span>
+        <div class="pnode"><div class="pe">📊</div><div class="pl">로그 3종</div><div class="ps">audit·metrics·agents</div></div>
+        <span class="parw">→</span>
+        <div class="pnode"><div class="pe">📈</div><div class="pl">daily-summary</div><div class="ps">하루 통계</div></div>
+      </div>
+
+      <div class="seclab s2" style="margin-top:30px;">4대 물길 상세</div>
+      <div class="secsub">같은 dispatcher에서 갈라지는 네 갈래</div>
+      <div class="streams">
+        <div class="st s-ok">
+          <div class="sh"><span class="se">✅</span>① 성공 기록 물길</div>
+          <div class="miniflow"><span class="mf">도구</span><span class="mfa">→</span><span class="mf acc">dispatcher</span><span class="mfa">→</span><span class="mf">로그 3종</span><span class="mfa">→</span><span class="mf">daily-summary</span></div>
+          <div class="desc">도구를 쓸 때마다 <code>dispatcher</code>가 받아 작업일지·통계·에이전트기록에 동시 기록. <code>session-log-guard</code>가 "일은 많은데 일지를 안 썼네?"를 감시합니다.</div>
+        </div>
+        <div class="st s-no">
+          <div class="sh"><span class="se">❌</span>② 실패 기록 물길</div>
+          <div class="miniflow"><span class="mf">도구 실패</span><span class="mfa">→</span><span class="mf acc">dispatcher-failure</span><span class="mfa">→</span><span class="mf">errors.jsonl</span><span class="mfa">→</span><span class="mf">analyze-errors</span></div>
+          <div class="desc">실패하면 <code>dispatcher-failure</code>가 <code>errors.jsonl</code>과 실패 통계에 기록. 나중에 <code>analyze-errors</code>를 돌리면 <b>3회 이상 반복된 에러</b>를 묶어 보여줍니다.</div>
+        </div>
+        <div class="st s-ag">
+          <div class="sh"><span class="se">🤖</span>③ 에이전트 수명 추적</div>
+          <div class="miniflow"><span class="mf">호출</span><span class="mfa">→</span><span class="mf acc">agent-tracker-pre</span><span class="mfa">→</span><span class="mf">dispatcher</span><span class="mfa">→</span><span class="mf">짝 추적</span></div>
+          <div class="desc"><code>agent-tracker-pre</code>가 "시작"을 적고, 끝나면 dispatcher(실패 시 dispatcher-failure)가 같은 파일에 "완료"를 기록. <b>시작·완료 짝</b>으로 사용량을 추적합니다.</div>
+        </div>
+        <div class="st s-rs">
+          <div class="sh"><span class="se">🔄</span>④ 컨텍스트 복원 물길</div>
+          <div class="miniflow"><span class="mf">압축·재시작</span><span class="mfa">→</span><span class="mf acc">restore-context</span><span class="mfa">→</span><span class="mf">cc-connect 기록</span><span class="mfa">→</span><span class="mf">맥락 복원</span></div>
+          <div class="desc">대화가 길어져 압축되거나 세션이 새로 시작되면 <code>restore-context</code>가 cc-connect 대화 기록을 읽어 직전 맥락을 되살립니다. 실패하면 <code>hot.md</code>를 대신 읽습니다.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tt">💡 기억해 둘 한 가지</div>
+        <p>거의 모든 기록은 <code>~/.claude/logs/</code> <b>한곳으로 모입니다</b>. 그래서 "봇이 뭘 했나"가 궁금하면 이 폴더만 보면 됩니다. (오래되면 <code>log-rotate</code>가 청소)</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
