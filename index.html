@@ -861,6 +861,17 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <h2>🔌 MCP 6개</h2>
         <p class="section-desc">봇을 바깥 세상(문서·웹·드라이브·메모)과 잇는 6개의 통로 — 언제·어떻게·지금 상태</p>
         <p class="para"><strong>MCP가 뭔가요</strong> — 봇이 외부 서비스를 쓰게 해주는 <span class="hl hl-c">표준 플러그</span>입니다(USB 포트 같은 것).<br><strong>없으면</strong> — 봇은 자기 디스크 안 파일만 다룰 수 있어, 최신 문서나 웹 정보를 못 가져옵니다.<br><strong>있으면</strong> — 공식 문서·웹 검색·내 드라이브·Obsidian 노트를 도구처럼 직접 호출.<br><strong>주의</strong> — 외부 연결이라 <span class="hl hl-r">인증·네트워크에 의존</span>(아래 ⚠️ 2개가 그 사례).</p>
+        <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 4px;">
+          <div style="flex:1; min-width:170px; background:var(--green-soft); border-radius:8px; padding:12px 14px;">
+            <div style="color:var(--green); font-weight:700; font-size:1.3em;">✅ 정상 4</div>
+            <div style="font-size:.85em; color:var(--muted);">context7 · obsidian · exa · firecrawl</div>
+          </div>
+          <div style="flex:1; min-width:170px; background:var(--red-soft); border-radius:8px; padding:12px 14px;">
+            <div style="color:var(--red); font-weight:700; font-size:1.3em;">⚠️ 막힘 2</div>
+            <div style="font-size:.85em; color:var(--muted);">notebooklm(미인증) · Google Drive(스코프)</div>
+          </div>
+        </div>
+        <p class="para" style="font-size:.85em; color:var(--muted); margin:0 0 4px;">연결은 6개지만 지금 바로 쓸 수 있는 건 <strong>4개</strong> — 막힌 2개는 리서치 쓸 때만 필요합니다.</p>
         <div class="comp-table-wrap reveal">
           <table class="comp-table">
             <thead><tr><th>MCP</th><th>무엇에 쓰나</th><th>상태</th></tr></thead>
@@ -889,6 +900,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <p class="section-desc">"내가 직접 할까, 보조 일꾼에게 넘길까" — 위임 게이트와 모델 3단 분류</p>
         <p class="para"><strong>위임이 뭔가요</strong> — 큰 일을 <span class="hl hl-c">보조 일꾼(에이전트)</span>에게 떼어 맡기는 것.<br><strong>안 하면</strong> — 모든 걸 메인이 직접 해서, 긴 탐색 결과가 <span class="hl hl-r">대화 맥락을 잡아먹습니다</span>.<br><strong>하면</strong> — 일꾼이 따로 일하고 <span class="hl hl-y">요약만</span> 가져와 메인 맥락이 깨끗해집니다.<br><strong>주의</strong> — 위임 한 번에 <span class="hl hl-r">고정 비용(약 16K~25K 토큰)</span>이 들어, 작은 일은 직접 하는 게 이득입니다.</p>
         <p class="para"><strong>① 위임 게이트</strong> — 모델을 고르기 전에 "넘길지 말지"부터 판단합니다. 기준은 "코드냐"가 아니라 <span class="hl hl-c">독립성·규모·맥락 격리</span>예요.</p>
+        <div class="flow reveal" style="margin:14px 0; flex-wrap:wrap;">
+          <div class="flow-step" style="border-color:var(--cyan-soft)"><div class="flow-step-label">이 일, 넘길까?</div><div class="flow-step-desc">독립성·규모로 판단</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--green-soft)"><div class="flow-step-label">병렬 위임</div><div class="flow-step-desc">독립 3개+</div></div>
+          <div class="flow-step" style="border-color:var(--green-soft)"><div class="flow-step-label">위임</div><div class="flow-step-desc">대량 탐색·파싱</div></div>
+          <div class="flow-step" style="border-color:var(--yellow-soft)"><div class="flow-step-label">메인 직접</div><div class="flow-step-desc">20줄 이하 단순</div></div>
+          <div class="flow-step" style="border-color:var(--yellow-soft)"><div class="flow-step-label">Opus 직접</div><div class="flow-step-desc">디버깅·판단·설계</div></div>
+        </div>
         <div class="comp-table-wrap reveal">
           <table class="comp-table">
             <thead><tr><th>조건</th><th>처리</th></tr></thead>
