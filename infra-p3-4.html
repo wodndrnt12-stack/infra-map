@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P3.4 · 도구 후 훅</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#3f9fb0;--soft:#d7eef2;--bd:#bce0e7;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#d6edf1 0%,#e0f1f3 55%,#ecf4f3 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#2f8595;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#3d5e62;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:20px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+
+.gates{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px;}
+.gate{flex:1;min-width:120px;background:var(--soft);border:1px solid var(--bd);border-radius:12px;padding:13px;text-align:center;}
+.gate.core{background:#cfeaef;border:2px solid var(--ac);}
+.gate .ge{font-size:22px;} .gate .gn{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;color:#3a3f48;margin-top:5px;}
+.gate .gs{font-size:11px;color:#5e8a8f;margin-top:2px;}
+.gate .gb{display:inline-block;font-size:10px;font-weight:700;color:#fff;background:var(--ac);border-radius:10px;padding:1px 8px;margin-top:6px;}
+
+.cards{display:flex;flex-direction:column;gap:13px;}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:15px;padding:17px 20px;}
+.card.core{border-left:5px solid var(--ac);}
+.chead{display:flex;align-items:center;gap:10px;}
+.cico{width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.cname{font-family:'JetBrains Mono',monospace;font-size:16.5px;font-weight:700;color:#3a3f48;}
+.cbadge{font-size:11px;font-weight:700;color:#fff;background:var(--ac);border-radius:20px;padding:2px 10px;}
+.cwhen{font-size:11px;color:#5e8a8f;margin-left:auto;}
+.rows{margin-top:11px;display:flex;flex-direction:column;gap:7px;}
+.row{display:flex;gap:10px;align-items:flex-start;}
+.rk{font-size:11px;font-weight:900;color:var(--ac);background:#fff;border:1px solid var(--bd);
+  border-radius:6px;padding:3px 8px;flex-shrink:0;min-width:58px;text-align:center;}
+.rv{font-size:12.5px;color:#5d6370;line-height:1.55;padding-top:2px;}
+.rv b{color:#3a3f48;} .rv code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:#fff;border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:#2f8595;}
+.rv .hl{background:linear-gradient(transparent 58%,#bce0e7 58%);font-weight:700;padding:0 2px;}
+.rv .hly{background:linear-gradient(transparent 58%,#f0e3a8 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .gate{min-width:0;flex:1 1 calc(50% - 9px);}
+  .card{padding:15px 16px;}
+  .chead{flex-wrap:wrap;gap:8px 10px;}
+  .cname{font-size:15px;}
+  .cwhen{margin-left:0;flex-basis:100%;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 3 · 3.4</span>
+      <h1>⚡ 도구 후 훅 &nbsp;<span style="font-size:20px;color:#2f8595;">5개</span></h1>
+      <p>도구를 쓴 직후 <b>뒷정리·기록·복원</b>을 맡는 훅들. 이 중 <b>dispatcher가 모든 기록의 중심</b>입니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead"><span class="hl">dispatcher</span>가 도구 사용을 세 곳에 동시에 적는 핵심 분배기이고, 나머지는 압축·복구·서식 같은 뒷정리예요.</p>
+
+      <div class="gates">
+        <div class="gate core"><div class="ge">📮</div><div class="gn">dispatcher</div><div class="gs">기록 분배</div><div class="gb">핵심</div></div>
+        <div class="gate"><div class="ge">🗜️</div><div class="gn">compress-output</div><div class="gs">긴 출력 압축</div></div>
+        <div class="gate"><div class="ge">🧹</div><div class="gn">restore-settings</div><div class="gs">설정 복구</div></div>
+        <div class="gate"><div class="ge">✨</div><div class="gn">auto-lint</div><div class="gs">서식 정리</div></div>
+        <div class="gate"><div class="ge">🔄</div><div class="gn">restore-session</div><div class="gs">압축 시 복원</div></div>
+      </div>
+
+      <div class="cards">
+        <div class="card core">
+          <div class="chead"><div class="cico">📮</div><div class="cname">dispatcher</div><div class="cbadge">핵심</div><div class="cwhen">모든 도구 직후</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">이 봇 기록의 <span class="hl">중심 분배기</span>. 도구 사용을 세 곳에 동시에 적습니다: ①작업일지(audit) ②통계(metrics) ③에이전트 기록(agents).</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">도구 결과를 읽어 <code>session-logs/</code>·<code>logs/metrics/</code>·<code>logs/agents/</code>에 기록(내부 3함수).</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">여기서 나온 기록을 <code>daily-summary</code>·<code>session-log-guard</code>가 읽습니다 → <span class="hly">성공 기록 물길</span>의 출발점.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">🗜️</div><div class="cname">compress-output</div><div class="cwhen">도구 결과 직후</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">결과가 <span class="hly">4000자</span>를 넘으면 앞 30줄 + 뒤 10줄만 남기고 줄여 토큰을 아낍니다. 에러 출력은 안 줄임(디버깅 보존).</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">P2.4 "긴 출력 압축" 규칙을 실제로 강제하는 훅.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">🧹</div><div class="cname">restore-settings</div><div class="cwhen">도구 사용 후</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">설정이 의도치 않게 틀어졌으면 원래대로 되돌립니다.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv">P2.3 "설정 안전" 규칙의 자동 복구 장치.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">✨</div><div class="cname">auto-lint</div><div class="cwhen">Edit·Write 직후</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">확장자에 맞춰 서식 정리 도구를 자동 실행: <code>ruff</code>(파이썬)·<code>biome</code>(JS/TS)·<code>prettier</code>(CSS/JSON/MD).</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv">외부 린터를 불러 대상 파일을 직접 다듬음.</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chead"><div class="cico">🔄</div><div class="cname">restore-session</div><div class="cwhen">압축(Compact) 시</div></div>
+          <div class="rows">
+            <div class="row"><span class="rk">하는 일</span><span class="rv">대화가 길어져 압축될 때, 직전 대화 <b>약 15개</b>를 다시 불러와 핵심 맥락을 복원합니다. 실패하면 <code>hot.md</code>를 대신 읽습니다.</span></div>
+            <div class="row"><span class="rk">읽고/쓰고</span><span class="rv"><code>cc-connect sessions</code>를 읽어 <code>last-session-context.md</code>에 캐시.</span></div>
+            <div class="row"><span class="rk">연결</span><span class="rv"><span class="hl">컨텍스트 복원 물길</span>(P3.6).</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
