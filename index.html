@@ -781,6 +781,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <h2>🧠 메모리 31개</h2>
         <p class="section-desc">봇이 까먹지 않으려고 파일로 저장해둔 기억 — 목차 1장 + 내용 30개</p>
         <p class="para"><code>MEMORY.md</code>가 <span class="hl hl-g">목차</span> 역할을 하고, 실제 내용은 30개 파일에 나뉘어 있습니다. 크게 3종류예요.</p>
+        <div class="reveal" style="margin:16px 0;">
+          <div style="display:flex; height:36px; border-radius:8px; overflow:hidden; font-size:.82em; font-weight:700;">
+            <div style="flex:18; background:var(--yellow-soft); color:var(--yellow); display:flex; align-items:center; justify-content:center;">🧭 행동지침 18</div>
+            <div style="flex:7; background:var(--cyan-soft); color:var(--cyan); display:flex; align-items:center; justify-content:center;">📦 프로젝트 7</div>
+            <div style="flex:6; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center;">🛠️ 인프라 6</div>
+          </div>
+          <p class="para" style="font-size:.85em; color:var(--muted); margin-top:6px;">총 31개 — 행동지침이 절반 이상으로, "어떻게 일할지"가 기억의 중심입니다.</p>
+        </div>
         <div class="accordion reveal">
           <div class="accordion-item open">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🧭</div><div class="accordion-title">행동지침 — 어떻게 일할지 <span class="badge badge-y">18</span></div><span class="accordion-chevron">▾</span></div>
@@ -795,6 +803,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
             <div class="accordion-body"><div class="accordion-content"><p class="para">환경 구축 중 막혔던 지점과 해법: 봇 자동시작(작업 스케줄러) · 새 PC 원클릭 복제 키트 · 훅 복제 · Obsidian Wiki 검색 고장 수정 · 복제 트러블슈팅.</p></div></div>
           </div>
         </div>
+        <p class="para" style="margin-top:18px;"><strong>행동지침은 고정이 아니라 승격됩니다</strong> — 같은 실수가 쌓이면 메모리에서 정식 규칙(P2)으로 올라갑니다.</p>
+        <div class="flow reveal" style="margin:8px 0 18px;">
+          <div class="flow-step" style="border-color:var(--green-soft)"><div class="flow-step-label">메모리</div><div class="flow-step-desc">행동지침 · 강제력 30~50%</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--red-soft)"><div class="flow-step-label">3회 반복 위반</div><div class="flow-step-desc">같은 실수 누적</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--yellow-soft)"><div class="flow-step-label">규칙 승격 (P2)</div><div class="flow-step-desc">강제력 70~80%</div></div>
+        </div>
         <div class="callout tip reveal">
           <div class="callout-title">유효기간(TTL)</div>
           <p>행동지침은 <span class="hl hl-g">영구</span>, 프로젝트 메모리는 <span class="hl hl-g">90일</span> 권장. 기한이 지나면 자동 삭제가 아니라 "정리할까요?"라고 먼저 묻습니다.</p>
@@ -805,6 +821,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
         <h2>📓 세션로그 + hot.md</h2>
         <p class="section-desc">봇이 매일 한 일을 일지로 남기고, 다음 세션이 그걸 이어받는 법 — 기억의 두 번째 축</p>
         <p class="para">메모리(4.1)가 "오래 두고 쓰는 사실"이라면, 세션로그는 <span class="hl hl-c">날짜별 업무일지</span>입니다. 그리고 <code>hot.md</code>는 그 일지들의 <span class="hl hl-y">맨 위 요약 카드</span> — 봇이 새 세션을 켤 때 <strong>가장 먼저 읽는 파일</strong>이에요. 둘이 합쳐 "어제까지 뭘 하고 있었지?"를 매번 복원합니다.</p>
+        <div class="flow reveal" style="margin:18px 0;">
+          <div class="flow-step" style="border-color:var(--cyan-soft)"><div class="flow-step-label">① 세션 시작</div><div class="flow-step-desc">hot.md 읽기</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-label">② 작업</div><div class="flow-step-desc">도구 사용·진행</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-label">③ 세션 종료</div><div class="flow-step-desc">세션로그 쓰기</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="border-color:var(--cyan-soft)"><div class="flow-step-label">④ hot.md 갱신</div><div class="flow-step-desc">다음 세션이 ①에서 다시 읽음 ↻</div></div>
+        </div>
         <div class="accordion reveal">
           <div class="accordion-item open">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">📝</div><div class="accordion-title">언제 일지를 쓰나 — 5가지 순간</div><span class="accordion-chevron">▾</span></div>
@@ -816,7 +841,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', s
           </div>
           <div class="accordion-item">
             <div class="accordion-head" onclick="toggleAccordion(this)"><div class="accordion-icon">🗜️</div><div class="accordion-title">압축 계층 — daily → weekly → monthly</div><span class="accordion-chevron">▾</span></div>
-            <div class="accordion-body"><div class="accordion-content"><p class="para">일지가 쌓이면 단계적으로 요약합니다: 매일 <code>sessions/</code> → 매주 월요일 <code>weekly/</code> → 매월 1일 <code>monthly/</code>. <span class="hl hl-y">원본은 절대 지우지 않고</span> 요약본만 추가합니다.<br><code>MOC.md</code>가 <span class="hl hl-g">주제별 색인</span> 역할을 해서, 과거 검색(P2.4 Obsidian 리콜)이 이 색인을 타고 "주제 → 세션 → TL;DR → 본문" 순으로 좁혀 들어갑니다.</p></div></div>
+            <div class="accordion-body"><div class="accordion-content"><p class="para">일지가 쌓이면 단계적으로 요약합니다: 매일 <code>sessions/</code> → 매주 월요일 <code>weekly/</code> → 매월 1일 <code>monthly/</code>. <span class="hl hl-y">원본은 절대 지우지 않고</span> 요약본만 추가합니다.<br><code>MOC.md</code>가 <span class="hl hl-g">주제별 색인</span> 역할을 해서, 과거 검색(P2.4 Obsidian 리콜)이 이 색인을 타고 "주제 → 세션 → TL;DR → 본문" 순으로 좁혀 들어갑니다.</p>
+              <div class="flow" style="margin:12px 0 4px;">
+                <div class="flow-step"><div class="flow-step-label">daily</div><div class="flow-step-desc">매일 · sessions/</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><div class="flow-step-label">weekly</div><div class="flow-step-desc">월요일 · weekly/</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><div class="flow-step-label">monthly</div><div class="flow-step-desc">1일 · monthly/</div></div>
+              </div></div></div>
           </div>
         </div>
         <div class="callout tip reveal">
