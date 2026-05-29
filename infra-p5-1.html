@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P5.1 · MCP 6개</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#2f9aa6;--soft:#d6eef0;--bd:#b6e0e4;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#d4edef 0%,#ddf0f0 55%,#ebf4f3 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#23808b;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#345c60;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+
+/* 4-step explain */
+.q4{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.q4row{display:flex;gap:11px;align-items:flex-start;background:var(--soft);border:1px solid var(--bd);
+  border-radius:11px;padding:11px 15px;}
+.q4row.warn{background:#fbeeec;border-color:#f4c9c0;}
+.q4k{font-size:11px;font-weight:900;color:#fff;background:var(--ac);border-radius:7px;padding:4px 9px;flex-shrink:0;min-width:54px;text-align:center;}
+.q4row.warn .q4k{background:#d4604f;}
+.q4v{font-size:12.5px;color:#5d6370;line-height:1.55;padding-top:2px;}
+.q4v b{color:#3a3f48;}
+
+.seclab{font-size:16px;font-weight:900;margin:24px 0 13px;display:flex;align-items:center;gap:9px;}
+.seclab::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--ac);}
+
+/* status strip */
+.stat{display:flex;gap:10px;flex-wrap:wrap;}
+.stbox{flex:1;min-width:200px;border-radius:11px;padding:13px 16px;}
+.stbox.ok{background:var(--soft);border:1px solid var(--bd);}
+.stbox.bad{background:#fbeeec;border:1px solid #f4c9c0;}
+.stbox .stt{font-size:17px;font-weight:900;}
+.stbox.ok .stt{color:#23808b;} .stbox.bad .stt{color:#c0503f;}
+.stbox .sts{font-size:12px;color:#6a7076;margin-top:3px;}
+.statcap{font-size:11.5px;color:#8a8f9b;margin-top:8px;}
+.statcap b{color:var(--ac);}
+
+/* table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:6px;font-size:12.5px;
+  border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.tbl th{background:var(--ac);color:#fff;font-weight:700;padding:10px 12px;text-align:left;font-size:12px;}
+.tbl td{padding:9px 12px;border-top:1px solid #eaf4f4;color:#5d6370;vertical-align:top;line-height:1.5;}
+.tbl tr:nth-child(even) td{background:#f6fbfb;}
+.tbl .nm{font-weight:800;color:#3a3f48;white-space:nowrap;}
+.tbl .hl{background:linear-gradient(transparent 58%,#b6e0e4 58%);font-weight:700;padding:0 2px;}
+.tbl .hly{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.bdg{font-size:10.5px;font-weight:700;color:#fff;border-radius:10px;padding:2px 9px;white-space:nowrap;}
+.bdg.g{background:#57a06a;} .bdg.r{background:#d4604f;}
+
+/* callout */
+.cal{display:flex;gap:13px;border-radius:11px;padding:15px 18px;margin-top:14px;}
+.cal .ci{font-size:21px;flex-shrink:0;}
+.cal .ct{font-size:13.5px;font-weight:900;color:#3a3f48;}
+.cal .cd{font-size:12.5px;color:#5d6370;line-height:1.65;margin-top:4px;}
+.cal .cd code{font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:4px;padding:1px 5px;}
+.cal.warn{background:#fbf2d6;border:1px solid #f0e0a8;border-left:5px solid #d39b34;}
+.cal.warn .cd code{background:#fff;border:1px solid #f0e0a8;color:#9a7424;}
+.cal.warn .cd .hl{background:linear-gradient(transparent 58%,#f0e0a8 58%);font-weight:700;padding:0 2px;}
+.cal.danger{background:#fbeeec;border:1px solid #f4c9c0;border-left:5px solid #d4604f;}
+.cal.danger .cd code{background:#fff;border:1px solid #f4c9c0;color:#b94a3a;}
+.cal.danger .cd .hl{background:linear-gradient(transparent 58%,#f4c9c0 58%);font-weight:700;padding:0 2px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:24px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .q4row{flex-wrap:wrap;gap:6px 10px;}
+  .stbox{min-width:0;flex:1 1 100%;}
+  .tbl{font-size:11px;}
+  .tbl th{padding:8px 8px;font-size:11px;}
+  .tbl td{padding:7px 8px;}
+  .cal{padding:13px 15px;}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 5 · 5.1</span>
+      <h1>🔌 MCP &nbsp;<span style="font-size:20px;color:#23808b;">6개</span></h1>
+      <p>봇을 바깥 세상(문서·웹·드라이브·메모)과 잇는 <b>6개의 통로</b> — 언제·어떻게·지금 상태.</p>
+    </div>
+
+    <div class="body">
+      <div class="q4">
+        <div class="q4row"><span class="q4k">뭔가요</span><span class="q4v">봇이 외부 서비스를 쓰게 해주는 <b>표준 플러그</b>입니다(USB 포트 같은 것).</span></div>
+        <div class="q4row warn"><span class="q4k">없으면</span><span class="q4v">봇은 자기 디스크 안 파일만 다룰 수 있어, <b>최신 문서나 웹 정보를 못 가져옵니다.</b></span></div>
+        <div class="q4row"><span class="q4k">있으면</span><span class="q4v">공식 문서·웹 검색·내 드라이브·Obsidian 노트를 <b>도구처럼 직접 호출.</b></span></div>
+        <div class="q4row warn"><span class="q4k">주의</span><span class="q4v">외부 연결이라 <b>인증·네트워크에 의존</b>(아래 막힘 2개가 그 사례).</span></div>
+      </div>
+
+      <div class="seclab">지금 쓸 수 있나</div>
+      <div class="stat">
+        <div class="stbox ok"><div class="stt">✅ 정상 4</div><div class="sts">context7 · obsidian · exa · firecrawl</div></div>
+        <div class="stbox bad"><div class="stt">⚠️ 막힘 2</div><div class="sts">notebooklm(미인증) · Google Drive(스코프)</div></div>
+      </div>
+      <div class="statcap">연결은 6개지만 지금 바로 쓸 수 있는 건 <b>4개</b> — 막힌 2개는 리서치 쓸 때만 필요합니다.</div>
+
+      <div class="seclab">6개 통로</div>
+      <table class="tbl">
+        <thead><tr><th>MCP</th><th>무엇에 쓰나</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">📚 context7</td><td>라이브러리·프레임워크·API <span class="hl">공식 문서 최신본</span> 조회 (학습데이터보다 신선)</td><td><span class="bdg g">정상</span></td></tr>
+          <tr><td class="nm">🔎 obsidian</td><td>Wiki 노트 읽기·검색·쓰기 — 과거 이력 <span class="hly">리콜</span>의 통로</td><td><span class="bdg g">정상</span></td></tr>
+          <tr><td class="nm">🌐 exa</td><td>의미 기반 웹 <span class="hl">검색·페치</span> (키워드보다 맥락 매칭)</td><td><span class="bdg g">정상</span></td></tr>
+          <tr><td class="nm">🔥 firecrawl</td><td>웹 스크래핑·크롤·구조화 추출·브라우저 자동화</td><td><span class="bdg g">정상</span></td></tr>
+          <tr><td class="nm">📓 notebooklm</td><td>소스 업로드 후 Gemini로 <span class="hl">근거 기반 연구</span>·오디오 요약</td><td><span class="bdg r">미인증</span></td></tr>
+          <tr><td class="nm">📁 Google Drive</td><td>드라이브 파일 검색·내용 읽기</td><td><span class="bdg r">스코프 부족</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="cal warn">
+        <div class="ci">🔧</div>
+        <div>
+          <div class="ct">복제 때 가장 크게 막혔던 한 줄</div>
+          <div class="cd">6개 모두 연결 방식을 <code>cmd /c &lt;직접 바이너리&gt;</code>로 통일했습니다. Windows에서는 <span class="hl">맨 <code>npx</code> 호출이 프로세스 스폰에 실패</span>하기 때문 — 새 PC 복제 시 핵심 교훈이었습니다.</div>
+        </div>
+      </div>
+
+      <div class="cal danger">
+        <div class="ci">⚠️</div>
+        <div>
+          <div class="ct">2개는 "연결됨"이지만 "쓸 수 없음"</div>
+          <div class="cd"><code>notebooklm</code>은 봇이 <span class="hl">백그라운드(headless)</span>로 떠 있어 브라우저 로그인(setup_auth)을 못 합니다 → 사람이 <b>앞단 터미널 세션</b>에서 한 번 로그인해야 합니다. <code>Google Drive</code>는 <span class="hl">권한 범위(스코프) 부족</span> → claude.ai 커넥터 재인증 필요. 둘 다 <b>리서치 쓸 때만</b> 필요해 평소 운영엔 지장 없습니다. (P6.1 펜딩)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
