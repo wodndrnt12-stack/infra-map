@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>P2.4 · 기억·기록</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;}
+body{background:#eef0f3;color:#2b2f38;font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;padding:34px 16px 70px;}
+.poster{max-width:980px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(40,40,55,0.14);}
+:root{--ac:#4d9a92;--soft:#d7ecea;--bd:#bfe0dc;}
+
+.hd{padding:32px 44px 28px;background:linear-gradient(120deg,#d5ebe8 0%,#e0f0ed 55%,#ecf4f2 100%);}
+.hd .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:#3c857d;
+  background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 13px;margin-bottom:12px;}
+.hd h1{font-size:31px;font-weight:900;letter-spacing:-0.5px;}
+.hd p{margin-top:10px;font-size:14.5px;color:#42605b;line-height:1.65;max-width:740px;}
+
+.body{padding:28px 44px 38px;}
+.lead{font-size:14px;color:#4a5060;line-height:1.75;margin-bottom:22px;}
+.lead b{color:#2b2f38;} .lead .hl{background:linear-gradient(transparent 58%,#c4e6e0 58%);font-weight:700;padding:0 2px;}
+
+.rules{display:flex;flex-direction:column;gap:14px;}
+.rule{display:flex;gap:16px;background:var(--soft);border:1px solid var(--bd);border-radius:16px;padding:18px 20px;}
+.rnum{width:38px;height:38px;border-radius:11px;background:var(--ac);color:#fff;font-size:18px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rmain{flex:1;min-width:0;}
+.rt{font-size:17px;font-weight:900;}
+.rd{font-size:13px;color:#5d6370;line-height:1.65;margin-top:7px;}
+.rd b{color:#3a3f48;}
+.rx{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:11px;}
+.chip{font-size:11.5px;font-weight:700;color:#3f4f4c;background:#fff;border:1px solid var(--bd);border-radius:7px;padding:5px 9px;}
+.chip.f{background:var(--ac);color:#fff;border-color:var(--ac);}
+.arw{color:#8fc7c0;font-size:12px;font-weight:700;margin:0 1px;}
+.lab{font-size:11.5px;color:#5e8a84;font-weight:700;margin-right:3px;}
+
+/* ttl table */
+.ttl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:11px;}
+.tt{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:11px;text-align:center;}
+.tt .k{font-size:12px;font-weight:700;color:#3a3f48;}
+.tt .v{font-size:18px;font-weight:900;color:var(--ac);margin-top:3px;}
+
+/* compress visual */
+.cmp{display:flex;align-items:center;gap:12px;margin-top:11px;flex-wrap:wrap;}
+.cmpbox{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:9px 13px;font-size:12.5px;font-weight:700;color:#3a3f48;}
+.cmpbox .s{font-family:'JetBrains Mono',monospace;font-size:11px;color:#5e8a84;display:block;font-weight:500;margin-top:1px;}
+
+/* mobile */
+@media (max-width:600px){
+  body{padding:18px 10px 50px;}
+  .poster{border-radius:16px;}
+  .hd{padding:24px 20px 20px;}
+  .hd h1{font-size:25px;}
+  .hd p{font-size:13.5px;}
+  .body{padding:22px 20px 28px;}
+  .rule{gap:13px;padding:15px 16px;}
+  .rnum{width:32px;height:32px;font-size:16px;}
+  .cmp .arw{transform:rotate(90deg);}
+}
+</style>
+</head>
+<body>
+  <div class="poster">
+    <div class="hd">
+      <span class="tag">PHASE 2 · 2.4</span>
+      <h1>🧠 기억·기록</h1>
+      <p>봇이 <b>남길 것은 남기고, 찾을 수 있게</b> 하는 4개 규칙. 기록·보관·회상·압축의 전체 사이클입니다.</p>
+    </div>
+
+    <div class="body">
+      <p class="lead">매번 백지에서 시작하지 않으려면 <span class="hl">"무엇을, 언제까지, 어떻게 찾을지"</span>의 규칙이 필요합니다. 기록만 쌓고 못 찾으면 의미가 없으니까요.</p>
+
+      <div class="rules">
+        <div class="rule">
+          <div class="rnum">10</div>
+          <div class="rmain">
+            <div class="rt">세션 일지</div>
+            <div class="rd"><b>5가지 순간</b>(마무리·작업완료·주제전환·계획구현·압축)에 일지를 쓰고 <code>hot.md</code>를 갱신합니다.</div>
+            <div class="rx">
+              <span class="lab">기록 형식</span>
+              <span class="chip f">6필드 프론트매터</span><span class="arw">+</span>
+              <span class="chip f">TL;DR 콜아웃</span><span class="arw">→</span>
+              <span class="chip">hot.md 갱신</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">11</div>
+          <div class="rmain">
+            <div class="rt">기억 유효기간 (TTL)</div>
+            <div class="rd">메모리 종류에 따라 보관 기간이 다릅니다. 만료돼도 <b>자동 삭제는 안 함</b> — 사용자 승인 후에만 정리.</div>
+            <div class="ttl">
+              <div class="tt"><div class="k">행동지침</div><div class="v">영구</div></div>
+              <div class="tt"><div class="k">프로젝트</div><div class="v">90일</div></div>
+              <div class="tt"><div class="k">장애</div><div class="v">180일</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">12</div>
+          <div class="rmain">
+            <div class="rt">과거 검색 (리콜)</div>
+            <div class="rd"><b>좁혀가며</b> 검색합니다 — 넓은 색인에서 시작해 점점 세부로. 한 번에 최대 <b>5개 세션</b>까지만.</div>
+            <div class="rx">
+              <span class="chip">MOC 색인</span><span class="arw">→</span>
+              <span class="chip">요약(summary)</span><span class="arw">→</span>
+              <span class="chip">TL;DR</span><span class="arw">→</span>
+              <span class="chip f">본문</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule">
+          <div class="rnum">13</div>
+          <div class="rmain">
+            <div class="rt">긴 출력 자동 압축</div>
+            <div class="rd">훅이 도구 출력을 자동으로 줄입니다. 단, <b>에러 출력은 압축하지 않음</b>(디버깅 정보 보존).</div>
+            <div class="cmp">
+              <span class="cmpbox">4000자 초과<span class="s">~1000 토큰</span></span>
+              <span class="arw">→</span>
+              <span class="cmpbox">앞 30줄 + 뒤 10줄<span class="s">중간 생략</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
